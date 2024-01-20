@@ -3199,11 +3199,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\CodeBackend\\ElderCare_API\\ElderCare_Repository\\ElderCare_Repository.csproj",
+      "projectUniqueName": "D:\\CodeBackend\\CapstoneProject_ElderCare_API\\ElderCare_Repository\\ElderCare_Repository.csproj",
       "projectName": "ElderCare_Repository",
-      "projectPath": "D:\\CodeBackend\\ElderCare_API\\ElderCare_Repository\\ElderCare_Repository.csproj",
+      "projectPath": "D:\\CodeBackend\\CapstoneProject_ElderCare_API\\ElderCare_Repository\\ElderCare_Repository.csproj",
       "packagesPath": "C:\\Users\\giahu\\.nuget\\packages\\",
-      "outputPath": "D:\\CodeBackend\\ElderCare_API\\ElderCare_Repository\\obj\\",
+      "outputPath": "D:\\CodeBackend\\CapstoneProject_ElderCare_API\\ElderCare_Repository\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -3224,8 +3224,8 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "D:\\CodeBackend\\ElderCare_API\\ElderCare_Domain\\ElderCare_Domain.csproj": {
-              "projectPath": "D:\\CodeBackend\\ElderCare_API\\ElderCare_Domain\\ElderCare_Domain.csproj"
+            "D:\\CodeBackend\\CapstoneProject_ElderCare_API\\ElderCare_Domain\\ElderCare_Domain.csproj": {
+              "projectPath": "D:\\CodeBackend\\CapstoneProject_ElderCare_API\\ElderCare_Domain\\ElderCare_Domain.csproj"
             }
           }
         }

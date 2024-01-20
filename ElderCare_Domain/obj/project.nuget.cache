@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "1jTUJUj3csTGI6xIazFfrcEOPqM6PQSCH1BFxuRGJl0nyRJDRi0+eiPzYpfi6odwEc2k7KBQCC7rVIkAiNX23w==",
+  "dgSpecHash": "e1743wMtsfiHzd8DkX59w8YTojGoNtDlQY3ujUxa8GMpJyNw6KdqqUoGU1QUmSK3YjK29PXTb9sk0fIDmWfX9w==",
   "success": true,
-  "projectFilePath": "D:\\CodeBackend\\ElderCare_API\\ElderCare_Domain\\ElderCare_Domain.csproj",
+  "projectFilePath": "D:\\CodeBackend\\CapstoneProject_ElderCare_API\\ElderCare_Domain\\ElderCare_Domain.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\giahu\\.nuget\\packages\\azure.core\\1.25.0\\azure.core.1.25.0.nupkg.sha512",
     "C:\\Users\\giahu\\.nuget\\packages\\azure.identity\\1.7.0\\azure.identity.1.7.0.nupkg.sha512",
