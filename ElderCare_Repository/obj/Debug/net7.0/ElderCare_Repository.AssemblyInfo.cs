@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ElderCare_Repository")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+807b2669d856ecd03794ef5231585155d10a974a")]
 [assembly: System.Reflection.AssemblyProductAttribute("ElderCare_Repository")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ElderCare_Repository")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
