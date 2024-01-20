@@ -1,0 +1,17 @@
+D:\CodeBackend\ElderCare_API\ElderCare_Repository\bin\Debug\net7.0\ElderCare_Repository.deps.json
+D:\CodeBackend\ElderCare_API\ElderCare_Repository\bin\Debug\net7.0\ElderCare_Repository.runtimeconfig.json
+D:\CodeBackend\ElderCare_API\ElderCare_Repository\bin\Debug\net7.0\ElderCare_Repository.dll
+D:\CodeBackend\ElderCare_API\ElderCare_Repository\bin\Debug\net7.0\ElderCare_Repository.pdb
+D:\CodeBackend\ElderCare_API\ElderCare_Repository\bin\Debug\net7.0\ElderCare_Domain.dll
+D:\CodeBackend\ElderCare_API\ElderCare_Repository\bin\Debug\net7.0\ElderCare_Domain.pdb
+D:\CodeBackend\ElderCare_API\ElderCare_Repository\obj\Debug\net7.0\ElderCare_Repository.csproj.AssemblyReference.cache
+D:\CodeBackend\ElderCare_API\ElderCare_Repository\obj\Debug\net7.0\ElderCare_Repository.GeneratedMSBuildEditorConfig.editorconfig
+D:\CodeBackend\ElderCare_API\ElderCare_Repository\obj\Debug\net7.0\ElderCare_Repository.AssemblyInfoInputs.cache
+D:\CodeBackend\ElderCare_API\ElderCare_Repository\obj\Debug\net7.0\ElderCare_Repository.AssemblyInfo.cs
+D:\CodeBackend\ElderCare_API\ElderCare_Repository\obj\Debug\net7.0\ElderCare_Repository.csproj.CoreCompileInputs.cache
+D:\CodeBackend\ElderCare_API\ElderCare_Repository\obj\Debug\net7.0\ElderCare_Repository.csproj.CopyComplete
+D:\CodeBackend\ElderCare_API\ElderCare_Repository\obj\Debug\net7.0\ElderCare_Repository.dll
+D:\CodeBackend\ElderCare_API\ElderCare_Repository\obj\Debug\net7.0\refint\ElderCare_Repository.dll
+D:\CodeBackend\ElderCare_API\ElderCare_Repository\obj\Debug\net7.0\ElderCare_Repository.pdb
+D:\CodeBackend\ElderCare_API\ElderCare_Repository\obj\Debug\net7.0\ElderCare_Repository.genruntimeconfig.cache
+D:\CodeBackend\ElderCare_API\ElderCare_Repository\obj\Debug\net7.0\ref\ElderCare_Repository.dll
