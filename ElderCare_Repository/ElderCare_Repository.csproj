@@ -28,9 +28,4 @@
     <ProjectReference Include="..\ElderCare_Domain\ElderCare_Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Interfaces\" />
-    <Folder Include="Repos\" />
-  </ItemGroup>
-
 </Project>
