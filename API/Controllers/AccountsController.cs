@@ -92,13 +92,11 @@ namespace API.Controllers
         [HttpPost]
         public async Task<ActionResult<Account>> PostAccount(SignInViewModel model)
         {
-            var list = await _unitOfWork.AccountRepository.GetAllAsync();
-            if (list.IsNullOrEmpty())
+            if ((await _unitOfWork.AccountRepository.GetAllAsync()).IsNullOrEmpty())
             {
                 return Problem("Entity set 'ElderCareContext.Accounts'  is null.");
             }
             var account = _mapper.Map<Account>(model);
-            account.AccountId = list.Last().AccountId+1;
             await _unitOfWork.AccountRepository.AddAsync(account);
             try
             {
