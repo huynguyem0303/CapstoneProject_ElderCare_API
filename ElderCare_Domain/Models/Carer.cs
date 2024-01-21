@@ -11,7 +11,7 @@ public partial class Carer
 
     public string Email { get; set; }
 
-    public int? Phone { get; set; }
+    public string? Phone { get; set; }
 
     public string Gender { get; set; }
 

@@ -1,5 +1,7 @@
-﻿using ElderCare_Domain.Models;
+﻿using AutoMapper;
+using ElderCare_Domain.Models;
 using ElderCare_Repository.Interfaces;
+using ElderCare_Repository.Mappers;
 using ElderCare_Repository.Repos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,6 +20,7 @@ namespace ElderCare_Repository
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IAccountRepository, AccountRepository>();
 
+            services.AddAutoMapper(typeof(MapperConfigurationProfile).Assembly);
             services.AddDbContext<ElderCareContext>(option => option.UseSqlServer(databaseConnection).EnableSensitiveDataLogging());
             return services;
         }

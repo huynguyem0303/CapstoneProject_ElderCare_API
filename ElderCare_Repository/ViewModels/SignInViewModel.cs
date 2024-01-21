@@ -16,6 +16,7 @@ namespace ElderCare_Repository.ViewModels
         [DataType(DataType.Password)]
         public string Password { get; set; }
         [DataType(DataType.Password)]
+        [Compare(nameof(Password), ErrorMessage = "please make sure your password match.")]
         public string PasswordConfirm { get; set; }
     }
 }

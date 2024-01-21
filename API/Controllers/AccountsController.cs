@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using ElderCare_Domain.Models;
 using ElderCare_Repository;
 using Microsoft.IdentityModel.Tokens;
+using ElderCare_Repository.ViewModels;
+using AutoMapper;
 
 namespace API.Controllers
 {
@@ -16,10 +18,12 @@ namespace API.Controllers
     public class AccountsController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public AccountsController(IUnitOfWork unitOfWork)
+        public AccountsController(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         // GET: api/Accounts
@@ -86,12 +90,15 @@ namespace API.Controllers
         // POST: api/Accounts
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Account>> PostAccount(Account account)
+        public async Task<ActionResult<Account>> PostAccount(SignInViewModel model)
         {
-          if ((await _unitOfWork.AccountRepository.GetAllAsync()).IsNullOrEmpty())
-          {
-              return Problem("Entity set 'ElderCareContext.Accounts'  is null.");
-          }
+            var list = await _unitOfWork.AccountRepository.GetAllAsync();
+            if (list.IsNullOrEmpty())
+            {
+                return Problem("Entity set 'ElderCareContext.Accounts'  is null.");
+            }
+            var account = _mapper.Map<Account>(model);
+            account.AccountId = list.Last().AccountId+1;
             await _unitOfWork.AccountRepository.AddAsync(account);
             try
             {
