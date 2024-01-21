@@ -15,7 +15,7 @@ public partial class ElderCareContext : DbContext
         : base(options)
     {
     }
-
+    #region DbSets
     public virtual DbSet<Account> Accounts { get; set; }
 
     public virtual DbSet<Bankinformation> Bankinformations { get; set; }
@@ -71,9 +71,10 @@ public partial class ElderCareContext : DbContext
     public virtual DbSet<Timetable> Timetables { get; set; }
 
     public virtual DbSet<Transaction> Transactions { get; set; }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { 
-        optionsBuilder.UseSqlServer(GetConnectionString()); 
+    #endregion
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseSqlServer(GetConnectionString());
     }
 
     private string GetConnectionString()

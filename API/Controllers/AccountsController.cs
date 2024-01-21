@@ -17,7 +17,7 @@ namespace API.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public AccountsController(UnitOfWork unitOfWork)
+        public AccountsController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }

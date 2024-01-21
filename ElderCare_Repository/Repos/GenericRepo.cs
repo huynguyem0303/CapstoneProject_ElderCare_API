@@ -2,6 +2,7 @@
 using ElderCare_Domain.Commons;
 using ElderCare_Domain.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -21,10 +22,15 @@ namespace DataAccess.Repositories
             _context = context;
             _dbSet = _context.Set<T>();
         }
-        public async Task<IEnumerable<T>> GetAllAsync(params Expression<Func<T, object>>[] includes)
+        public async Task<IEnumerable<T>?> GetAllAsync(params Expression<Func<T, object>>[] includes)
         {
             try
             {
+                var a = await _dbSet.ToListAsync();
+                if (a.IsNullOrEmpty())
+                {
+                    throw new Exception("why");
+                }
                 return await includes
                     .Aggregate(_dbSet.AsQueryable(),
                     (entity, property)=>entity.Include(property))
