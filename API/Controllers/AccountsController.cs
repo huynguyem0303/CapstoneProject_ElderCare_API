@@ -10,6 +10,9 @@ using ElderCare_Repository;
 using Microsoft.IdentityModel.Tokens;
 using ElderCare_Repository.ViewModels;
 using AutoMapper;
+using API.Ultils;
+using ElderCare_Repository.Repos;
+using API.DTO;
 
 namespace API.Controllers
 {
@@ -140,6 +143,72 @@ namespace API.Controllers
         private async Task<bool> AccountExists(int id)
         {
             return await _unitOfWork.AccountRepository.GetByIdAsync(id) != null;
+        }
+        [HttpPost("loginCustomer")]
+        public async Task<IActionResult> LoginCus(LoginDto loginDto)
+        {
+           IConfiguration config = new ConfigurationBuilder()
+           .SetBasePath(Directory.GetCurrentDirectory())
+           .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+           .Build();
+           // string adminEmail = config["AdminAccount:Email"];
+           // string adminPassword = config["AdminAccount:Password"];
+           // if (loginDto.email.ToLower().Equals(adminEmail.ToLower()) && loginDto.password.Equals(adminPassword))
+           //     return Ok(new ApiResponse
+           //     {
+           //         Success = true,
+           //         Message = "Authenticate success",
+           //         Data = GenerateJWTString.GenerateJsonWebTokenForAdmin(adminEmail, config["AppSettings:SecretKey"], DateTime.Now)
+           //     }); ;
+            var account = await _unitOfWork.AccountRepository.LoginCustomerAsync(loginDto.email, loginDto.password);
+            if (account == null)
+            {
+                return Unauthorized();
+            }
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Message = "Authenticate success",
+                Data = GenerateJWTString.GenerateJsonWebToken(account, config["AppSettings:SecretKey"], DateTime.Now)
+            }); ;
+        }
+        [HttpPost("loginCarer")]
+        public async Task<IActionResult> LoginCarer(LoginDto loginDto)
+        {
+            IConfiguration config = new ConfigurationBuilder()
+           .SetBasePath(Directory.GetCurrentDirectory())
+           .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+           .Build();
+            var account = await _unitOfWork.AccountRepository.LoginCarerAsync(loginDto.email, loginDto.password);
+            if (account == null)
+            {
+                return Unauthorized();
+            }
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Message = "Authenticate success",
+                Data = GenerateJWTString.GenerateJsonWebTokenForCarer(account, config["AppSettings:SecretKey"], DateTime.Now)
+            }); ;
+        }
+        [HttpPost("loginStaff")]
+        public async Task<IActionResult> LoginStaff(LoginDto loginDto)
+        {
+            IConfiguration config = new ConfigurationBuilder()
+           .SetBasePath(Directory.GetCurrentDirectory())
+           .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+           .Build();
+            var account = await _unitOfWork.AccountRepository.LoginStaffAsync(loginDto.email, loginDto.password);
+            if (account == null)
+            {
+                return Unauthorized();
+            }
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Message = "Authenticate success",
+                Data = GenerateJWTString.GenerateJsonWebTokenForStaff(account, config["AppSettings:SecretKey"], DateTime.Now)
+            }); ;
         }
     }
 }
