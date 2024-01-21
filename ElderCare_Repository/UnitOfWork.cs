@@ -12,14 +12,18 @@ namespace ElderCare_Repository
     {
         private readonly ElderCareContext _context;
         private readonly IAccountRepository _accountRepository;
+        private readonly ICustomerRepository _customerRepository;
 
-        public UnitOfWork(ElderCareContext context, IAccountRepository accountRepository)
+        public UnitOfWork(ElderCareContext context, IAccountRepository accountRepository, ICustomerRepository customerRepository)
         {
             _context = context;
             _accountRepository = accountRepository;
+            _customerRepository = customerRepository;
         }
 
         public IAccountRepository AccountRepository => _accountRepository;
+
+        public ICustomerRepository CustomerRepository => _customerRepository;
 
         public async Task<int> SaveChangeAsync()
         {

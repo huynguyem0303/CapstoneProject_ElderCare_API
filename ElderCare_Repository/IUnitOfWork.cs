@@ -11,5 +11,6 @@ namespace ElderCare_Repository
     {
         public Task<int> SaveChangeAsync();
         public IAccountRepository AccountRepository { get; }
+        public ICustomerRepository CustomerRepository { get; }
     }
 }
