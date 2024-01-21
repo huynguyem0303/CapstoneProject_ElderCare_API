@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.15" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.15">
       <PrivateAssets>all</PrivateAssets>
@@ -26,11 +27,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ElderCare_Domain\ElderCare_Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Interfaces\" />
-    <Folder Include="Repos\" />
   </ItemGroup>
 
 </Project>

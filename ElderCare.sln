@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElderCare_Repository", "Eld
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElderCare_Domain", "ElderCare_Domain\ElderCare_Domain.csproj", "{64F2583B-CB16-442D-B967-B1BC69903CC7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API", "API\API.csproj", "{51E57C7B-CAE1-46C0-BD7D-920A25085F81}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API", "API\API.csproj", "{51E57C7B-CAE1-46C0-BD7D-920A25085F81}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
