@@ -37,8 +37,7 @@ namespace ElderCare_Repository.Repos
                  FirstOrDefaultAsync(x => (x.Email == email && x.Password == password)
                  && x.RoleId == 2);
         }
-        }
-        public async Task AddAsync(Account entity)
+        public new async Task AddAsync(Account entity)
         {
             try
             {
