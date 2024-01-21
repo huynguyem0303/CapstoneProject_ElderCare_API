@@ -1,4 +1,5 @@
 ﻿using DataAccess.Interfaces;
+using ElderCare_Domain.Commons;
 using ElderCare_Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -20,30 +21,21 @@ namespace DataAccess.Repositories
             _context = context;
             _dbSet = _context.Set<T>();
         }
-        public IEnumerable<T> GetAll()
+        public async Task<IEnumerable<T>> GetAllAsync(params Expression<Func<T, object>>[] includes)
         {
             try
             {
-                return _dbSet;
+                return await includes
+                    .Aggregate(_dbSet.AsQueryable(),
+                    (entity, property)=>entity.Include(property))
+                    .ToListAsync();
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
         }
-
-        public IEnumerable<T> GetAllWhen(Expression<Func<T,bool>> predicate)
-        {
-            try
-            {
-                return _dbSet.Where(predicate);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-        public async Task<T> GetByIdAsync(object id)
+        public async Task<T?> GetByIdAsync(object id)
         {
             try
             {
@@ -61,7 +53,6 @@ namespace DataAccess.Repositories
             try
             {
                 await _dbSet.AddAsync(entity);
-                await _context.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
@@ -78,7 +69,6 @@ namespace DataAccess.Repositories
             try
             {
                 _context.Entry(entity).State = EntityState.Modified;
-                await _context.SaveChangesAsync();
             }
             catch (Exception ex)
             {
@@ -91,12 +81,35 @@ namespace DataAccess.Repositories
             try
             {
                 _dbSet.Remove(entity);
-                await _context.SaveChangesAsync();
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
+        }
+        public Task<Pagination<T>> ToPagination(int pageIndex = 0, int pageSize = 10)
+            => ToPagination(x => true, pageIndex, pageSize);
+        public Task<Pagination<T>> ToPagination(Expression<Func<T, bool>> expression, int pageIndex = 0, int pageSize = 10)
+            => ToPagination(_dbSet, expression, pageIndex, pageSize);
+        public async Task<Pagination<T>> ToPagination(IQueryable<T> value, Expression<Func<T, bool>> expression, int pageIndex, int pageSize)
+        {
+
+            var itemCount = await value.Where(expression).CountAsync();
+            var items = await value.Where(expression)
+                                    .Skip(pageIndex * pageSize)
+                                    .Take(pageSize)
+                                    .AsNoTracking()
+                                    .ToListAsync();
+
+            var result = new Pagination<T>()
+            {
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                TotalItemsCount = itemCount,
+                Items = items,
+            };
+
+            return result;
         }
     }
 }
