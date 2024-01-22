@@ -13,6 +13,7 @@ using AutoMapper;
 using API.Ultils;
 using ElderCare_Repository.Repos;
 using API.DTO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
@@ -31,6 +32,7 @@ namespace API.Controllers
 
         // GET: api/Accounts
         [HttpGet]
+        [Authorize(Roles="Staff, Admin")]
         public async Task<ActionResult<IEnumerable<Account>>> GetAccounts()
         {
             var list = await _unitOfWork.AccountRepository.GetAllAsync();
@@ -43,6 +45,7 @@ namespace API.Controllers
 
         // GET: api/Accounts/5
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<Account>> GetAccount(int id)
         {
           if ((await _unitOfWork.AccountRepository.GetAllAsync()).IsNullOrEmpty())
@@ -62,6 +65,7 @@ namespace API.Controllers
         // PUT: api/Accounts/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> PutAccount(int id, Account account)
         {
             if (id != account.AccountId)
@@ -122,6 +126,7 @@ namespace API.Controllers
 
         // DELETE: api/Accounts/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Staff, Admin")]
         public async Task<IActionResult> DeleteAccount(int id)
         {
             if ((await _unitOfWork.AccountRepository.GetAllAsync()).IsNullOrEmpty())
