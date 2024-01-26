@@ -21,6 +21,8 @@ namespace API.Ultils
             var token = new JwtSecurityToken(
                 claims: claims,
                 expires: now.AddHours(1),
+                issuer: secretKey,
+                audience: secretKey,
                 signingCredentials: credentials);
 
 
@@ -39,6 +41,8 @@ namespace API.Ultils
             var token = new JwtSecurityToken(
                 claims: claims,
                 expires: now.AddHours(1),
+                issuer: secretKey,
+                audience: secretKey,
                 signingCredentials: credentials);
 
 
@@ -57,6 +61,8 @@ namespace API.Ultils
             var token = new JwtSecurityToken(
                 claims: claims,
                 expires: now.AddHours(1),
+                issuer: secretKey,
+                audience: secretKey,
                 signingCredentials: credentials);
 
 
@@ -74,6 +80,8 @@ namespace API.Ultils
             var token = new JwtSecurityToken(
                 claims: claims,
                 expires: now.AddHours(1),
+                issuer: secretKey,
+                audience: secretKey,
                 signingCredentials: credentials);
 
 

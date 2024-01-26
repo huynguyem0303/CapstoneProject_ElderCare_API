@@ -37,5 +37,22 @@ namespace ElderCare_Repository.Repos
                  FirstOrDefaultAsync(x => (x.Email == email && x.Password == password)
                  && x.RoleId == 2);
         }
+        public new async Task AddAsync(Account entity)
+        {
+            try
+            {
+                entity.AccountId = _dbSet.Last().AccountId + 1;
+                entity.Status = true;
+                await _dbSet.AddAsync(entity);
+            }
+            catch (DbUpdateException)
+            {
+                throw new Exception(message: "This has already been added");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }
