@@ -14,12 +14,15 @@ using API.Ultils;
 using ElderCare_Repository.Repos;
 using API.DTO;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.OData.Query;
+using Microsoft.AspNetCore.OData.Results;
+using Microsoft.AspNetCore.OData.Routing.Controllers;
 
 namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AccountsController : ControllerBase
+    public class AccountsController : ODataController
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -32,39 +35,29 @@ namespace API.Controllers
 
         // GET: api/Accounts
         [HttpGet]
-        [Authorize(Roles="Staff, Admin")]
-        public async Task<ActionResult<IEnumerable<Account>>> GetAccounts()
+        [EnableQuery]
+        [Authorize(Roles = "Staff, Admin")]
+        public IActionResult GetAccounts()
         {
-            var list = await _unitOfWork.AccountRepository.GetAllAsync();
-          if (list.IsNullOrEmpty())
-          {
-              return NotFound();
-          }
+            var list = _unitOfWork.AccountRepository.GetAll();
+            
             return Ok(list);
         }
 
         // GET: api/Accounts/5
         [HttpGet("{id}")]
+        [EnableQuery]
         [Authorize]
-        public async Task<ActionResult<Account>> GetAccount(int id)
+        public async Task<SingleResult<Account>> GetAccount(int id)
         {
-          if ((await _unitOfWork.AccountRepository.GetAllAsync()).IsNullOrEmpty())
-          {
-              return NotFound();
-          }
-            var account = await _unitOfWork.AccountRepository.GetByIdAsync(id);
-
-            if (account == null)
-            {
-                return NotFound();
-            }
-
-            return account;
+            var account = await _unitOfWork.AccountRepository.FindAsync(x=>x.AccountId == id);
+            return SingleResult.Create(account.AsQueryable());
         }
 
         // PUT: api/Accounts/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [EnableQuery]
         [Authorize]
         public async Task<IActionResult> PutAccount(int id, Account account)
         {
@@ -73,7 +66,7 @@ namespace API.Controllers
                 return BadRequest();
             }
 
-            await _unitOfWork.AccountRepository.UpdateAsync(account);
+            _unitOfWork.AccountRepository.Update(account);
 
             try
             {
@@ -97,9 +90,10 @@ namespace API.Controllers
         // POST: api/Accounts
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [EnableQuery]
         public async Task<ActionResult<Account>> PostAccount(SignInViewModel model)
         {
-            if ((await _unitOfWork.AccountRepository.GetAllAsync()).IsNullOrEmpty())
+            if ((_unitOfWork.AccountRepository.GetAll()).IsNullOrEmpty())
             {
                 return Problem("Entity set 'ElderCareContext.Accounts'  is null.");
             }
@@ -126,10 +120,11 @@ namespace API.Controllers
 
         // DELETE: api/Accounts/5
         [HttpDelete("{id}")]
+        [EnableQuery]
         [Authorize(Roles = "Staff, Admin")]
         public async Task<IActionResult> DeleteAccount(int id)
         {
-            if ((await _unitOfWork.AccountRepository.GetAllAsync()).IsNullOrEmpty())
+            if ((_unitOfWork.AccountRepository.GetAll()).IsNullOrEmpty())
             {
                 return NotFound();
             }
@@ -139,7 +134,7 @@ namespace API.Controllers
                 return NotFound();
             }
 
-            await _unitOfWork.AccountRepository.DeleteAsync(account);
+            _unitOfWork.AccountRepository.Delete(account);
             await _unitOfWork.SaveChangeAsync();
 
             return NoContent();
@@ -148,72 +143,6 @@ namespace API.Controllers
         private async Task<bool> AccountExists(int id)
         {
             return await _unitOfWork.AccountRepository.GetByIdAsync(id) != null;
-        }
-        [HttpPost("loginCustomer")]
-        public async Task<IActionResult> LoginCus(LoginDto loginDto)
-        {
-           IConfiguration config = new ConfigurationBuilder()
-           .SetBasePath(Directory.GetCurrentDirectory())
-           .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-           .Build();
-           // string adminEmail = config["AdminAccount:Email"];
-           // string adminPassword = config["AdminAccount:Password"];
-           // if (loginDto.email.ToLower().Equals(adminEmail.ToLower()) && loginDto.password.Equals(adminPassword))
-           //     return Ok(new ApiResponse
-           //     {
-           //         Success = true,
-           //         Message = "Authenticate success",
-           //         Data = GenerateJWTString.GenerateJsonWebTokenForAdmin(adminEmail, config["AppSettings:SecretKey"], DateTime.Now)
-           //     }); ;
-            var account = await _unitOfWork.AccountRepository.LoginCustomerAsync(loginDto.email, loginDto.password);
-            if (account == null)
-            {
-                return Unauthorized();
-            }
-            return Ok(new ApiResponse
-            {
-                Success = true,
-                Message = "Authenticate success",
-                Data = GenerateJWTString.GenerateJsonWebToken(account, config["AppSettings:SecretKey"], DateTime.Now)
-            }); ;
-        }
-        [HttpPost("loginCarer")]
-        public async Task<IActionResult> LoginCarer(LoginDto loginDto)
-        {
-            IConfiguration config = new ConfigurationBuilder()
-           .SetBasePath(Directory.GetCurrentDirectory())
-           .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-           .Build();
-            var account = await _unitOfWork.AccountRepository.LoginCarerAsync(loginDto.email, loginDto.password);
-            if (account == null)
-            {
-                return Unauthorized();
-            }
-            return Ok(new ApiResponse
-            {
-                Success = true,
-                Message = "Authenticate success",
-                Data = GenerateJWTString.GenerateJsonWebTokenForCarer(account, config["AppSettings:SecretKey"], DateTime.Now)
-            }); ;
-        }
-        [HttpPost("loginStaff")]
-        public async Task<IActionResult> LoginStaff(LoginDto loginDto)
-        {
-            IConfiguration config = new ConfigurationBuilder()
-           .SetBasePath(Directory.GetCurrentDirectory())
-           .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-           .Build();
-            var account = await _unitOfWork.AccountRepository.LoginStaffAsync(loginDto.email, loginDto.password);
-            if (account == null)
-            {
-                return Unauthorized();
-            }
-            return Ok(new ApiResponse
-            {
-                Success = true,
-                Message = "Authenticate success",
-                Data = GenerateJWTString.GenerateJsonWebTokenForStaff(account, config["AppSettings:SecretKey"], DateTime.Now)
-            }); ;
         }
     }
 }

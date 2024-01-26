@@ -22,19 +22,11 @@ namespace DataAccess.Repositories
             _context = context;
             _dbSet = _context.Set<T>();
         }
-        public async Task<IEnumerable<T>?> GetAllAsync(params Expression<Func<T, object>>[] includes)
+        public IEnumerable<T> GetAll()
         {
             try
             {
-                var a = await _dbSet.ToListAsync();
-                if (a.IsNullOrEmpty())
-                {
-                    throw new Exception("why");
-                }
-                return await includes
-                    .Aggregate(_dbSet.AsQueryable(),
-                    (entity, property)=>entity.Include(property))
-                    .ToListAsync();
+                return _dbSet;
             }
             catch (Exception ex)
             {
@@ -70,7 +62,7 @@ namespace DataAccess.Repositories
             }
         }
 
-        public async Task UpdateAsync(T entity)
+        public void Update(T entity)
         {
             try
             {
@@ -82,7 +74,7 @@ namespace DataAccess.Repositories
             }
         }
 
-        public async Task DeleteAsync(T entity)
+        public void Delete(T entity)
         {
             try
             {
@@ -116,6 +108,14 @@ namespace DataAccess.Repositories
             };
 
             return result;
+        }
+
+        public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> expression, params Expression<Func<T, object>>[] includes)
+        {
+            return await includes
+                .Aggregate(_dbSet.AsQueryable(),
+                (entity, property) => entity.Include(property))
+                .Where(expression).ToListAsync();
         }
     }
 }
