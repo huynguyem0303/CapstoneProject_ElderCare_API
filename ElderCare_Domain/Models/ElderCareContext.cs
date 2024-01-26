@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace ElderCare_Domain.Models;
 
@@ -15,18 +14,22 @@ public partial class ElderCareContext : DbContext
         : base(options)
     {
     }
-    #region DbSets
+
     public virtual DbSet<Account> Accounts { get; set; }
 
     public virtual DbSet<Bankinformation> Bankinformations { get; set; }
 
     public virtual DbSet<Carer> Carers { get; set; }
 
+    public virtual DbSet<CarerCategory> CarerCategories { get; set; }
+
     public virtual DbSet<CarerPoint> CarerPoints { get; set; }
 
     public virtual DbSet<CarerShilft> CarerShilfts { get; set; }
 
     public virtual DbSet<CarersCustomer> CarersCustomers { get; set; }
+
+    public virtual DbSet<Category> Categories { get; set; }
 
     public virtual DbSet<Certification> Certifications { get; set; }
 
@@ -71,21 +74,11 @@ public partial class ElderCareContext : DbContext
     public virtual DbSet<Timetable> Timetables { get; set; }
 
     public virtual DbSet<Transaction> Transactions { get; set; }
-    #endregion
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseSqlServer(GetConnectionString());
-    }
 
-    private string GetConnectionString()
-    {
-        IConfiguration config = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", true, true)
-            .Build();
-        var strConn = config["ConnectionStrings:DefaultDB"]!;
-        return strConn;
-    }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Data Source=(local);Initial Catalog=ElderCare;User ID=sa;Password=12345678;TrustServerCertificate=True");
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Account>(entity =>
@@ -106,7 +99,9 @@ public partial class ElderCareContext : DbContext
             entity.Property(e => e.Password)
                 .HasMaxLength(100)
                 .HasColumnName("password");
-            entity.Property(e => e.PhoneNumber).HasColumnName("phone_number");
+            entity.Property(e => e.PhoneNumber)
+                .HasMaxLength(50)
+                .HasColumnName("phone_number");
             entity.Property(e => e.RoleId).HasColumnName("role_id");
             entity.Property(e => e.Status).HasColumnName("status");
             entity.Property(e => e.Username)
@@ -115,7 +110,6 @@ public partial class ElderCareContext : DbContext
 
             entity.HasOne(d => d.Carer).WithMany(p => p.Accounts)
                 .HasForeignKey(d => d.CarerId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Account_Carer");
 
             entity.HasOne(d => d.Customer).WithMany(p => p.Accounts)
@@ -171,13 +165,33 @@ public partial class ElderCareContext : DbContext
             entity.Property(e => e.Name)
                 .HasMaxLength(100)
                 .HasColumnName("name");
-            entity.Property(e => e.Phone).HasColumnName("phone");
+            entity.Property(e => e.Phone)
+                .HasMaxLength(50)
+                .HasColumnName("phone");
             entity.Property(e => e.Status).HasColumnName("status");
             entity.Property(e => e.TransactionId).HasColumnName("transaction_id");
 
             entity.HasOne(d => d.Bankinfo).WithMany(p => p.Carers)
                 .HasForeignKey(d => d.BankinfoId)
                 .HasConstraintName("FK_Carer_Bankinformation1");
+        });
+
+        modelBuilder.Entity<CarerCategory>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToTable("CarerCategory");
+
+            entity.Property(e => e.CarerId).HasColumnName("carer_id");
+            entity.Property(e => e.CateId).HasColumnName("cate_id");
+
+            entity.HasOne(d => d.Carer).WithMany()
+                .HasForeignKey(d => d.CarerId)
+                .HasConstraintName("FK_CarerCategory_Carer");
+
+            entity.HasOne(d => d.Cate).WithMany()
+                .HasForeignKey(d => d.CateId)
+                .HasConstraintName("FK_CarerCategory_Category");
         });
 
         modelBuilder.Entity<CarerPoint>(entity =>
@@ -229,6 +243,21 @@ public partial class ElderCareContext : DbContext
             entity.HasOne(d => d.Customer).WithMany(p => p.CarersCustomers)
                 .HasForeignKey(d => d.CustomerId)
                 .HasConstraintName("FK_CarersCustomers_Customer");
+        });
+
+        modelBuilder.Entity<Category>(entity =>
+        {
+            entity.HasKey(e => e.CateId);
+
+            entity.ToTable("Category");
+
+            entity.Property(e => e.CateId)
+                .ValueGeneratedNever()
+                .HasColumnName("cate_id");
+            entity.Property(e => e.CateType).HasColumnName("cate_type");
+            entity.Property(e => e.Desciption)
+                .HasMaxLength(200)
+                .HasColumnName("desciption");
         });
 
         modelBuilder.Entity<Certification>(entity =>
@@ -367,7 +396,9 @@ public partial class ElderCareContext : DbContext
             entity.Property(e => e.Email)
                 .HasMaxLength(100)
                 .HasColumnName("email");
-            entity.Property(e => e.Phone).HasColumnName("phone");
+            entity.Property(e => e.Phone)
+                .HasMaxLength(50)
+                .HasColumnName("phone");
             entity.Property(e => e.Status).HasColumnName("status");
             entity.Property(e => e.TransactionId).HasColumnName("transaction_id");
 
