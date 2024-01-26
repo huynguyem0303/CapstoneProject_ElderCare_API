@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 
 namespace ElderCare_Domain.Models;
 
@@ -16,19 +15,19 @@ public partial class Account
 
     public string Email { get; set; }
 
-    public string? PhoneNumber { get; set; }
+    public string PhoneNumber { get; set; }
 
-    public string? Address { get; set; }
+    public string Address { get; set; }
 
-    public bool? Status { get; set; }
+    public int? Status { get; set; }
 
     public int? CustomerId { get; set; }
 
     public int? CarerId { get; set; }
 
-    public virtual Carer? Carer { get; set; }
+    public virtual Carer Carer { get; set; }
 
-    public virtual Customer? Customer { get; set; }
+    public virtual Customer Customer { get; set; }
 
-    public virtual Role? Role { get; set; }
+    public virtual Role Role { get; set; }
 }
