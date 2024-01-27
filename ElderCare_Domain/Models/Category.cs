@@ -9,5 +9,5 @@ public partial class Category
 
     public int? CateType { get; set; }
 
-    public string Desciption { get; set; }
+    public string Description { get; set; }
 }

@@ -10,6 +10,6 @@ namespace ElderCare_Repository.Interfaces
 {
     public interface ICustomerRepository : IGenericRepo<Customer>
     {
-      
+       
     }
 }

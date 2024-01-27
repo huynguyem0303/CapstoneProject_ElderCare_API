@@ -15,11 +15,11 @@ public partial class Carer
 
     public string Gender { get; set; }
 
-    public int? Age { get; set; }
+    public string Age { get; set; }
 
     public int? Status { get; set; }
 
-    public string Image { get; set; }
+    public string? Image { get; set; }
 
     public int? CertificateId { get; set; }
 
@@ -27,9 +27,7 @@ public partial class Carer
 
     public int? TransactionId { get; set; }
 
-    public virtual ICollection<Account> Accounts { get; set; } = new List<Account>();
-
-    public virtual Bankinformation Bankinfo { get; set; }
+    public virtual Bankinformation? Bankinfo { get; set; }
 
     public virtual ICollection<CarersCustomer> CarersCustomers { get; set; } = new List<CarersCustomer>();
 

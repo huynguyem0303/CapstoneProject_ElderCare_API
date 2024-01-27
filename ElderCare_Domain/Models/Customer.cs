@@ -15,15 +15,13 @@ public partial class Customer
 
     public string Address { get; set; }
 
-    public int? Status { get; set; }
+    public bool? Status { get; set; }
 
     public int? BankinfoId { get; set; }
 
     public int? TransactionId { get; set; }
 
     public int? ElderlyId { get; set; }
-
-    public virtual ICollection<Account> Accounts { get; set; } = new List<Account>();
 
     public virtual Bankinformation Bankinfo { get; set; }
 
