@@ -107,19 +107,6 @@ public partial class ElderCareContext : DbContext
             entity.Property(e => e.Username)
                 .HasMaxLength(100)
                 .HasColumnName("username");
-
-            entity.HasOne(d => d.Carer).WithMany(p => p.Accounts)
-                .HasForeignKey(d => d.CarerId)
-                .HasConstraintName("FK_Account_Carer");
-
-            entity.HasOne(d => d.Customer).WithMany(p => p.Accounts)
-                .HasForeignKey(d => d.CustomerId)
-                .HasConstraintName("FK_Account_Customer");
-
-            entity.HasOne(d => d.Role).WithMany(p => p.Accounts)
-                .HasForeignKey(d => d.RoleId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Account_Role");
         });
 
         modelBuilder.Entity<Bankinformation>(entity =>
@@ -150,7 +137,9 @@ public partial class ElderCareContext : DbContext
             entity.Property(e => e.CarerId)
                 .ValueGeneratedNever()
                 .HasColumnName("carer_id");
-            entity.Property(e => e.Age).HasColumnName("age");
+            entity.Property(e => e.Age)
+                .HasMaxLength(50)
+                .HasColumnName("age");
             entity.Property(e => e.BankinfoId).HasColumnName("bankinfo_id");
             entity.Property(e => e.CertificateId).HasColumnName("certificate_id");
             entity.Property(e => e.Email)
@@ -255,9 +244,10 @@ public partial class ElderCareContext : DbContext
                 .ValueGeneratedNever()
                 .HasColumnName("cate_id");
             entity.Property(e => e.CateType).HasColumnName("cate_type");
-            entity.Property(e => e.Desciption)
-                .HasMaxLength(200)
-                .HasColumnName("desciption");
+            entity.Property(e => e.Description)
+                .IsRequired()
+                .HasMaxLength(50)
+                .HasColumnName("description");
         });
 
         modelBuilder.Entity<Certification>(entity =>
@@ -650,6 +640,7 @@ public partial class ElderCareContext : DbContext
                 .HasMaxLength(50)
                 .HasColumnName("description");
             entity.Property(e => e.Name)
+                .IsRequired()
                 .HasMaxLength(100)
                 .HasColumnName("name");
         });

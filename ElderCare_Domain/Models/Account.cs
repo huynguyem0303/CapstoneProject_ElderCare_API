@@ -9,7 +9,7 @@ public partial class Account
 
     public int AccountId { get; set; }
 
-    public string? Username { get; set; }
+    public string Username { get; set; }
 
     public string Password { get; set; }
 
@@ -17,17 +17,11 @@ public partial class Account
 
     public string PhoneNumber { get; set; }
 
-    public string Address { get; set; }
+    public string? Address { get; set; }
 
-    public int? Status { get; set; }
+    public bool? Status { get; set; }
 
     public int? CustomerId { get; set; }
 
     public int? CarerId { get; set; }
-
-    public virtual Carer Carer { get; set; }
-
-    public virtual Customer Customer { get; set; }
-
-    public virtual Role Role { get; set; }
 }
