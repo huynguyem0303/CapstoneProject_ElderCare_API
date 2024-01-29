@@ -10,7 +10,7 @@ public partial class Account
 
     public int AccountId { get; set; }
 
-    public string? Username { get; set; }
+    public string Username { get; set; }
 
     public string Password { get; set; }
 
@@ -24,10 +24,4 @@ public partial class Account
     public int? CustomerId { get; set; }
 
     public int? CarerId { get; set; }
-
-    public virtual Carer Carer { get; set; }
-
-    public virtual Customer Customer { get; set; }
-
-    public virtual Role Role { get; set; }
 }
