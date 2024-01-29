@@ -42,7 +42,7 @@ namespace ElderCare_Repository.Repos
             try
             {
                 entity.AccountId = _dbSet.Last().AccountId + 1;
-                entity.Status = true;
+                entity.Status = 1;
                 await _dbSet.AddAsync(entity);
             }
             catch (DbUpdateException)
