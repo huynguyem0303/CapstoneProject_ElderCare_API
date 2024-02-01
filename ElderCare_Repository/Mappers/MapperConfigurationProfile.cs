@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using ElderCare_Domain.Commons;
 using ElderCare_Domain.Models;
-using ElderCare_Repository.ViewModels;
+using ElderCare_Repository.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +15,7 @@ namespace ElderCare_Repository.Mappers
         public MapperConfigurationProfile()
         {
             CreateMap(typeof(Pagination<>), typeof(Pagination<>));
-            CreateMap<SignInViewModel, Account>();
+            CreateMap<SignInDto, Account>();
          
         }
     }

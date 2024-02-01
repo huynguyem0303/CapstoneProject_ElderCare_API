@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ElderCare_Repository.ViewModels
+namespace ElderCare_Repository.DTO
 {
-    public class SignInViewModel
+    public class SignInDto
     {
         [DataType(DataType.PhoneNumber)]
         public string PhoneNumber { get; set; }

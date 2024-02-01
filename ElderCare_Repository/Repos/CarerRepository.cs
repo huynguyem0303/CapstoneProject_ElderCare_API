@@ -23,13 +23,13 @@ namespace ElderCare_Repository.Repos
 
         public async Task<List<Carer?>> searchCarer(SearchCarerDto dto)
         {
-            var list = GetAll().Result;
+            var list = GetAll().ToList();
             List<Carer> carer = new List<Carer>();
             List<Carer> carershift = new List<Carer>();
             List<Carer> carercate = new List<Carer>();
-            List<CarerShilft> shift = await GetAlls();
+            List<CarerShilft> shift = await _context.Set<CarerShilft>().ToListAsync();
             List<CarerShilft> CarerShilft = new List<CarerShilft>();
-            List<CarerShilft> cate = await GetAlls();
+            List<CarerShilft> cate = await _context.Set<CarerShilft>().ToListAsync();
             List<CarerCategory> CarerCategory = new List<CarerCategory>();
             string separator = " ";
             string genderlist = String.Join(separator, dto.Gender);
@@ -77,14 +77,6 @@ namespace ElderCare_Repository.Repos
             var combile = carer.Union(carershift).ToList();
             var result = combile.Union(carercate).ToList();
             return result;
-        }
-        public async Task<List<CarerShilft>> GetAlls()
-        {
-            return await _context.Set<CarerShilft>().ToListAsync();
-        }
-        public new async Task<List<Carer>> GetAll()
-        {
-            return await _context.Set<Carer>().ToListAsync();
         }
     }
 }

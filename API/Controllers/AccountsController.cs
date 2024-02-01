@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using ElderCare_Domain.Models;
 using ElderCare_Repository;
 using Microsoft.IdentityModel.Tokens;
-using ElderCare_Repository.ViewModels;
 using AutoMapper;
 using API.Ultils;
 using ElderCare_Repository.Repos;
@@ -17,6 +16,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Results;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
+using ElderCare_Repository.DTO;
 
 namespace API.Controllers
 {
@@ -91,7 +91,7 @@ namespace API.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         [EnableQuery]
-        public async Task<ActionResult<Account>> PostAccount(SignInViewModel model)
+        public async Task<ActionResult<Account>> PostAccount(SignInDto model)
         {
             if ((_unitOfWork.AccountRepository.GetAll()).IsNullOrEmpty())
             {
