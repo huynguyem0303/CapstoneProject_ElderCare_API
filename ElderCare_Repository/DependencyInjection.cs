@@ -1,9 +1,14 @@
 ﻿using AutoMapper;
+using CorePush.Apple;
+using CorePush.Google;
+using ElderCare_Domain.Commons;
 using ElderCare_Domain.Models;
 using ElderCare_Repository.Interfaces;
 using ElderCare_Repository.Mappers;
 using ElderCare_Repository.Repos;
+using ElderCare_Repository.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -23,6 +28,10 @@ namespace ElderCare_Repository
             services.AddScoped<ICarerRepository, CarerRepository>();
             services.AddAutoMapper(typeof(MapperConfigurationProfile).Assembly);
             services.AddDbContext<ElderCareContext>(option => option.UseSqlServer(databaseConnection).EnableSensitiveDataLogging());
+
+            services.AddTransient<INotificationService, NotificationService>();
+            services.AddHttpClient<FcmSender>();
+            services.AddHttpClient<ApnSender>();
             return services;
         }
     }
