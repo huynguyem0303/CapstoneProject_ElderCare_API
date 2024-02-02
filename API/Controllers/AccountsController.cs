@@ -36,7 +36,7 @@ namespace API.Controllers
         // GET: api/Accounts
         [HttpGet]
         [EnableQuery]
-        [Authorize(Roles = "Staff, Admin")]
+        //[Authorize(Roles = "Staff, Admin")]
         public IActionResult GetAccounts()
         {
             var list = _unitOfWork.AccountRepository.GetAll();

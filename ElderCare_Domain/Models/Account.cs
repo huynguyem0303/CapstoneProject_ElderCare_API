@@ -24,4 +24,6 @@ public partial class Account
     public int? CustomerId { get; set; }
 
     public int? CarerId { get; set; }
+
+    public virtual ICollection<FCMToken> FCMTokens { get; set; }
 }

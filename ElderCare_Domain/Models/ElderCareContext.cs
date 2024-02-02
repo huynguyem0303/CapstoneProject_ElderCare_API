@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.ValueGeneration;
 using Microsoft.Extensions.Configuration;
 
 namespace ElderCare_Domain.Models;
@@ -16,6 +18,7 @@ public partial class ElderCareContext : DbContext
     {
     }
 
+    #region DbSets
     public virtual DbSet<Account> Accounts { get; set; }
 
     public virtual DbSet<Bankinformation> Bankinformations { get; set; }
@@ -75,6 +78,9 @@ public partial class ElderCareContext : DbContext
     public virtual DbSet<Timetable> Timetables { get; set; }
 
     public virtual DbSet<Transaction> Transactions { get; set; }
+
+    public virtual DbSet<FCMToken> FCMTokens { get; set; }
+    #endregion
 
     //    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
@@ -758,8 +764,36 @@ public partial class ElderCareContext : DbContext
             entity.Property(e => e.Type).HasColumnName("type");
         });
 
+        modelBuilder.Entity<FCMToken>(entity =>
+        {
+            entity.ToTable("FCMToken");
+
+            entity.HasKey(e => e.TokenId);
+            entity.Property(e => e.TokenId)
+                  .HasColumnName("token_id")
+                  .HasColumnType("uniqueidentifier");
+            entity.Property(e => e.AccountId).HasColumnName("account_id").IsRequired();
+            entity.Property(e => e.TokenValue)
+                  .HasColumnName("token_description")
+                  .HasMaxLength(255);
+
+            entity.HasOne(e => e.Account).WithMany(e => e.FCMTokens)
+                  .HasForeignKey(e => e.AccountId)
+                  .HasConstraintName("FK_FCMToken_Account");
+        });
+
         OnModelCreatingPartial(modelBuilder);
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+
+    private class GuidGenerator : ValueGenerator<Guid>
+    {
+        public override bool GeneratesTemporaryValues => false;
+
+        public override Guid Next(EntityEntry entry)
+        {
+            return Guid.NewGuid();
+        }
+    }
 }

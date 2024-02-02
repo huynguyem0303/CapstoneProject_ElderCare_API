@@ -13,6 +13,5 @@ namespace ElderCare_Repository.Interfaces
     public interface ICarerRepository : IGenericRepo<Carer>
     {
         Task<List<Carer>?> searchCarer(SearchCarerDto dto );
-        Task<List<Carer>> GetAll();
     }
 }
