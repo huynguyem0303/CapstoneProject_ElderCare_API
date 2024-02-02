@@ -16,7 +16,10 @@ namespace ElderCare_Repository.Mappers
         {
             CreateMap(typeof(Pagination<>), typeof(Pagination<>));
             CreateMap<SignInDto, Account>();
-         
+            CreateMap<AccountNotiDto, NotificationModel>()
+                .ForMember(d => d.IsAndroidDevice, s => s.MapFrom(e => e.Data.IsAndroidDevice))
+                .ForMember(d => d.Title, s => s.MapFrom(e => e.Data.Title))
+                .ForMember(d => d.Body, s => s.MapFrom(e => e.Data.Body));
         }
     }
 }

@@ -13,5 +13,7 @@ namespace ElderCare_Repository.Interfaces
         Task<Account?> LoginCustomerAsync(String email, String password);
         Task<Account?> LoginStaffAsync(String email, String password);
         Task<Account?> LoginCarerAsync(String email, String password);
+        Task<List<FCMToken>?> GetFCMTokensByAccountId(int accountId);
+        Task AddFCMToken(int accountId, string tokenValue);
     }
 }

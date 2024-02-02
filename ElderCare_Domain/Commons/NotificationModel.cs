@@ -7,7 +7,7 @@ namespace ElderCare_Domain.Commons
         [JsonProperty("deviceId")]
         public string DeviceId { get; set; }
         [JsonProperty("isAndroiodDevice")]
-        public bool IsAndroiodDevice { get; set; }
+        public bool IsAndroidDevice { get; set; }
         [JsonProperty("title")]
         public string Title { get; set; }
         [JsonProperty("body")]

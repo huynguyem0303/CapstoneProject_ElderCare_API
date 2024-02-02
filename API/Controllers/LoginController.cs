@@ -1,9 +1,12 @@
 ﻿using API.DTO;
 using API.Ultils;
 using AutoMapper;
+using ElderCare_Domain.Commons;
+using ElderCare_Domain.Models;
 using ElderCare_Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace API.Controllers
 {
@@ -29,17 +32,25 @@ namespace API.Controllers
             .Build();
             // string adminEmail = config["AdminAccount:Email"];
             // string adminPassword = config["AdminAccount:Password"];
-            // if (loginDto.email.ToLower().Equals(adminEmail.ToLower()) && loginDto.password.Equals(adminPassword))
+            // if (loginDto.Email.ToLower().Equals(adminEmail.ToLower()) && loginDto.Password.Equals(adminPassword))
             //     return Ok(new ApiResponse
             //     {
             //         Success = true,
             //         Message = "Authenticate success",
             //         Data = GenerateJWTString.GenerateJsonWebTokenForAdmin(adminEmail, config["AppSettings:SecretKey"], DateTime.Now)
             //     }); ;
-            var account = await _unitOfWork.AccountRepository.LoginCustomerAsync(loginDto.email, loginDto.password);
+            var account = await _unitOfWork.AccountRepository.LoginCustomerAsync(loginDto.Email, loginDto.Password);
             if (account == null)
             {
                 return Unauthorized();
+            }
+            else if(!loginDto.FCMToken.IsNullOrEmpty())
+            {
+                var response = await checkAccountFCMToken(account.AccountId, loginDto.FCMToken);
+                if (!response.IsSuccess)
+                {
+                    return Ok(response);
+                }
             }
             return Ok(new ApiResponse
             {
@@ -55,10 +66,18 @@ namespace API.Controllers
            .SetBasePath(Directory.GetCurrentDirectory())
            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
            .Build();
-            var account = await _unitOfWork.AccountRepository.LoginCarerAsync(loginDto.email, loginDto.password);
+            var account = await _unitOfWork.AccountRepository.LoginCarerAsync(loginDto.Email, loginDto.Password);
             if (account == null)
             {
                 return Unauthorized();
+            }
+            else if (!loginDto.FCMToken.IsNullOrEmpty())
+            {
+                var response = await checkAccountFCMToken(account.AccountId, loginDto.FCMToken);
+                if (!response.IsSuccess)
+                {
+                    return Ok(response);
+                }
             }
             return Ok(new ApiResponse
             {
@@ -74,7 +93,7 @@ namespace API.Controllers
            .SetBasePath(Directory.GetCurrentDirectory())
            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
            .Build();
-            var account = await _unitOfWork.AccountRepository.LoginStaffAsync(loginDto.email, loginDto.password);
+            var account = await _unitOfWork.AccountRepository.LoginStaffAsync(loginDto.Email, loginDto.Password);
             if (account == null)
             {
                 return Unauthorized();
@@ -85,6 +104,27 @@ namespace API.Controllers
                 Message = "Authenticate success",
                 Data = GenerateJWTString.GenerateJsonWebTokenForStaff(account, config["AppSettings:SecretKey"], DateTime.Now)
             }); ;
+        }
+
+        private async Task<ResponseModel> checkAccountFCMToken(int accountId, string token)
+        {
+            var response = await _unitOfWork.NotificationService.SendNotification(new ElderCare_Domain.Commons.NotificationModel()
+            {
+                Title = "Login Notification",
+                IsAndroidDevice = true,
+                Body = "An account attemp to login into this device",
+                DeviceId = token,
+            });
+            if (response.IsSuccess)
+            {
+                await _unitOfWork.AccountRepository.AddFCMToken(accountId, token);
+                await _unitOfWork.SaveChangeAsync();
+            }
+            else
+            {
+                response.Message = $"Invalid FCMToken: {response.Message}";
+            }
+            return response;
         }
     }
 }

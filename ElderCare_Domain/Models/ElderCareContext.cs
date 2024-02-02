@@ -771,7 +771,9 @@ public partial class ElderCareContext : DbContext
             entity.HasKey(e => e.TokenId);
             entity.Property(e => e.TokenId)
                   .HasColumnName("token_id")
-                  .HasColumnType("uniqueidentifier");
+                  .HasColumnType("uniqueidentifier")
+                  .ValueGeneratedOnAdd()
+                  .HasValueGenerator<GuidValueGenerator>();
             entity.Property(e => e.AccountId).HasColumnName("account_id").IsRequired();
             entity.Property(e => e.TokenValue)
                   .HasColumnName("token_description")
@@ -786,14 +788,4 @@ public partial class ElderCareContext : DbContext
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
-
-    private class GuidGenerator : ValueGenerator<Guid>
-    {
-        public override bool GeneratesTemporaryValues => false;
-
-        public override Guid Next(EntityEntry entry)
-        {
-            return Guid.NewGuid();
-        }
-    }
 }
