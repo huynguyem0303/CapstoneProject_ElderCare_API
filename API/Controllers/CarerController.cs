@@ -3,7 +3,10 @@ using AutoMapper;
 using ElderCare_Domain.Models;
 using ElderCare_Repository;
 using ElderCare_Repository.DTO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Query;
+using Microsoft.AspNetCore.OData.Results;
 using Microsoft.IdentityModel.Tokens;
 
 namespace API.Controllers
@@ -28,5 +31,13 @@ namespace API.Controllers
 
             return Ok(account);
         }
+        [HttpGet("{id}")]
+        [EnableQuery]
+        public async Task<SingleResult<Account>> GetCarerById(int id)
+        {
+            var account = await _unitOfWork.AccountRepository.FindAsync(x => x.AccountId == id);
+            return SingleResult.Create(account.AsQueryable());
+        }
+
     }
 }
