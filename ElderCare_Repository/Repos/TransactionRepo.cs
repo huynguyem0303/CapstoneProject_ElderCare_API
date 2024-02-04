@@ -16,5 +16,9 @@ namespace ElderCare_Repository.Repos
 
         }
 
+        public async Task CreateTrans(int cusid, int carerid, decimal amount)
+        {
+            
+        }
     }
 }

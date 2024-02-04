@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ElderCare_Repository.Repos
 {
-    public class PaymentRepo : IPayment
+    public class PaymentRepo : IPaymentRepo
     {
         public Task UrlCreated()
         {

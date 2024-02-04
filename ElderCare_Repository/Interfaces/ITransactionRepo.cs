@@ -10,6 +10,6 @@ namespace ElderCare_Repository.Interfaces
 {
     public interface ITransactionRepo:IGenericRepo<Transaction>
     {
-        Task<Transaction> CreateTrans(int cusid, int carerid, decimal amount);
+        Task CreateTrans(int cusid, int carerid, decimal amount);
     }
 }

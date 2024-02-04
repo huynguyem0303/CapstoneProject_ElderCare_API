@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ElderCare_Repository.Interfaces
 {
-    public interface IPayment
+    public interface IPaymentRepo
     {
         Task UrlCreated();
     }
