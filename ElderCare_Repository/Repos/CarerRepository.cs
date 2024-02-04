@@ -29,7 +29,7 @@ namespace ElderCare_Repository.Repos
             List<Carer> carercate = new List<Carer>();
             List<CarerShilft> shift = await _context.Set<CarerShilft>().ToListAsync();
             List<CarerShilft> CarerShilft = new List<CarerShilft>();
-            List<CarerShilft> cate = await _context.Set<CarerShilft>().ToListAsync();
+            List<CarerCategory> cate = await _context.Set<CarerCategory>().ToListAsync();
             List<CarerCategory> CarerCategory = new List<CarerCategory>();
             string separator = " ";
             string genderlist = String.Join(separator, dto.Gender);
@@ -47,6 +47,19 @@ namespace ElderCare_Repository.Repos
                 for (int i = 0; i < CarerShilft.Count; i++)
                 {
                     carershift = await _context.Set<Carer>().Where(x => (x.CarerId == CarerShilft[i].CarerId)).ToListAsync(); ;
+                }
+
+            }
+            if (!catelist.IsNullOrEmpty())
+            {
+                for (int i = 0; i < cate.Count; i++)
+                {
+                    if (catelist.Contains(cate[i].Cate.Description))
+                        CarerCategory.Add(cate[i]);
+                }
+                for (int i = 0; i < CarerCategory.Count; i++)
+                {
+                    carercate = await _context.Set<Carer>().Where(x => (x.CarerId == CarerCategory[i].CarerId)).ToListAsync(); ;
                 }
 
             }
@@ -71,11 +84,8 @@ namespace ElderCare_Repository.Repos
                         carer.Add(list[i]);
                 }
 
-
-
-
-            var combile = carer.Union(carershift).ToList();
-            var result = combile.Union(carercate).ToList();
+            var combine = carer.Union(carershift).ToList();
+            var result = combine.Union(carercate).ToList();
             return result;
         }
     }
