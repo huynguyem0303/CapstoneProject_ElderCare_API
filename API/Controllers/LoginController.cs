@@ -16,7 +16,7 @@ namespace API.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-
+        public static string? currentJWT;
         public LoginController(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
@@ -52,6 +52,7 @@ namespace API.Controllers
                     return Ok(response);
                 }
             }
+            currentJWT = GenerateJWTString.GenerateJsonWebTokenForCarer(account, config["AppSettings:SecretKey"], DateTime.Now);
             return Ok(new ApiResponse
             {
                 Success = true,
@@ -79,12 +80,14 @@ namespace API.Controllers
                     return Ok(response);
                 }
             }
+            currentJWT= GenerateJWTString.GenerateJsonWebTokenForCarer(account, config["AppSettings:SecretKey"], DateTime.Now);
             return Ok(new ApiResponse
             {
                 Success = true,
                 Message = "Authenticate success",
                 Data = GenerateJWTString.GenerateJsonWebTokenForCarer(account, config["AppSettings:SecretKey"], DateTime.Now)
-            }); ;
+            });
+            ;
         }
         [HttpPost("loginStaff")]
         public async Task<IActionResult> LoginStaff(LoginDto loginDto)
@@ -98,6 +101,7 @@ namespace API.Controllers
             {
                 return Unauthorized();
             }
+            currentJWT = GenerateJWTString.GenerateJsonWebTokenForCarer(account, config["AppSettings:SecretKey"], DateTime.Now);
             return Ok(new ApiResponse
             {
                 Success = true,

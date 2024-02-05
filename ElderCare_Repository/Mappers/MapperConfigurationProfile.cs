@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ElderCare_Domain.Commons;
+using ElderCare_Domain.Enums;
 using ElderCare_Domain.Models;
 using ElderCare_Repository.DTO;
 using System;
@@ -16,6 +17,8 @@ namespace ElderCare_Repository.Mappers
         {
             CreateMap(typeof(Pagination<>), typeof(Pagination<>));
             CreateMap<SignInDto, Account>();
+            CreateMap<Transaction, TrasactionDto>().ReverseMap().ForMember(des => des.Type,
+                opt => opt.MapFrom(src => EnumMapper<TransactionType>.MapType(src.Type)));
             CreateMap<AccountNotiDto, NotificationModel>()
                 .ForMember(d => d.IsAndroidDevice, s => s.MapFrom(e => e.Data.IsAndroidDevice))
                 .ForMember(d => d.Title, s => s.MapFrom(e => e.Data.Title))

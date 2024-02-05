@@ -16,20 +16,23 @@ namespace ElderCare_Repository
         private readonly ICustomerRepository _customerRepository;
         private readonly ICarerRepository _carerRepository;
         private readonly INotificationService _notificationService;
+        private readonly ITransactionRepo _transactionRepository;
 
-        public UnitOfWork(ElderCareContext context, IAccountRepository accountRepository, ICustomerRepository customerRepository, ICarerRepository carerRepository, INotificationService notificationService)
+        public UnitOfWork(ElderCareContext context, IAccountRepository accountRepository, ICustomerRepository customerRepository, ICarerRepository carerRepository, INotificationService notificationService, ITransactionRepo transactionRepository)
         {
             _context = context;
             _accountRepository = accountRepository;
             _customerRepository = customerRepository;
             _carerRepository = carerRepository;
             _notificationService = notificationService;
+            _transactionRepository = transactionRepository;
         }
 
         public IAccountRepository AccountRepository => _accountRepository;
 
         public ICustomerRepository CustomerRepository => _customerRepository;
         public ICarerRepository CarerRepository => _carerRepository;
+        public ITransactionRepo TransactionRepo => _transactionRepository;
         public INotificationService NotificationService => _notificationService;
 
         public async Task<int> SaveChangeAsync()
