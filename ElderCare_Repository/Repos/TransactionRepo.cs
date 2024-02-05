@@ -1,6 +1,10 @@
-﻿using DataAccess.Repositories;
+﻿using AutoMapper;
+using DataAccess.Repositories;
 using ElderCare_Domain.Models;
+using ElderCare_Repository.DTO;
 using ElderCare_Repository.Interfaces;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,14 +15,11 @@ namespace ElderCare_Repository.Repos
 {
     public class TransactionRepo : GenericRepo<Transaction>, ITransactionRepo
     {
-        public TransactionRepo(ElderCareContext context) : base(context)
+        private readonly IMapper _mapper;
+        public TransactionRepo(ElderCareContext context, IMapper mapper) : base(context)
         {
-
+            _mapper = mapper;
         }
 
-        public async Task CreateTrans(int cusid, int carerid, decimal amount)
-        {
-            
-        }
     }
 }

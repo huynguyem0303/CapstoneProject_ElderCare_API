@@ -3,6 +3,7 @@ using ElderCare_Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,5 +16,6 @@ namespace ElderCare_Repository.Interfaces
         Task<Account?> LoginCarerAsync(String email, String password);
         Task<List<FCMToken>?> GetFCMTokensByAccountId(int accountId);
         Task AddFCMToken(int accountId, string tokenValue);
+        int? GetMemberIdFromToken(ClaimsPrincipal userClaims);
     }
 }
