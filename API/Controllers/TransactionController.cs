@@ -36,7 +36,8 @@ namespace API.Controllers
              
                 var id = _unitOfWork.TransactionRepo.GetAll().OrderByDescending(i=>i.TransactionId).FirstOrDefault().TransactionId;
             Transaction obj = _mapper.Map<Transaction>(dto);
-            obj.AccountId = userid.AccountId+1;
+            obj.AccountId = userid.AccountId;
+            obj.TransactionId = id+1;
                 await _unitOfWork.TransactionRepo.AddAsync(obj);
 
             try

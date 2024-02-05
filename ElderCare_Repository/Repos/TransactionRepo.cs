@@ -5,6 +5,7 @@ using ElderCare_Repository.DTO;
 using ElderCare_Repository.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,5 +22,12 @@ namespace ElderCare_Repository.Repos
             _mapper = mapper;
         }
 
+        public async Task<List<Transaction>> GetAllTransactions()
+        {
+            var list=await _context.Set<Transaction>().ToListAsync();
+            if (list==null) { }
+            return list;
+
+        }
     }
 }
