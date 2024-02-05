@@ -11,5 +11,6 @@ namespace ElderCare_Repository.Interfaces
 {
     public interface ITransactionRepo:IGenericRepo<Transaction>
     {
+        Task<List<Transaction>> GetAllTransactions();
     }
 }
