@@ -12,5 +12,8 @@ namespace ElderCare_Repository.Interfaces
     public interface ITransactionRepo:IGenericRepo<Transaction>
     {
         Task<List<Transaction>> GetAllTransactions();
+        Task<Transaction> GetLastestTransaction(int id);
+        Task<Transaction> GetTransaction(long id);
+        Task UpdateOrderInfoInDatabase(Transaction transaction);
     }
 }

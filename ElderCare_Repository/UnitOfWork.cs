@@ -1,6 +1,7 @@
 ﻿using ElderCare_Domain.Models;
 using ElderCare_Repository.Interfaces;
 using ElderCare_Repository.Services;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,8 +18,9 @@ namespace ElderCare_Repository
         private readonly ICarerRepository _carerRepository;
         private readonly INotificationService _notificationService;
         private readonly ITransactionRepo _transactionRepository;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UnitOfWork(ElderCareContext context, IAccountRepository accountRepository, ICustomerRepository customerRepository, ICarerRepository carerRepository, INotificationService notificationService, ITransactionRepo transactionRepository)
+        public UnitOfWork(ElderCareContext context, IAccountRepository accountRepository, ICustomerRepository customerRepository, ICarerRepository carerRepository, INotificationService notificationService, ITransactionRepo transactionRepository, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _accountRepository = accountRepository;
@@ -26,6 +28,7 @@ namespace ElderCare_Repository
             _carerRepository = carerRepository;
             _notificationService = notificationService;
             _transactionRepository = transactionRepository;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public IAccountRepository AccountRepository => _accountRepository;
@@ -33,6 +36,7 @@ namespace ElderCare_Repository
         public ICustomerRepository CustomerRepository => _customerRepository;
         public ICarerRepository CarerRepository => _carerRepository;
         public ITransactionRepo TransactionRepo => _transactionRepository;
+ 
         public INotificationService NotificationService => _notificationService;
 
         public async Task<int> SaveChangeAsync()
