@@ -66,6 +66,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                         ClockSkew = TimeSpan.FromSeconds(1)
                     };
                 });
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddCors(options
         => options.AddDefaultPolicy(policy
             => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));

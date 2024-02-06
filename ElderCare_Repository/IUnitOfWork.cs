@@ -1,5 +1,6 @@
 ﻿using ElderCare_Repository.Interfaces;
 using ElderCare_Repository.Services;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,8 @@ namespace ElderCare_Repository
         public ICustomerRepository CustomerRepository { get; }
         public ICarerRepository CarerRepository { get; }
         public ITransactionRepo TransactionRepo { get; }
+       
+
         public INotificationService NotificationService { get; }
     }
 }
