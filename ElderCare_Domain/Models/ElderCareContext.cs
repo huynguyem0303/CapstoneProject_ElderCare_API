@@ -111,7 +111,7 @@ public partial class ElderCareContext : DbContext
                 .HasMaxLength(100)
                 .HasColumnName("address");
             entity.Property(e => e.CarerId).HasColumnName("carer_id").IsRequired(false);
-            entity.Property(e => e.CustomerId).HasColumnName("customer_id");
+            entity.Property(e => e.CustomerId).HasColumnName("customer_id").IsRequired(false);
             entity.Property(e => e.Email)
                 .HasMaxLength(100)
                 .HasColumnName("email");

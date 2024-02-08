@@ -56,7 +56,7 @@ namespace API.Ultils
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             var claims = new[]
             {
-             new Claim(ClaimTypes.SerialNumber ,account.AccountId.ToString()),
+             new Claim("Id" ,account.AccountId.ToString()),
             new Claim(ClaimTypes.NameIdentifier, account.Username),
             new Claim(ClaimTypes.Role, "Carer"),
         };

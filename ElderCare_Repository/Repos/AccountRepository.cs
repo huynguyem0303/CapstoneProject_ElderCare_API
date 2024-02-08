@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
@@ -42,10 +43,16 @@ namespace ElderCare_Repository.Repos
         }
         public new async Task AddAsync(Account entity)
         {
+            if (await IsEmailDublicate(entity.Email))
+            {
+                throw new DuplicateNameException("This email has already been registered");
+            }
             try
             {
-                entity.AccountId = _dbSet.Last().AccountId + 1;
-                entity.Status = 1;
+                //CheckIfNullException();
+                entity.AccountId = _dbSet.OrderBy(e=>e.AccountId).Last().AccountId + 1;
+                entity.Status = (int)AccountStatus.Active;
+                entity.RoleId = (int)AccountRole.None;
                 await _dbSet.AddAsync(entity);
             }
             catch (DbUpdateException)
@@ -97,6 +104,26 @@ namespace ElderCare_Repository.Repos
             }
 
             return null; // Trả về null nếu không tìm thấy hoặc không thể chuyển đổi thành Guid
+        }
+
+        private async Task<bool> IsEmailDublicate(string email)
+        {
+            return await _dbSet.AnyAsync(e => e.Email == email.Trim());
+        }
+
+        private void CheckIfNullException()
+        {
+            _ = _dbSet.Select(e => e.RoleId).ToList();
+            _ = _dbSet.Select(e => e.AccountId).ToList();
+            _ = _dbSet.Select(e => e.Username).ToList();
+            _ = _dbSet.Select(e => e.Password).ToList();
+            _ = _dbSet.Select(e => e.Email).ToList();
+            _ = _dbSet.Select(e => e.PhoneNumber).ToList();
+            _ = _dbSet.Select(e => e.Address).ToList();
+            _ = _dbSet.Select(e => e.Status).ToList();
+            _ = _dbSet.Select(e => e.CustomerId).ToList();
+            _ = _dbSet.Select(e => e.CarerId).ToList();
+            
         }
     }
 }

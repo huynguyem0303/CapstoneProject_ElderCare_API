@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Results;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
 using ElderCare_Repository.DTO;
+using System.Data;
 
 namespace API.Controllers
 {
@@ -98,12 +99,12 @@ namespace API.Controllers
                 return Problem("Entity set 'ElderCareContext.Accounts'  is null.");
             }
             var account = _mapper.Map<Account>(model);
-            await _unitOfWork.AccountRepository.AddAsync(account);
             try
             {
+                await _unitOfWork.AccountRepository.AddAsync(account);
                 await _unitOfWork.SaveChangeAsync();
             }
-            catch (DbUpdateException)
+            catch (DbUpdateException e)
             {
                 if (await AccountExists(account.AccountId))
                 {
@@ -111,8 +112,11 @@ namespace API.Controllers
                 }
                 else
                 {
-                    throw;
+                    return BadRequest(error: e.Message);
                 }
+            }catch (DuplicateNameException e)
+            {
+                return Conflict(error: e.Message);
             }
 
             return CreatedAtAction("GetAccount", new { id = account.AccountId }, account);
