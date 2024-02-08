@@ -64,7 +64,18 @@ namespace ElderCare_Repository.Repos
                 throw new Exception(ex.Message);
             }
         }
-
+        public new void Delete(Account entity)
+        {
+            try
+            {
+                entity.Status = (int)AccountStatus.InActive;
+                _context.Entry(entity).State = EntityState.Modified;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
         public async Task<List<FCMToken>?> GetFCMTokensByAccountId(int accountId)
         {
             return await _context.FCMTokens.Where(e => e.AccountId.Equals(accountId)).ToListAsync();
