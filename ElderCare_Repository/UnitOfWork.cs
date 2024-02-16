@@ -19,8 +19,9 @@ namespace ElderCare_Repository
         private readonly INotificationService _notificationService;
         private readonly ITransactionRepo _transactionRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IElderRepo _elderRepo;
 
-        public UnitOfWork(ElderCareContext context, IAccountRepository accountRepository, ICustomerRepository customerRepository, ICarerRepository carerRepository, INotificationService notificationService, ITransactionRepo transactionRepository, IHttpContextAccessor httpContextAccessor)
+        public UnitOfWork(ElderCareContext context, IAccountRepository accountRepository, ICustomerRepository customerRepository, ICarerRepository carerRepository, INotificationService notificationService, ITransactionRepo transactionRepository, IHttpContextAccessor httpContextAccessor, IElderRepo elderRepo)
         {
             _context = context;
             _accountRepository = accountRepository;
@@ -29,6 +30,7 @@ namespace ElderCare_Repository
             _notificationService = notificationService;
             _transactionRepository = transactionRepository;
             _httpContextAccessor = httpContextAccessor;
+            _elderRepo = elderRepo;
         }
 
         public IAccountRepository AccountRepository => _accountRepository;
@@ -39,6 +41,7 @@ namespace ElderCare_Repository
  
         public INotificationService NotificationService => _notificationService;
 
+        public IElderRepo ElderRepo => _elderRepo;
         public async Task<int> SaveChangeAsync()
         {
             return await _context.SaveChangesAsync();

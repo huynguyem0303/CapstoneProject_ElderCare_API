@@ -11,17 +11,17 @@ public partial class Elderly
 
     public int? LivingconditionId { get; set; }
 
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
     public int? Age { get; set; }
 
-    public string Relationshiptocustomer { get; set; }
+    public string? Relationshiptocustomer { get; set; }
 
-    public string Address { get; set; }
+    public string? Address { get; set; }
 
-    public string Image { get; set; }
+    public string? Image { get; set; }
 
-    public string Note { get; set; }
+    public string? Note { get; set; }
 
     public int? HobbyId { get; set; }
 
