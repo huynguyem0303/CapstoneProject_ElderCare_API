@@ -16,7 +16,8 @@ namespace ElderCare_Repository
         public ICustomerRepository CustomerRepository { get; }
         public ICarerRepository CarerRepository { get; }
         public ITransactionRepo TransactionRepo { get; }
-       
+        public IElderRepo ElderRepo { get; }
+
 
         public INotificationService NotificationService { get; }
     }

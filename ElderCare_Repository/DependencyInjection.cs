@@ -28,6 +28,7 @@ namespace ElderCare_Repository
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<ICarerRepository, CarerRepository>();
             services.AddScoped<ITransactionRepo, TransactionRepo>();
+            services.AddScoped<IElderRepo, ElderRepo>();
             services.AddAutoMapper(typeof(MapperConfigurationProfile).Assembly);
             services.AddDbContext<ElderCareContext>(option => option.UseSqlServer(databaseConnection).EnableSensitiveDataLogging());
 
