@@ -13,6 +13,6 @@ namespace ElderCare_Repository.Interfaces
     public interface ICarerRepository : IGenericRepo<Carer>
     {
         Task<List<Carer>?> searchCarer(SearchCarerDto dto );
-       
+        new Task<Carer> AddAsync(Carer entity);
     }
 }

@@ -7,7 +7,7 @@ public partial class Bankinformation
 {
     public int BankinfoId { get; set; }
 
-    public int? AccountNumber { get; set; }
+    public string AccountNumber { get; set; }
 
     public string BankName { get; set; }
 

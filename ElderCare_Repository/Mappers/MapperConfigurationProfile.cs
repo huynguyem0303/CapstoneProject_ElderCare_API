@@ -24,6 +24,20 @@ namespace ElderCare_Repository.Mappers
                 .ForMember(d => d.IsAndroidDevice, s => s.MapFrom(e => e.Data.IsAndroidDevice))
                 .ForMember(d => d.Title, s => s.MapFrom(e => e.Data.Title))
                 .ForMember(d => d.Body, s => s.MapFrom(e => e.Data.Body));
+            CreateMap<CarerSignInDto, Carer>()
+                .ForMember(d => d.Name, s => s.MapFrom(e => e.Name))
+                .ForMember(d => d.Email, s => s.MapFrom(e => e.Email))
+                .ForMember(d => d.Phone, s => s.MapFrom(e => e.PhoneNumber))
+                .ForMember(d => d.Age, s => s.MapFrom(e => e.Age))
+                .ForMember(d => d.Bankinfo, s => s.MapFrom(e => e.BankInfo))
+                .ForMember(d => d.Gender, s => s.MapFrom(e => e.Gender))
+                .ForMember(d => d.Image, s => s.MapFrom(e => e.Image));
+            CreateMap<CarerSignInDto.BankInfomation, Bankinformation>();
+            CreateMap<CarerSignInDto, Account>()
+                .ForMember(d => d.Email, s => s.MapFrom(e => e.Email))
+                .ForMember(d => d.Username, s => s.MapFrom(e => e.Name))
+                .ForMember(d => d.Address, s => s.MapFrom(e => e.Address))
+                .ForMember(d => d.PhoneNumber, s => s.MapFrom(e => e.PhoneNumber));
         }
     }
 }

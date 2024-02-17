@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.OData.Results;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
 using ElderCare_Repository.DTO;
 using System.Data;
+using ElderCare_Domain.Enums;
 
 namespace API.Controllers
 {
@@ -99,6 +100,8 @@ namespace API.Controllers
                 return Problem("Entity set 'ElderCareContext.Accounts'  is null.");
             }
             var account = _mapper.Map<Account>(model);
+            account.Status = (int)AccountStatus.Active;
+            account.RoleId = (int)AccountRole.None;
             try
             {
                 await _unitOfWork.AccountRepository.AddAsync(account);

@@ -140,7 +140,9 @@ public partial class ElderCareContext : DbContext
             entity.Property(e => e.AccountName)
                 .HasMaxLength(100)
                 .HasColumnName("account_name");
-            entity.Property(e => e.AccountNumber).HasColumnName("account_number");
+            entity.Property(e => e.AccountNumber)
+                .HasMaxLength(50)
+                .HasColumnName("account_number");
             entity.Property(e => e.BankName)
                 .HasMaxLength(100)
                 .HasColumnName("bank_name");

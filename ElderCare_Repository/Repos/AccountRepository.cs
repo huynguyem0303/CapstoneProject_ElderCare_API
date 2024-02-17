@@ -51,8 +51,6 @@ namespace ElderCare_Repository.Repos
             {
                 //CheckIfNullException();
                 entity.AccountId = _dbSet.OrderBy(e=>e.AccountId).Last().AccountId + 1;
-                entity.Status = (int)AccountStatus.Active;
-                entity.RoleId = (int)AccountRole.None;
                 await _dbSet.AddAsync(entity);
             }
             catch (DbUpdateException)
