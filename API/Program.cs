@@ -8,7 +8,18 @@ using Microsoft.OpenApi.Models;
 using System.Reflection;
 using System.Text;
 
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      policy =>
+                      {
+                          policy.WithOrigins("http://localhost:3000",
+                                              "https://elder-care-system.vercel.app");
+                      });
+});
 // Add services to the container.
 
 builder.Services.AddControllers().AddOData(options => options.EnableQueryFeatures(100));
@@ -71,7 +82,7 @@ builder.Services.AddCors(options
         => options.AddDefaultPolicy(policy
             => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 var app = builder.Build();
-app.UseCors();
+app.UseCors(MyAllowSpecificOrigins);
 // Configure the HTTP request pipeline.
 
 app.UseSwagger();
