@@ -11,15 +11,7 @@ using System.Text;
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy(name: MyAllowSpecificOrigins,
-                      policy =>
-                      {
-                          policy.WithOrigins("http://localhost:3000",
-                                              "https://elder-care-system.vercel.app");
-                      });
-});
+
 // Add services to the container.
 
 builder.Services.AddControllers().AddOData(options => options.EnableQueryFeatures(100));
@@ -79,7 +71,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 });
 builder.Services.AddHttpContextAccessor();
 var app = builder.Build();
-app.UseCors(MyAllowSpecificOrigins);
+app.UseCors(x => x
+          .AllowAnyMethod()
+          .AllowAnyHeader()
+          .SetIsOriginAllowed(origin => true) // allow any origin 
+          .AllowCredentials());
+
 // Configure the HTTP request pipeline.
 
 app.UseSwagger();
