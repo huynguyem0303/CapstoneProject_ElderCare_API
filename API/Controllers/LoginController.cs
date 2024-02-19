@@ -96,12 +96,22 @@ namespace API.Controllers
            .SetBasePath(Directory.GetCurrentDirectory())
            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
            .Build();
+            string adminEmail = config["AdminAccount:Email"];
+            string adminPassword = config["AdminAccount:Password"];
+            if (loginDto.Email.ToLower().Equals(adminEmail.ToLower()) && loginDto.Password.Equals(adminPassword))
+                return Ok(new ApiResponse
+                {
+                    Success = true,
+                    Message = "Authenticate success",
+                    Data = GenerateJWTString.GenerateJsonWebTokenForAdmin(adminEmail, config["AppSettings:SecretKey"], DateTime.Now)
+                }); ;
             var account = await _unitOfWork.AccountRepository.LoginStaffAsync(loginDto.Email, loginDto.Password);
             if (account == null)
             {
                 return Unauthorized();
             }
             currentJWT = GenerateJWTString.GenerateJsonWebTokenForCarer(account, config["AppSettings:SecretKey"], DateTime.Now);
+            
             return Ok(new ApiResponse
             {
                 Success = true,
