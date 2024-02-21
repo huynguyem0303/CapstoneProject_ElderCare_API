@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Results;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 namespace API.Controllers
@@ -39,5 +40,39 @@ namespace API.Controllers
             return SingleResult.Create(account.AsQueryable());
         }
 
+        [HttpPut("{id}")]
+        [EnableQuery]
+        public async Task<IActionResult> PutCarer(int id, Carer carer)
+        {
+            if (id != carer.CarerId)
+            {
+                return BadRequest();
+            }
+
+            _unitOfWork.CarerRepository.Update(carer);
+
+            try
+            {
+                await _unitOfWork.SaveChangeAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!await CarerExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+        private async Task<bool> CarerExists(int id)
+        {
+            return await _unitOfWork.CarerRepository.GetByIdAsync(id) != null;
+        }
     }
 }
