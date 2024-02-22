@@ -42,7 +42,7 @@ namespace API.Controllers
             {
                 return BadRequest(error: e.Message);
             }
-            return CreatedAtAction("signinCarer", new { id = account.AccountId }, account);
+            return CreatedAtAction("GetAccount", controllerName: "Accounts", new { id = account.AccountId }, account);
         }
     }
 }
