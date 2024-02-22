@@ -47,10 +47,42 @@ namespace API.Controllers
             try
             {
                 await _unitOfWork.SaveChangeAsync();
+                string vnp_Returnurl = "https://quangttse151013.monoinfinity.net/process-payment"; //URL nhan ket qua tra ve 
+                string vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html"; //URL thanh toan cua VNPAY 
+                string vnp_TmnCode = "NWYNAA42"; //Ma định danh merchant kết nối (Terminal Id)
+                string vnp_HashSecret = "XLTMAZINYXOVQKRVTNEIXAJIRVANWGZN"; //Secret Key
+
+                VnPayLibrary vnpay = new VnPayLibrary();
+
+
+                vnpay.AddRequestData("vnp_Version", VnPayLibrary.VERSION);
+                vnpay.AddRequestData("vnp_Command", "pay");
+                vnpay.AddRequestData("vnp_TmnCode", vnp_TmnCode);
+                vnpay.AddRequestData("vnp_Amount", Math.Floor(decimal.Parse(obj.FigureMoney.ToString()) * 100).ToString());
+
+                vnpay.AddRequestData("vnp_BankCode", "VNBANK");
+                vnpay.AddRequestData("vnp_CreateDate", DateTime.Now.ToString("yyyyMMddHHmmss"));
+                vnpay.AddRequestData("vnp_CurrCode", "VND");
+                vnpay.AddRequestData("vnp_IpAddr", Utils.GetIpAddress(_httpContextAccessor));
+
+                vnpay.AddRequestData("vnp_Locale", "vn");
+
+
+                vnpay.AddRequestData("vnp_OrderInfo", "Thanh toan don hang:" + obj.TransactionId);
+                vnpay.AddRequestData("vnp_OrderType", "other"); //default value: other
+
+                vnpay.AddRequestData("vnp_ReturnUrl", vnp_Returnurl);
+                vnpay.AddRequestData("vnp_TxnRef", obj.TransactionId.ToString());
+
+
+
+                string paymentUrl = vnpay.CreateRequestUrl(vnp_Url, vnp_HashSecret);
+
                 return Ok(new ApiResponse
                 {
                     Success = true,
                     Message = "Create success",
+                    Data = paymentUrl
                 }); ;
             }
             catch
