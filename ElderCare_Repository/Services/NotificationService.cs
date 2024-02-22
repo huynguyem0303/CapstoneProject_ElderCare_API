@@ -90,7 +90,7 @@ namespace ElderCare_Repository.Services
             try
             {
                 var notificationModel = _mapper.Map<NotificationModel>(accountNotiModel);
-                if((await _accountRepository.FindAsync(e => e.Status != (int)AccountStatus.Active
+                if((await _accountRepository.FindAsync(e => e.Status != (int)AccountStatus.InActive
                                                             && e.AccountId == accountNotiModel.AccountId))
                                                             .IsNullOrEmpty())
                 {
