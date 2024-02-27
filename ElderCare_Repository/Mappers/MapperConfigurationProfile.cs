@@ -24,6 +24,7 @@ namespace ElderCare_Repository.Mappers
                 .ForMember(d => d.IsAndroidDevice, s => s.MapFrom(e => e.Data.IsAndroidDevice))
                 .ForMember(d => d.Title, s => s.MapFrom(e => e.Data.Title))
                 .ForMember(d => d.Body, s => s.MapFrom(e => e.Data.Body));
+            //carer sign in
             CreateMap<CarerSignInDto, Carer>()
                 .ForMember(d => d.Name, s => s.MapFrom(e => e.Name))
                 .ForMember(d => d.Email, s => s.MapFrom(e => e.Email))
@@ -37,6 +38,19 @@ namespace ElderCare_Repository.Mappers
                 .ForMember(d => d.Email, s => s.MapFrom(e => e.Email))
                 .ForMember(d => d.Username, s => s.MapFrom(e => e.Name))
                 .ForMember(d => d.Address, s => s.MapFrom(e => e.Address))
+                .ForMember(d => d.PhoneNumber, s => s.MapFrom(e => e.PhoneNumber));
+            //customer sign in
+            CreateMap<CustomerSignInDto, Customer>()
+                .ForMember(d => d.CustomerName, s => s.MapFrom(e => e.Name))
+                .ForMember(d => d.Email, s => s.MapFrom(e => e.Email))
+                .ForMember(d => d.Phone, s => s.MapFrom(e => e.PhoneNumber))
+                .ForMember(d => d.Bankinfo, s => s.MapFrom(e => e.BankInfo));
+            CreateMap<CustomerSignInDto.CustomerBankInfomation, Bankinformation>();
+            CreateMap<CustomerSignInDto, Account>()
+                .ForMember(d => d.Email, s => s.MapFrom(e => e.Email))
+                .ForMember(d => d.Username, s => s.MapFrom(e => e.Name))
+                .ForMember(d => d.Address, s => s.MapFrom(e => e.Address))
+                .ForMember(d => d.Password, s => s.MapFrom(e => e.Password))
                 .ForMember(d => d.PhoneNumber, s => s.MapFrom(e => e.PhoneNumber));
         }
     }

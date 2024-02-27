@@ -15,7 +15,7 @@ public partial class Customer
 
     public string Address { get; set; }
 
-    public bool? Status { get; set; }
+    public int? Status { get; set; }
 
     public int? BankinfoId { get; set; }
 
