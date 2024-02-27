@@ -421,9 +421,9 @@ public partial class ElderCareContext : DbContext
                 .HasForeignKey(d => d.ElderlyId)
                 .HasConstraintName("FK_Customer_Elderly");
 
-            entity.HasOne(d => d.Transaction).WithMany(p => p.Customers)
-                .HasForeignKey(d => d.TransactionId)
-                .HasConstraintName("FK_Customer_Transaction");
+            //entity.HasOne(d => d.Transaction).WithMany(p => p.Customers)
+            //    .HasForeignKey(d => d.TransactionId)
+            //    .HasConstraintName("FK_Customer_Transaction");
         });
 
         modelBuilder.Entity<Elderly>(entity =>
