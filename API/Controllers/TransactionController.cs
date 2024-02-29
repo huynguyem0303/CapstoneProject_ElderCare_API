@@ -47,7 +47,7 @@ namespace API.Controllers
             try
             {
                 await _unitOfWork.SaveChangeAsync();
-                string vnp_Returnurl = "https://quangttse151013.monoinfinity.net/process-payment"; //URL nhan ket qua tra ve 
+                string vnp_Returnurl = "https://elder-care-api.monoinfinity.net/process-payment"; //URL nhan ket qua tra ve 
                 string vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html"; //URL thanh toan cua VNPAY 
                 string vnp_TmnCode = "NWYNAA42"; //Ma định danh merchant kết nối (Terminal Id)
                 string vnp_HashSecret = "XLTMAZINYXOVQKRVTNEIXAJIRVANWGZN"; //Secret Key
@@ -101,7 +101,7 @@ namespace API.Controllers
                 var userid = await _unitOfWork.AccountRepository.GetByIdAsync(idClaim);
                 var trans = _unitOfWork.TransactionRepo.GetLastestTransaction(userid.AccountId);
 
-                string vnp_Returnurl = "https://quangttse151013.monoinfinity.net/process-payment"; //URL nhan ket qua tra ve 
+                string vnp_Returnurl = "https://elder-care-api.monoinfinity.net/process-payment"; //URL nhan ket qua tra ve 
                 string vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html"; //URL thanh toan cua VNPAY 
                 string vnp_TmnCode = "NWYNAA42"; //Ma định danh merchant kết nối (Terminal Id)
                 string vnp_HashSecret = "XLTMAZINYXOVQKRVTNEIXAJIRVANWGZN"; //Secret Key

@@ -72,7 +72,7 @@ namespace API.Controllers
 
         [HttpGet("getTransactionHistory")]
         [EnableQuery]
-        //[Authorize(Roles = "Carer")]
+        [Authorize(Roles = "Carer")]
         public async Task<IActionResult> GetCarerTransactionHistory(int carerId)
         {
             try
