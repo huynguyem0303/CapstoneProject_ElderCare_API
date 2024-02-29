@@ -43,6 +43,9 @@ namespace ElderCare_Repository.Repos
             var result = await _context.Set<Transaction>().Where(t => t.TransactionId == id).FirstOrDefaultAsync();
             return result;
         }
+
+        
+
         public async Task UpdateOrderInfoInDatabase(Transaction transaction)
         {
             _context.Entry(transaction).State = EntityState.Modified;

@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace API.Controllers
 {
     [Route("api/[controller]")]
@@ -19,6 +20,7 @@ namespace API.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        public static string? url;
 
         public TransactionController(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor)
         {
@@ -47,7 +49,7 @@ namespace API.Controllers
             try
             {
                 await _unitOfWork.SaveChangeAsync();
-                string vnp_Returnurl = "https://elder-care-api.monoinfinity.net/process-payment"; //URL nhan ket qua tra ve 
+                string vnp_Returnurl = dto.RedirectUrl; //URL nhan ket qua tra ve 
                 string vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html"; //URL thanh toan cua VNPAY 
                 string vnp_TmnCode = "NWYNAA42"; //Ma định danh merchant kết nối (Terminal Id)
                 string vnp_HashSecret = "XLTMAZINYXOVQKRVTNEIXAJIRVANWGZN"; //Secret Key
@@ -77,7 +79,7 @@ namespace API.Controllers
 
 
                 string paymentUrl = vnpay.CreateRequestUrl(vnp_Url, vnp_HashSecret);
-
+                url= paymentUrl;
                 return Ok(new ApiResponse
                 {
                     Success = true,
@@ -239,9 +241,10 @@ namespace API.Controllers
                 returnContent = "{\"RspCode\":\"99\",\"Message\":\"An error occurred\"}";
             }
 
-            return Content(returnContent, "application/json");
+            return Ok();
         }
 
     }
+
 }
 

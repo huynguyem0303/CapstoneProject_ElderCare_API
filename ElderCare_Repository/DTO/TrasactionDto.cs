@@ -10,6 +10,7 @@ namespace ElderCare_Repository.DTO
     public class TrasactionDto
     {
         public double? FigureMoney { get; set; }
+        public string? RedirectUrl { get; set; }
         public string? Type { get; set; }
         public DateTime? DateTime { get; set; }
     }
