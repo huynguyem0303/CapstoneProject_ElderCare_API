@@ -20,6 +20,7 @@ namespace ElderCare_Repository.Mappers
             CreateMap<AddElderDto, Elderly>();
             CreateMap<Transaction, TrasactionDto>().ReverseMap().ForMember(des => des.Type,
                 opt => opt.MapFrom(src => EnumMapper<TransactionType>.MapType(src.Type)));
+            CreateMap<Transaction, CarerTransactionDto>().ReverseMap();
             CreateMap<AccountNotiDto, NotificationModel>()
                 .ForMember(d => d.IsAndroidDevice, s => s.MapFrom(e => e.Data.IsAndroidDevice))
                 .ForMember(d => d.Title, s => s.MapFrom(e => e.Data.Title))

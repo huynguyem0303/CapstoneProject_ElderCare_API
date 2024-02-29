@@ -132,5 +132,21 @@ namespace ElderCare_Repository.Repos
             _ = _context.Bankinformations.Select(e => e.BankName).ToList();
             _ = _context.Bankinformations.Select(e => e.Branch).ToList();
         }
+
+        public async Task<List<Transaction>> GetCarerTransaction(int carerId)
+        {
+            var carerCusIdList = await _context.CarersCustomers.Where(x => x.CarerId == carerId).Select(x => x.CarercusId).ToListAsync();
+            if (carerCusIdList.IsNullOrEmpty())
+            {
+                throw new Exception("Empty transaction history");
+            }
+            var transactionList = await _context.Transactions.Where(x => carerCusIdList.Contains((int)x.CarercusId!)).ToListAsync();
+            return transactionList;
+        }
+
+        public async Task<CarersCustomer?> GetCarerCustomerFromIdAsync(int? carercusId)
+        {
+            return await _context.CarersCustomers.FirstOrDefaultAsync(x=>x.CarercusId == carercusId);
+        }
     }
 }
