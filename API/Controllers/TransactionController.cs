@@ -74,7 +74,7 @@ namespace API.Controllers
                 vnpay.AddRequestData("vnp_OrderType", "other"); //default value: other
 
                 vnpay.AddRequestData("vnp_ReturnUrl", vnp_Returnurl);
-                vnpay.AddRequestData("vnp_TxnRef", obj.TransactionId.ToString());
+                vnpay.AddRequestData("vnp_TxnRef", "https://elder-care-api.monoinfinity.net/process-payment");
 
 
 
