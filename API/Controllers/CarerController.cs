@@ -70,6 +70,31 @@ namespace API.Controllers
             return NoContent();
         }
 
+        [HttpGet("getTransactionHistory")]
+        [EnableQuery]
+        //[Authorize(Roles = "Carer")]
+        public async Task<IActionResult> GetCarerTransactionHistory(int carerId)
+        {
+            try
+            {
+                var transactionList = await _unitOfWork.CarerRepository.GetCarerTransaction(carerId);
+                var carerTransactions = _mapper.Map<List<CarerTransactionDto>>(transactionList);
+                foreach (var transaction in carerTransactions)
+                {
+                    var carerCus = await _unitOfWork.CarerRepository.GetCarerCustomerFromIdAsync(transactionList[0].CarercusId);
+                    if(carerCus != null)
+                    {
+                        (transaction.CarerId, transaction.CustomerId) = (carerCus.CarerId, carerCus.CustomerId);
+                    }
+                }
+                return Ok(carerTransactions);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         private async Task<bool> CarerExists(int id)
         {
             return await _unitOfWork.CarerRepository.GetByIdAsync(id) != null;
