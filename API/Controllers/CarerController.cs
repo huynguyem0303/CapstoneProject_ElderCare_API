@@ -81,7 +81,7 @@ namespace API.Controllers
                 var carerTransactions = _mapper.Map<List<CarerTransactionDto>>(transactionList);
                 foreach (var transaction in carerTransactions)
                 {
-                    var carerCus = await _unitOfWork.CarerRepository.GetCarerCustomerFromIdAsync(transactionList[0].CarercusId);
+                    var carerCus = await _unitOfWork.CarerRepository.GetCarerCustomerFromIdAsync(transactionList[carerTransactions.IndexOf(transaction)].CarercusId);
                     if(carerCus != null)
                     {
                         (transaction.CarerId, transaction.CustomerId) = (carerCus.CarerId, carerCus.CustomerId);
