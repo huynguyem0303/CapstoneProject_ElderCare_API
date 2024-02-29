@@ -70,11 +70,11 @@ namespace API.Controllers
                 vnpay.AddRequestData("vnp_Locale", "vn");
 
 
-                vnpay.AddRequestData("vnp_OrderInfo", "Thanh toan don hang:" + obj.TransactionId);
+                vnpay.AddRequestData("vnp_OrderInfo", "https://elder-care-api.monoinfinity.net/process-payment");
                 vnpay.AddRequestData("vnp_OrderType", "other"); //default value: other
 
                 vnpay.AddRequestData("vnp_ReturnUrl", vnp_Returnurl);
-                vnpay.AddRequestData("vnp_TxnRef", "https://elder-care-api.monoinfinity.net/process-payment");
+                vnpay.AddRequestData("vnp_TxnRef", obj.TransactionId.ToString());
 
 
 
@@ -241,7 +241,7 @@ namespace API.Controllers
                 returnContent = "{\"RspCode\":\"99\",\"Message\":\"An error occurred\"}";
             }
 
-            return Ok();
+            return Redirect(url);
         }
 
     }
