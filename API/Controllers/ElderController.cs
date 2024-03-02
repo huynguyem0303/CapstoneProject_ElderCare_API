@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.OData.Results;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using ElderCare_Service.Interfaces;
 
 namespace API.Controllers
 {
@@ -16,21 +17,28 @@ namespace API.Controllers
     [ApiController]
     public class ElderController  : ODataController
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
+        //private readonly IUnitOfWork _unitOfWork;
+        //private readonly IMapper _mapper;
+        private readonly IElderService _elderService;
 
-        public ElderController(IUnitOfWork unitOfWork, IMapper mapper)
+        public ElderController(IElderService elderService)
         {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
+            _elderService = elderService;
         }
+
+        //public ElderController(IUnitOfWork unitOfWork, IMapper mapper)
+        //{
+        //    _unitOfWork = unitOfWork;
+        //    _mapper = mapper;
+        //}
         // GET: api/Accounts
         [HttpGet]
         [EnableQuery]
         [Authorize]
         public IActionResult GetElders()
         {
-            var list = _unitOfWork.ElderRepo.GetAll();
+            //var list = _unitOfWork.ElderRepo.GetAll();
+            var list = _elderService.GetAll();
 
             return Ok(list);
         }
@@ -41,7 +49,8 @@ namespace API.Controllers
         [Authorize]
         public async Task<SingleResult<Elderly>> GetElder(int id)
         {
-            var elder = await _unitOfWork.ElderRepo.FindAsync(x => x.ElderlyId == id);
+            //var elder = await _unitOfWork.ElderRepo.FindAsync(x => x.ElderlyId == id);
+            var elder = await _elderService.FindAsync(x => x.ElderlyId == id);
             return SingleResult.Create(elder.AsQueryable());
         }
 
@@ -57,15 +66,16 @@ namespace API.Controllers
                 return BadRequest();
             }
 
-            _unitOfWork.ElderRepo.Update(elder);
+            //_unitOfWork.ElderRepo.Update(elder);
 
             try
             {
-                await _unitOfWork.SaveChangeAsync();
+                await _elderService.UpdateElderly(elder);
+                //await _unitOfWork.SaveChangeAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!await ElderExists(id))
+                if (!await _elderService.ElderExists(id))
                 {
                     return NotFound();
                 }
@@ -84,28 +94,19 @@ namespace API.Controllers
         [EnableQuery]
         public async Task<ActionResult<Account>> PostElder(AddElderDto model)
         {
-            if ((_unitOfWork.AccountRepository.GetAll()).IsNullOrEmpty())
-            {
-                return Problem("Entity set 'ElderCareContext.Elderlies'  is null.");
-            }
-            var elder = _mapper.Map<Elderly>(model);
-            var id = _unitOfWork.ElderRepo.GetAll().OrderByDescending(i => i.ElderlyId).FirstOrDefault().ElderlyId;
-            elder.ElderlyId = id+1;
-            await _unitOfWork.ElderRepo.AddAsync(elder);
+            //var elder = _mapper.Map<Elderly>(model);
+            //var id = _unitOfWork.ElderRepo.GetAll().OrderByDescending(i => i.ElderlyId).FirstOrDefault().ElderlyId;
+            //elder.ElderlyId = id+1;
+            //await _unitOfWork.ElderRepo.AddAsync(elder);
+            Elderly elder;
             try
             {
-                await _unitOfWork.SaveChangeAsync();
+                //await _unitOfWork.SaveChangeAsync();
+                elder = await _elderService.AddELderlyAsync(model);
             }
-            catch (DbUpdateException)
+            catch (DbUpdateException e)
             {
-                if (await ElderExists(elder.ElderlyId))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
+                return BadRequest(e.Message);
             }
 
             return CreatedAtAction("GetElder", new { id = elder.ElderlyId }, elder);
@@ -117,26 +118,31 @@ namespace API.Controllers
         [Authorize]
         public async Task<IActionResult> DeleteElder(int id)
         {
-            if ((_unitOfWork.ElderRepo.GetAll()).IsNullOrEmpty())
-            {
-                return NotFound();
-            }
-            var elder = await _unitOfWork.ElderRepo.GetByIdAsync(id);
-            if (elder == null)
-            {
-                return NotFound();
-            }
+            //if ((_unitOfWork.ElderRepo.GetAll()).IsNullOrEmpty())
+            //{
+            //    return NotFound();
+            //}
+            //var elder = await _unitOfWork.ElderRepo.GetByIdAsync(id);
+            //if (elder == null)
+            //{
+            //    return NotFound();
+            //}
 
-            _unitOfWork.ElderRepo.Delete(elder);
-            await _unitOfWork.SaveChangeAsync();
+            //_unitOfWork.ElderRepo.Delete(elder);
+            //await _unitOfWork.SaveChangeAsync();
+            if(!await _elderService.ElderExists(id))
+            {
+                return NotFound();
+            }
+            await _elderService.DeleteElderly(id);
 
             return NoContent();
         }
 
-        private async Task<bool> ElderExists(int id)
-        {
-            return await _unitOfWork.ElderRepo.GetByIdAsync(id) != null;
-        }
+        //private async Task<bool> ElderExists(int id)
+        //{
+        //    return await _unitOfWork.ElderRepo.GetByIdAsync(id) != null;
+        //}
     }
 }
 
