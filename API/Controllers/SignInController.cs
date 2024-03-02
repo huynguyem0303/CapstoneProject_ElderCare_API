@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using ElderCare_Domain.Enums;
 using ElderCare_Domain.Models;
-using ElderCare_Repository;
+using ElderCare_Service;
 using ElderCare_Repository.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;

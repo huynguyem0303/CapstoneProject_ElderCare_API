@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using ElderCare_Repository;
+using ElderCare_Service;
 using ElderCare_Repository.DTO;
 using MailKit.Net.Smtp;
 using MailKit.Security;

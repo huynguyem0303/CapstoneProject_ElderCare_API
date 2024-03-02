@@ -1,24 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ElderCare_Domain.Models;
-using ElderCare_Repository;
-using Microsoft.IdentityModel.Tokens;
-using AutoMapper;
-using API.Ultils;
-using ElderCare_Repository.Repos;
-using API.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Results;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
 using ElderCare_Repository.DTO;
 using System.Data;
-using ElderCare_Domain.Enums;
+using ElderCare_Service.Interfaces;
 
 namespace API.Controllers
 {
@@ -26,14 +15,20 @@ namespace API.Controllers
     [ApiController]
     public class AccountsController : ODataController
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
+        //private readonly IUnitOfWork _unitOfWork;
+        //private readonly IMapper _mapper;
+        private readonly IAccountService _accountService;
 
-        public AccountsController(IUnitOfWork unitOfWork, IMapper mapper)
+        public AccountsController(IAccountService accountService)
         {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
+            _accountService = accountService;
         }
+
+        //public AccountsController(IUnitOfWork unitOfWork, IMapper mapper)
+        //{
+        //    _unitOfWork = unitOfWork;
+        //    _mapper = mapper;
+        //}
 
         // GET: api/Accounts
         [HttpGet]
@@ -41,7 +36,8 @@ namespace API.Controllers
         [Authorize(Roles = "Staff, Admin")]
         public IActionResult GetAccounts()
         {
-            var list = _unitOfWork.AccountRepository.GetAll();
+            //var list = _unitOfWork.AccountRepository.GetAll();
+            var list = _accountService.GetAll();
             
             return Ok(list);
         }
@@ -52,7 +48,9 @@ namespace API.Controllers
         [Authorize]
         public async Task<SingleResult<Account>> GetAccount(int id)
         {
-            var account = await _unitOfWork.AccountRepository.FindAsync(x=>x.AccountId == id);
+            //var account = await _unitOfWork.AccountRepository.FindAsync(x=>x.AccountId == id);
+
+            var account = await _accountService.FindAsync(x => x.AccountId == id);
             return SingleResult.Create(account.AsQueryable());
         }
 
@@ -68,15 +66,16 @@ namespace API.Controllers
                 return BadRequest();
             }
 
-            _unitOfWork.AccountRepository.Update(account);
+            //_unitOfWork.AccountRepository.Update(account);
 
             try
             {
-                await _unitOfWork.SaveChangeAsync();
+                //await _unitOfWork.SaveChangeAsync();
+                await _accountService.UpdateAccount(account);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!await AccountExists(id))
+                if (!await _accountService.AccountExists(id))
                 {
                     return NotFound();
                 }
@@ -95,28 +94,26 @@ namespace API.Controllers
         [EnableQuery]
         public async Task<ActionResult<Account>> PostAccount(SignInDto model)
         {
-            if ((_unitOfWork.AccountRepository.GetAll()).IsNullOrEmpty())
-            {
-                return Problem("Entity set 'ElderCareContext.Accounts'  is null.");
-            }
-            var account = _mapper.Map<Account>(model);
-            account.Status = (int)AccountStatus.Active;
-            account.RoleId = (int)AccountRole.None;
+            //var account = _mapper.Map<Account>(model);
+            //account.Status = (int)AccountStatus.Active;
+            //account.RoleId = (int)AccountRole.None;
+            Account account;
             try
             {
-                await _unitOfWork.AccountRepository.AddAsync(account);
-                await _unitOfWork.SaveChangeAsync();
+                //await _unitOfWork.AccountRepository.AddAsync(account);
+                //await _unitOfWork.SaveChangeAsync();
+                account = await _accountService.AddAccountAsync(model);
             }
             catch (DbUpdateException e)
             {
-                if (await AccountExists(account.AccountId))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    return BadRequest(error: e.Message);
-                }
+                //    if (await AccountExists(account.AccountId))
+                //    {
+                //        return Conflict();
+                //    }
+                //    else
+                //    {
+                return BadRequest(error: e.Message);
+                //}
             }catch (DuplicateNameException e)
             {
                 return Conflict(error: e.Message);
@@ -131,25 +128,30 @@ namespace API.Controllers
         [Authorize(Roles = "Staff, Admin")]
         public async Task<IActionResult> DeleteAccount(int id)
         {
-            if ((_unitOfWork.AccountRepository.GetAll()).IsNullOrEmpty())
-            {
-                return NotFound();
-            }
-            var account = await _unitOfWork.AccountRepository.GetByIdAsync(id);
-            if (account == null)
+            //if ((_unitOfWork.AccountRepository.GetAll()).IsNullOrEmpty())
+            //{
+            //    return NotFound();
+            //}
+            //var account = await _unitOfWork.AccountRepository.GetByIdAsync(id);
+            //var account = await _unitOfWork.AccountRepository.GetByIdAsync(id);
+            //if (account == null)
+            //{
+            //    return NotFound();
+            //}
+            if (await _accountService.AccountExists(id))
             {
                 return NotFound();
             }
 
-            _unitOfWork.AccountRepository.Delete(account);
-            await _unitOfWork.SaveChangeAsync();
-
+            //_unitOfWork.AccountRepository.Delete(account);
+            //await _unitOfWork.SaveChangeAsync();
+            await _accountService.DeleteAccount(id);
             return NoContent();
         }
 
-        private async Task<bool> AccountExists(int id)
-        {
-            return await _unitOfWork.AccountRepository.GetByIdAsync(id) != null;
-        }
+        //private async Task<bool> AccountExists(int id)
+        //{
+        //    return await _unitOfWork.AccountRepository.GetByIdAsync(id) != null;
+        //}
     }
 }

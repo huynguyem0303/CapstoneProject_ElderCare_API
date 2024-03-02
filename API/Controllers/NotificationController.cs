@@ -1,9 +1,8 @@
 ﻿using ElderCare_Domain.Commons;
-using ElderCare_Repository;
+using ElderCare_Service;
 using ElderCare_Repository.DTO;
-using ElderCare_Repository.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ElderCare_Repository.Services;
 
 namespace API.Controllers
 {
@@ -11,17 +10,25 @@ namespace API.Controllers
     [ApiController]
     public class NotificationController : ControllerBase
     {
-        private readonly IUnitOfWork _unitOfWork;
-        public NotificationController(IUnitOfWork unitOfWork)
+        //private readonly IUnitOfWork _unitOfWork;
+        private readonly INotificationService _notificationService;
+
+        public NotificationController(INotificationService notificationService)
         {
-            _unitOfWork = unitOfWork;
+            _notificationService = notificationService;
         }
+
+        //public NotificationController(IUnitOfWork unitOfWork)
+        //{
+        //    _unitOfWork = unitOfWork;
+        //}
 
         [Route("send")]
         [HttpPost]
         public async Task<IActionResult> SendNotification(NotificationModel notificationModel)
         {
-            var result = await _unitOfWork.NotificationService.SendNotification(notificationModel);
+            //var result = await _unitOfWork.NotificationService.SendNotification(notificationModel);
+            var result = await _notificationService.SendNotification(notificationModel);
             return Ok(result);
         }
 
@@ -29,7 +36,8 @@ namespace API.Controllers
         [HttpPost]
         public async Task<IActionResult> SendNotificationToAccount(AccountNotiDto accountNotiDto)
         {
-            var result = await _unitOfWork.NotificationService.SendNotificationToAccount(accountNotiDto);
+            //var result = await _unitOfWork.NotificationService.SendNotificationToAccount(accountNotiDto);
+            var result = await _notificationService.SendNotificationToAccount(accountNotiDto);
             return Ok(result);
         }
     }
