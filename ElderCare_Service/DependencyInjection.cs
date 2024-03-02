@@ -24,6 +24,7 @@ namespace ElderCare_Service
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<ILoginService, LoginService>();
+            services.AddScoped<ISigninService, SigninService>();
             services.AddAutoMapper(typeof(MapperConfigurationProfile).Assembly);
             services.AddDbContext<ElderCareContext>(option => option.UseSqlServer(databaseConnection).EnableSensitiveDataLogging());
 

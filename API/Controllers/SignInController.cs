@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
 using Microsoft.EntityFrameworkCore;
+using ElderCare_Service.Interfaces;
 
 namespace API.Controllers
 {
@@ -14,31 +15,39 @@ namespace API.Controllers
     [ApiController]
     public class SignInController : ControllerBase
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
+        //private readonly IUnitOfWork _unitOfWork;
+        //private readonly IMapper _mapper;
+        private readonly ISigninService _signinService;
 
-        public SignInController(IUnitOfWork unitOfWork, IMapper mapper)
+        public SignInController(ISigninService signinService)
         {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
+            _signinService = signinService;
         }
+
+        //public SignInController(IUnitOfWork unitOfWork, IMapper mapper)
+        //{
+        //    _unitOfWork = unitOfWork;
+        //    _mapper = mapper;
+        //}
 
         [HttpPost("signinCarer")]
         public async Task<IActionResult> SignInCarer(CarerSignInDto carerDto)
         {
-            var carer = _mapper.Map<Carer>(carerDto);
-            var account = _mapper.Map<Account>(carerDto);
-            carer = await _unitOfWork.CarerRepository.AddAsync(carer);
-            account.CarerId = carer.CarerId;
-            account.RoleId = (int)AccountRole.Carer;
-            account.Status = (int)AccountStatus.Active;
-            Guid guid = Guid.NewGuid();
-            string randomString = guid.ToString("N").Substring(0, 10);
-            account.Password = randomString;
-            await _unitOfWork.AccountRepository.AddAsync(account);
+            //var carer = _mapper.Map<Carer>(carerDto);
+            //var account = _mapper.Map<Account>(carerDto);
+            //carer = await _unitOfWork.CarerRepository.AddAsync(carer);
+            //account.CarerId = carer.CarerId;
+            //account.RoleId = (int)AccountRole.Carer;
+            //account.Status = (int)AccountStatus.Active;
+            //Guid guid = Guid.NewGuid();
+            //string randomString = guid.ToString("N").Substring(0, 10);
+            //account.Password = randomString;
+            //await _unitOfWork.AccountRepository.AddAsync(account);
+            Account account;
             try
             {
-                await _unitOfWork.SaveChangeAsync();
+                //await _unitOfWork.SaveChangeAsync();
+                account = await _signinService.SignInCarer(carerDto);
             }
             catch (DbUpdateException e)
             {
@@ -50,16 +59,18 @@ namespace API.Controllers
         [HttpPost("signinCustomer")]
         public async Task<IActionResult> SignInCustomer(CustomerSignInDto customerDto)
         {
-            var customer = _mapper.Map<Customer>(customerDto);
-            var account = _mapper.Map<Account>(customerDto);
-            customer = await _unitOfWork.CustomerRepository.AddAsync(customer);
-            account.CustomerId = customer.CustomerId;
-            account.RoleId = (int)AccountRole.Customer;
-            account.Status = (int)AccountStatus.Active;
-            await _unitOfWork.AccountRepository.AddAsync(account);
+            //var customer = _mapper.Map<Customer>(customerDto);
+            //var account = _mapper.Map<Account>(customerDto);
+            //customer = await _unitOfWork.CustomerRepository.AddAsync(customer);
+            //account.CustomerId = customer.CustomerId;
+            //account.RoleId = (int)AccountRole.Customer;
+            //account.Status = (int)AccountStatus.Active;
+            //await _unitOfWork.AccountRepository.AddAsync(account);
+            Account account;
             try
             {
-                await _unitOfWork.SaveChangeAsync();
+                //await _unitOfWork.SaveChangeAsync();
+                account = await _signinService.SignInCustomer(customerDto);
             }
             catch (DbUpdateException e)
             {
