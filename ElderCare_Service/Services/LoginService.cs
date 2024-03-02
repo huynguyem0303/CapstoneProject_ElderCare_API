@@ -30,7 +30,7 @@ namespace ElderCare_Service.Services
             var account = await _unitOfWork.AccountRepository.LoginCustomerAsync(email, password);
             if(account == null)
             {
-                throw new UnauthorizedAccessException();
+                throw new UnauthorizedAccessException("incorrect email or password");
             }else if (!FCMToken.IsNullOrEmpty())
             {
                 var response = await checkAccountFCMToken(account.AccountId, FCMToken);
@@ -48,7 +48,7 @@ namespace ElderCare_Service.Services
             var account = await _unitOfWork.AccountRepository.LoginCarerAsync(email, password);
             if (account == null)
             {
-                throw new UnauthorizedAccessException();
+                throw new UnauthorizedAccessException("incorrect email or password");
             }
             else if (!FCMToken.IsNullOrEmpty())
             {
@@ -73,7 +73,7 @@ namespace ElderCare_Service.Services
             var account = await _unitOfWork.AccountRepository.LoginStaffAsync(email, password);
             if (account == null)
             {
-                throw new UnauthorizedAccessException();
+                throw new UnauthorizedAccessException("incorrect email or password");
             }
             else if (!FCMToken.IsNullOrEmpty())
             {

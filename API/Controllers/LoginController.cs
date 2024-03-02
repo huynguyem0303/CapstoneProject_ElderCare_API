@@ -61,7 +61,13 @@ namespace API.Controllers
             //    }
             //}
             //currentJWT = GenerateJWTString.GenerateJsonWebTokenForCarer(account, config["AppSettings:SecretKey"], DateTime.Now);
-            currentJWT = await _loginService.LoginCusAsync(loginDto.Email, loginDto.Password, loginDto.FCMToken);
+            try
+            {
+                currentJWT = await _loginService.LoginCusAsync(loginDto.Email, loginDto.Password, loginDto.FCMToken);
+            }catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
             return Ok(new ApiResponse
             {
                 Success = true,
@@ -73,25 +79,32 @@ namespace API.Controllers
         [HttpPost("loginCarer")]
         public async Task<IActionResult> LoginCarer(LoginDto loginDto)
         {
-           // IConfiguration config = new ConfigurationBuilder()
-           //.SetBasePath(Directory.GetCurrentDirectory())
-           //.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-           //.Build();
-           // var account = await _unitOfWork.AccountRepository.LoginCarerAsync(loginDto.Email, loginDto.Password);
-           // if (account == null)
-           // {
-           //     return Unauthorized();
-           // }
-           // else if (!loginDto.FCMToken.IsNullOrEmpty())
-           // {
-           //     var response = await checkAccountFCMToken(account.AccountId, loginDto.FCMToken);
-           //     if (!response.IsSuccess)
-           //     {
-           //         return Ok(response);
-           //     }
-           // }
-           // currentJWT= GenerateJWTString.GenerateJsonWebTokenForCarer(account, config["AppSettings:SecretKey"], DateTime.Now);
-            currentJWT= await _loginService.LoginCarerAsync(loginDto.Email, loginDto.Password, loginDto.FCMToken);
+            // IConfiguration config = new ConfigurationBuilder()
+            //.SetBasePath(Directory.GetCurrentDirectory())
+            //.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            //.Build();
+            // var account = await _unitOfWork.AccountRepository.LoginCarerAsync(loginDto.Email, loginDto.Password);
+            // if (account == null)
+            // {
+            //     return Unauthorized();
+            // }
+            // else if (!loginDto.FCMToken.IsNullOrEmpty())
+            // {
+            //     var response = await checkAccountFCMToken(account.AccountId, loginDto.FCMToken);
+            //     if (!response.IsSuccess)
+            //     {
+            //         return Ok(response);
+            //     }
+            // }
+            // currentJWT= GenerateJWTString.GenerateJsonWebTokenForCarer(account, config["AppSettings:SecretKey"], DateTime.Now);
+            try
+            {
+                currentJWT = await _loginService.LoginCarerAsync(loginDto.Email, loginDto.Password, loginDto.FCMToken);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
             return Ok(new ApiResponse
             {
                 Success = true,
@@ -104,27 +117,33 @@ namespace API.Controllers
         [HttpPost("loginStaff")]
         public async Task<IActionResult> LoginStaff(LoginDto loginDto)
         {
-           // IConfiguration config = new ConfigurationBuilder()
-           //.SetBasePath(Directory.GetCurrentDirectory())
-           //.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-           //.Build();
-           // string adminEmail = config["AdminAccount:Email"];
-           // string adminPassword = config["AdminAccount:Password"];
-           // if (loginDto.Email.ToLower().Equals(adminEmail.ToLower()) && loginDto.Password.Equals(adminPassword))
-           //     return Ok(new ApiResponse
-           //     {
-           //         Success = true,
-           //         Message = "Authenticate success",
-           //         Data = GenerateJWTString.GenerateJsonWebTokenForAdmin(adminEmail, config["AppSettings:SecretKey"], DateTime.Now)
-           //     }); ;
-           // var account = await _unitOfWork.AccountRepository.LoginStaffAsync(loginDto.Email, loginDto.Password);
-           // if (account == null)
-           // {
-           //     return Unauthorized();
-           // }
-           // currentJWT = GenerateJWTString.GenerateJsonWebTokenForCarer(account, config["AppSettings:SecretKey"], DateTime.Now);
-            currentJWT = await _loginService.LoginStaffAsync(loginDto.Email, loginDto.Password, loginDto.FCMToken);
-            
+            // IConfiguration config = new ConfigurationBuilder()
+            //.SetBasePath(Directory.GetCurrentDirectory())
+            //.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            //.Build();
+            // string adminEmail = config["AdminAccount:Email"];
+            // string adminPassword = config["AdminAccount:Password"];
+            // if (loginDto.Email.ToLower().Equals(adminEmail.ToLower()) && loginDto.Password.Equals(adminPassword))
+            //     return Ok(new ApiResponse
+            //     {
+            //         Success = true,
+            //         Message = "Authenticate success",
+            //         Data = GenerateJWTString.GenerateJsonWebTokenForAdmin(adminEmail, config["AppSettings:SecretKey"], DateTime.Now)
+            //     }); ;
+            // var account = await _unitOfWork.AccountRepository.LoginStaffAsync(loginDto.Email, loginDto.Password);
+            // if (account == null)
+            // {
+            //     return Unauthorized();
+            // }
+            // currentJWT = GenerateJWTString.GenerateJsonWebTokenForCarer(account, config["AppSettings:SecretKey"], DateTime.Now);
+            try
+            {
+                currentJWT = await _loginService.LoginStaffAsync(loginDto.Email, loginDto.Password, loginDto.FCMToken);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
             return Ok(new ApiResponse
             {
                 Success = true,
