@@ -1,8 +1,7 @@
 ﻿using ElderCare_Domain.Commons;
-using ElderCare_Service;
+using ElderCare_Service.Interfaces;
 using ElderCare_Repository.DTO;
 using Microsoft.AspNetCore.Mvc;
-using ElderCare_Repository.Services;
 
 namespace API.Controllers
 {
