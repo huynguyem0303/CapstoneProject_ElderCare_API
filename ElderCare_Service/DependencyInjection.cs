@@ -6,8 +6,10 @@ using ElderCare_Repository.Mappers;
 using ElderCare_Repository.Repos;
 using ElderCare_Service.Interfaces;
 using ElderCare_Service.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace ElderCare_Service
 {
@@ -24,9 +26,11 @@ namespace ElderCare_Service
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<ILoginService, LoginService>();
-            services.AddScoped<ISigninService, SigninService>();
+            services.AddScoped<ISignupService, SignupService>();
             services.AddScoped<IElderService, ElderService>();
             services.AddScoped<ICarerService, CarerService>();
+            services.AddScoped<ITransactionService, TransactionService>();
+            services.AddHttpContextAccessor();
             services.AddAutoMapper(typeof(MapperConfigurationProfile).Assembly);
             services.AddDbContext<ElderCareContext>(option => option.UseSqlServer(databaseConnection).EnableSensitiveDataLogging());
 

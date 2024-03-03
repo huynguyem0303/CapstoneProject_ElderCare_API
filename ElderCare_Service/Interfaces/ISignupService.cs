@@ -3,7 +3,7 @@ using ElderCare_Repository.DTO;
 
 namespace ElderCare_Service.Interfaces
 {
-    public interface ISigninService
+    public interface ISignupService
     {
         Task<Account> SignInCarer(CarerSignInDto carerDto);
         Task<Account> SignInCustomer(CustomerSignInDto customerDto);

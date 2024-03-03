@@ -13,13 +13,13 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SignInController : ControllerBase
+    public class SignupController : ControllerBase
     {
         //private readonly IUnitOfWork _unitOfWork;
         //private readonly IMapper _mapper;
-        private readonly ISigninService _signinService;
+        private readonly ISignupService _signinService;
 
-        public SignInController(ISigninService signinService)
+        public SignupController(ISignupService signinService)
         {
             _signinService = signinService;
         }

@@ -6,13 +6,13 @@ using ElderCare_Service.Interfaces;
 
 namespace ElderCare_Service.Services
 {
-    public class SigninService : ISigninService
+    public class SignupService : ISignupService
     {
 
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public SigninService(IMapper mapper, IUnitOfWork unitOfWork)
+        public SignupService(IMapper mapper, IUnitOfWork unitOfWork)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
