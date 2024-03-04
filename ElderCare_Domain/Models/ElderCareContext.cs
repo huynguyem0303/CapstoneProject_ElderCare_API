@@ -437,12 +437,12 @@ public partial class ElderCareContext : DbContext
                 .HasMaxLength(100)
                 .HasColumnName("address");
             entity.Property(e => e.Age).HasColumnName("age");
-            entity.Property(e => e.HealthDetailId).HasColumnName("health_detail_id");
-            entity.Property(e => e.HobbyId).HasColumnName("hobby_id");
+            entity.Property(e => e.HealthDetailId).HasColumnName("health_detail_id").IsRequired(false);
+            entity.Property(e => e.HobbyId).HasColumnName("hobby_id").IsRequired(false);
             entity.Property(e => e.Image)
                 .HasMaxLength(100)
                 .HasColumnName("image");
-            entity.Property(e => e.LivingconditionId).HasColumnName("livingcondition_id");
+            entity.Property(e => e.LivingconditionId).HasColumnName("livingcondition_id").IsRequired(false);
             entity.Property(e => e.Name)
                 .HasMaxLength(100)
                 .HasColumnName("name");

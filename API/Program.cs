@@ -1,6 +1,5 @@
 using ElderCare_Domain.Commons;
-using ElderCare_Domain.Models;
-using ElderCare_Repository;
+using ElderCare_Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.OData;
 using Microsoft.IdentityModel.Tokens;

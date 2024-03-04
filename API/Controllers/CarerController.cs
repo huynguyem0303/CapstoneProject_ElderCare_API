@@ -1,7 +1,7 @@
 ﻿using API.DTO;
 using AutoMapper;
 using ElderCare_Domain.Models;
-using ElderCare_Repository;
+using ElderCare_Service;
 using ElderCare_Repository.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Results;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using ElderCare_Service.Interfaces;
 
 namespace API.Controllers
 {
@@ -16,28 +17,36 @@ namespace API.Controllers
     [ApiController]
     public class CarerController : Controller
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
+        //private readonly IUnitOfWork _unitOfWork;
+        //private readonly IMapper _mapper;
+        private readonly ICarerService _carerService;
 
-        public CarerController(IUnitOfWork unitOfWork, IMapper mapper)
+        public CarerController(ICarerService carerService)
         {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
+            _carerService = carerService;
         }
+
+        //public CarerController(IUnitOfWork unitOfWork, IMapper mapper)
+        //{
+        //    _unitOfWork = unitOfWork;
+        //    _mapper = mapper;
+        //}
 
         [HttpPost("search")]
         public async Task<IActionResult> GetCarer(SearchCarerDto dto)
         {
-            var account = await _unitOfWork.CarerRepository.searchCarer(dto);
+            //var carer = await _unitOfWork.CarerRepository.SearchCarer(dto);
+            var carer = await _carerService.SearchCarer(dto);
 
-            return Ok(account);
+            return Ok(carer);
         }
         [HttpGet("{id}")]
         [EnableQuery]
-        public async Task<SingleResult<Account>> GetCarerById(int id)
+        public async Task<SingleResult<Carer>> GetCarerById(int id)
         {
-            var account = await _unitOfWork.AccountRepository.FindAsync(x => x.AccountId == id);
-            return SingleResult.Create(account.AsQueryable());
+            //var carer = await _unitOfWork.AccountRepository.FindAsync(x => x.AccountId == id);
+            var carer = await _carerService.FindAsync(x => x.CarerId == id);
+            return SingleResult.Create(carer.AsQueryable());
         }
 
         [HttpPut("{id}")]
@@ -49,15 +58,16 @@ namespace API.Controllers
                 return BadRequest();
             }
 
-            _unitOfWork.CarerRepository.Update(carer);
+            //_unitOfWork.CarerRepository.Update(carer);
 
             try
             {
-                await _unitOfWork.SaveChangeAsync();
+                //await _unitOfWork.SaveChangeAsync();
+                await _carerService.UpdateCarer(carer);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!await CarerExists(id))
+                if (!await _carerService.CarerExists(id))
                 {
                     return NotFound();
                 }
@@ -77,16 +87,17 @@ namespace API.Controllers
         {
             try
             {
-                var transactionList = await _unitOfWork.CarerRepository.GetCarerTransaction(carerId);
-                var carerTransactions = _mapper.Map<List<CarerTransactionDto>>(transactionList);
-                foreach (var transaction in carerTransactions)
-                {
-                    var carerCus = await _unitOfWork.CarerRepository.GetCarerCustomerFromIdAsync(transactionList[carerTransactions.IndexOf(transaction)].CarercusId);
-                    if(carerCus != null)
-                    {
-                        (transaction.CarerId, transaction.CustomerId) = (carerCus.CarerId, carerCus.CustomerId);
-                    }
-                }
+                //var transactionList = await _unitOfWork.CarerRepository.GetCarerTransactionHistoryAsync(carerId);
+                //var carerTransactions = _mapper.Map<List<CarerTransactionDto>>(transactionList);
+                //foreach (var transaction in carerTransactions)
+                //{
+                //    var carerCus = await _unitOfWork.CarerRepository.GetCarerCustomerFromIdAsync(transactionList[carerTransactions.IndexOf(transaction)].CarercusId);
+                //    if(carerCus != null)
+                //    {
+                //        (transaction.CarerId, transaction.CustomerId) = (carerCus.CarerId, carerCus.CustomerId);
+                //    }
+                //}
+                var carerTransactions = await _carerService.GetCarerTransactionHistoryAsync(carerId);
                 return Ok(carerTransactions);
             }
             catch(Exception ex)
@@ -95,9 +106,9 @@ namespace API.Controllers
             }
         }
 
-        private async Task<bool> CarerExists(int id)
-        {
-            return await _unitOfWork.CarerRepository.GetByIdAsync(id) != null;
-        }
+        //private async Task<bool> CarerExists(int id)
+        //{
+        //    return await _unitOfWork.CarerRepository.GetByIdAsync(id) != null;
+        //}
     }
 }

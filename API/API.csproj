@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ElderCare_Repository\ElderCare_Repository.csproj" />
+    <ProjectReference Include="..\ElderCare_Service\ElderCare_Service.csproj" />
   </ItemGroup>
 
 </Project>

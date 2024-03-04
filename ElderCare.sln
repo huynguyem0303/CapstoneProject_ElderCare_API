@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElderCare_Domain", "ElderCa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API", "API\API.csproj", "{51E57C7B-CAE1-46C0-BD7D-920A25085F81}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElderCare_Service", "ElderCare_Service\ElderCare_Service.csproj", "{FED05445-A0DD-4D24-90D1-CCBA60DA35E8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{51E57C7B-CAE1-46C0-BD7D-920A25085F81}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{51E57C7B-CAE1-46C0-BD7D-920A25085F81}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{51E57C7B-CAE1-46C0-BD7D-920A25085F81}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FED05445-A0DD-4D24-90D1-CCBA60DA35E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FED05445-A0DD-4D24-90D1-CCBA60DA35E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FED05445-A0DD-4D24-90D1-CCBA60DA35E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FED05445-A0DD-4D24-90D1-CCBA60DA35E8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
