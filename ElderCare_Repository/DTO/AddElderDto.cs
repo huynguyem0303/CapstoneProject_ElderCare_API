@@ -18,7 +18,7 @@ namespace ElderCare_Repository.DTO
 
         public string Image { get; set; }
 
-        public string Note { get; set; }
+        public string? Note { get; set; }
 
     }
 }

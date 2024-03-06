@@ -438,7 +438,7 @@ public partial class ElderCareContext : DbContext
                 .HasColumnName("address");
             entity.Property(e => e.Age).HasColumnName("age");
             entity.Property(e => e.HealthDetailId).HasColumnName("health_detail_id").IsRequired(false);
-            entity.Property(e => e.HobbyId).HasColumnName("hobby_id").IsRequired(false);
+            //entity.Property(e => e.HobbyId).HasColumnName("hobby_id").IsRequired(false);
             entity.Property(e => e.Image)
                 .HasMaxLength(100)
                 .HasColumnName("image");
@@ -457,9 +457,9 @@ public partial class ElderCareContext : DbContext
                 .HasForeignKey(d => d.HealthDetailId)
                 .HasConstraintName("FK_Elderly_HealthDetail");
 
-            entity.HasOne(d => d.Hobby).WithMany(p => p.Elderlies)
-                .HasForeignKey(d => d.HobbyId)
-                .HasConstraintName("FK_Elderly_Hobby");
+            //entity.HasOne(d => d.Hobby).WithMany(p => p.Elderlies)
+            //    .HasForeignKey(d => d.HobbyId)
+            //    .HasConstraintName("FK_Elderly_Hobby");
 
             entity.HasOne(d => d.Livingcondition).WithMany(p => p.Elderlies)
                 .HasForeignKey(d => d.LivingconditionId)
@@ -536,6 +536,10 @@ public partial class ElderCareContext : DbContext
                 .HasMaxLength(100)
                 .HasColumnName("name");
             entity.Property(e => e.Status).HasColumnName("status");
+
+            entity.HasOne(d => d.Elderly).WithMany(p => p.Hobbies)
+                .HasForeignKey(d => d.ElderlyId)
+                .HasConstraintName("FK_Hobby_Elderly");
         });
 
         modelBuilder.Entity<LivingCondition>(entity =>

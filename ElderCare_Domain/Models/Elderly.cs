@@ -23,7 +23,7 @@ public partial class Elderly
 
     public string? Note { get; set; }
 
-    public int? HobbyId { get; set; }
+    //public int? HobbyId { get; set; }
 
     public virtual ICollection<Contract> Contracts { get; set; } = new List<Contract>();
 
@@ -31,7 +31,8 @@ public partial class Elderly
 
     public virtual HealthDetail HealthDetail { get; set; }
 
-    public virtual Hobby Hobby { get; set; }
+    //public virtual Hobby Hobby { get; set; }
+    public virtual ICollection<Hobby> Hobbies { get; set; }
 
     public virtual LivingCondition Livingcondition { get; set; }
 }
