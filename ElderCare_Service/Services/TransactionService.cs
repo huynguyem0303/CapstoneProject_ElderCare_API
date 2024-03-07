@@ -38,7 +38,7 @@ namespace ElderCare_Service.Services
             Transaction? obj = _mapper.Map<Transaction>(dto);
             obj.AccountId = accountId;
             obj.TransactionId = id + 1;
-            var check = _unitOfWork.CarerRepository.FindAsync(carerid, accountId);
+            var check = _unitOfWork.CarerRepository.FindAsync(carerid, cusid);
             if (check.Result == null)
             {
                 CarersCustomer carersCustomer = new CarersCustomer();

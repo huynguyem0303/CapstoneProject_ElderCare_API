@@ -19,6 +19,7 @@ namespace ElderCare_Repository.Interfaces
        Task<List<Transaction>> GetCarerTransaction(int carerId);
         Task<List<Transaction>> GetCustomerTransaction(int customerId);
         Task<CarersCustomer?> GetCarerCustomerFromIdAsync(int? carercusId);
+
         Task<CarersCustomer?> GetLastest();
     }
 }
