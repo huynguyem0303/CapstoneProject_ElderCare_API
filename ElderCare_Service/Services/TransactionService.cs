@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using CorePush.Apple;
 using ElderCare_Domain.Models;
 using ElderCare_Repository.DTO;
