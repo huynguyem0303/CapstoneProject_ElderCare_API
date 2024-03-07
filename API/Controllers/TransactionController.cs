@@ -29,27 +29,28 @@ namespace API.Controllers
         private readonly ITransactionService _transactionService;
         public static string? url;
 
-        public TransactionController(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor, ICarerService carerService)
+        public TransactionController(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor, ICarerService carerService, ITransactionService transactionService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _httpContextAccessor = httpContextAccessor;
             _carerService = carerService;
+            _transactionService = transactionService;
         }
 
         [HttpGet]
         [EnableQuery]
         public IActionResult GetAllTransactions()
         {
-            var list = _unitOfWork.TransactionRepo.GetAll();
-            //var list = _transactionService.GetAll();
+            //var list = _unitOfWork.TransactionRepo.GetAll();
+            var list = _transactionService.GetAll();
 
             return Ok(list);
         }
         [HttpPost]
         [EnableQuery]
         [Authorize]
-        public async Task<IActionResult> CreateTransaction([FromBody] TrasactionDto dto)
+        public async Task<IActionResult> CreateTransaction([FromBody] TrasactionDto dto,int carerid)
         {
             
             var idClaim = _unitOfWork.AccountRepository.GetMemberIdFromToken(HttpContext.User);
@@ -96,7 +97,7 @@ namespace API.Controllers
 
 
                 //string paymentUrl = vnpay.CreateRequestUrl(vnp_Url, vnp_HashSecret);
-                string paymentUrl = await _transactionService.CreateTransaction(dto, userid.AccountId);
+                string paymentUrl = await _transactionService.CreateTransaction(dto, userid.AccountId,carerid);
                 url= paymentUrl;
                 return Ok(new ApiResponse
                 {

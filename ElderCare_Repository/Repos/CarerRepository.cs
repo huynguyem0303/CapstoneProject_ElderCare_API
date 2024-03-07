@@ -158,5 +158,32 @@ namespace ElderCare_Repository.Repos
         {
             return await _context.CarersCustomers.FirstOrDefaultAsync(x=>x.CarercusId == carercusId);
         }
+
+        public async Task<CarersCustomer?> GetLastest()
+        {
+            return await _context.CarersCustomers.OrderByDescending(x=>x.CarercusId).FirstOrDefaultAsync();
+        }
+
+        public async Task<CarersCustomer> AddCarerCusAsync(CarersCustomer entity)
+        {
+            try
+            {
+                await _context.CarersCustomers.AddAsync(entity);
+            }
+            catch (DbUpdateException)
+            {
+                throw new Exception(message: "This has already been added");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return entity;
+        }
+
+        public async Task<CarersCustomer> FindAsync(int carerid, int cusid)
+        {
+           return await _context.CarersCustomers.Where(x => x.CarerId == carerid && x.CustomerId == cusid).FirstOrDefaultAsync();
+        }
     }
 }
