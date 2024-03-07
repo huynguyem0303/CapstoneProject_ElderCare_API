@@ -64,7 +64,7 @@ namespace ElderCare_Service.Services
                 vnpay.AddRequestData("vnp_Locale", "vn");
 
 
-                vnpay.AddRequestData("vnp_OrderInfo", "https://elder-care-api.monoinfinity.net/process-payment");
+                //vnpay.AddRequestData("vnp_OrderInfo", "https://elder-care-api.monoinfinity.net/process-payment");
                 vnpay.AddRequestData("vnp_OrderInfo", VNP_RETURNURL);
                 vnpay.AddRequestData("vnp_OrderType", "other"); //default value: other
 
