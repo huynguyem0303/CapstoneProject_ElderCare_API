@@ -263,10 +263,10 @@ namespace API.Controllers
 
             return Redirect(url);
         }
-        [HttpGet("getTransactionHistory")]
+        [HttpGet("getTransactionHistoryByCarerId")]
         [EnableQuery]
-        [Authorize(Roles = "Carer")]
-        public async Task<IActionResult> GetCarerTransactionHistory(int carerId)
+        
+        public async Task<IActionResult> GetCarerTransactionHistoryByCarer(int carerId)
         {
             try
             {
@@ -280,7 +280,31 @@ namespace API.Controllers
                 //        (transaction.CarerId, transaction.CustomerId) = (carerCus.CarerId, carerCus.CustomerId);
                 //    }
                 //}
-                var carerTransactions = await _carerService.GetCarerTransactionHistoryAsync(carerId);
+                var carerTransactions = await _carerService.GetCarerTransactionHistoryAsyncByCarerId(carerId);
+                return Ok(carerTransactions);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("getTransactionHistoryByCustomerId")]
+        [EnableQuery]
+        public async Task<IActionResult> GetCarerTransactionHistoryByCus(int customerId)
+        {
+            try
+            {
+                //var transactionList = await _unitOfWork.CarerRepository.GetCarerTransactionHistoryAsync(carerId);
+                //var carerTransactions = _mapper.Map<List<CarerTransactionDto>>(transactionList);
+                //foreach (var transaction in carerTransactions)
+                //{
+                //    var carerCus = await _unitOfWork.CarerRepository.GetCarerCustomerFromIdAsync(transactionList[carerTransactions.IndexOf(transaction)].CarercusId);
+                //    if(carerCus != null)
+                //    {
+                //        (transaction.CarerId, transaction.CustomerId) = (carerCus.CarerId, carerCus.CustomerId);
+                //    }
+                //}
+                var carerTransactions = await _carerService.GetCarerTransactionHistoryAsyncByCustomerId(customerId);
                 return Ok(carerTransactions);
             }
             catch (Exception ex)
