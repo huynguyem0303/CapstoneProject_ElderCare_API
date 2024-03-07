@@ -35,11 +35,11 @@ namespace ElderCare_Service.Services
         {
             dto.DateTime = DateTime.Now;
             var id = _unitOfWork.TransactionRepo.GetAll().OrderByDescending(i => i.TransactionId).FirstOrDefault().TransactionId;
-            Transaction obj = _mapper.Map<Transaction>(dto);
+            Transaction? obj = _mapper.Map<Transaction>(dto);
             obj.AccountId = accountId;
             obj.TransactionId = id + 1;
             var check = _unitOfWork.CarerRepository.FindAsync(carerid, accountId);
-            if (check == null)
+            if (check.Result == null)
             {
                 CarersCustomer carersCustomer = new CarersCustomer();
                 carersCustomer.Datetime = DateTime.Now;
@@ -50,7 +50,7 @@ namespace ElderCare_Service.Services
                 await _unitOfWork.CarerRepository.AddCarerCusAsync(carersCustomer);
                 obj.CarercusId = carersCustomer.CarercusId;
             }
-            if (check != null)
+            if (check.Result != null)
             {
                 obj.CarercusId=check.Result.CarercusId;
             }
