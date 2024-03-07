@@ -41,8 +41,8 @@ namespace API.Controllers
         [EnableQuery]
         public IActionResult GetAllTransactions()
         {
-            //var list = _unitOfWork.AccountRepository.GetAll();
-            var list = _transactionService.GetAll();
+            var list = _unitOfWork.TransactionRepo.GetAll();
+            //var list = _transactionService.GetAll();
 
             return Ok(list);
         }
