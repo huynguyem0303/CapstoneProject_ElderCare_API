@@ -181,9 +181,9 @@ namespace ElderCare_Repository.Repos
             return entity;
         }
 
-        public async Task<CarersCustomer> FindAsync(int carerid, int cusid)
+        public async Task<CarersCustomer?> FindAsync(int carerid, int cusid)
         {
-           return await _context.CarersCustomers.Where(x => x.CarerId == carerid && x.CustomerId == cusid).FirstOrDefaultAsync();
+           return await _context.CarersCustomers.FirstOrDefaultAsync(x => x.CarerId == carerid && x.CustomerId == cusid);
         }
     }
 }
