@@ -1,4 +1,4 @@
-﻿using ElderCare_Domain.Models;
+using ElderCare_Domain.Models;
 using ElderCare_Repository.DTO;
 using System;
 using System.Collections.Generic;
@@ -19,5 +19,8 @@ namespace ElderCare_Service.Interfaces
         Task DeleteCarer(int id);
         Task<bool> CarerExists(int id);
         Task<List<Carer>?> SearchCarer(SearchCarerDto dto);
+       
+        Task<List<CarerTransactionDto>> GetCarerTransactionHistoryAsyncByCarerId(int carerId);
+        Task<List<CarerTransactionDto>> GetCarerTransactionHistoryAsyncByCustomerId(int customerId);
     }
 }

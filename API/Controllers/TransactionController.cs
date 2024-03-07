@@ -1,4 +1,4 @@
-﻿using API.DTO;
+using API.DTO;
 using API.Ultils;
 using AutoMapper;
 using ElderCare_Domain.Models;
@@ -22,22 +22,35 @@ namespace API.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
+   
+        private readonly ICarerService _carerService;
+
 
         private readonly ITransactionService _transactionService;
         public static string? url;
 
-        public TransactionController(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor, ITransactionService transactionService)
+        public TransactionController(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor, ICarerService carerService, ITransactionService transactionService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _httpContextAccessor = httpContextAccessor;
+            _carerService = carerService;
             _transactionService = transactionService;
         }
 
+        [HttpGet]
+        [EnableQuery]
+        public IActionResult GetAllTransactions()
+        {
+            //var list = _unitOfWork.TransactionRepo.GetAll();
+            var list = _transactionService.GetAll();
+
+            return Ok(list);
+        }
         [HttpPost]
         [EnableQuery]
         [Authorize]
-        public async Task<IActionResult> CreateTransaction([FromBody] TrasactionDto dto)
+        public async Task<IActionResult> CreateTransaction([FromBody] TrasactionDto dto,int carerid)
         {
             
             var idClaim = _unitOfWork.AccountRepository.GetMemberIdFromToken(HttpContext.User);
@@ -84,7 +97,7 @@ namespace API.Controllers
 
 
                 //string paymentUrl = vnpay.CreateRequestUrl(vnp_Url, vnp_HashSecret);
-                string paymentUrl = await _transactionService.CreateTransaction(dto, userid.AccountId);
+                string paymentUrl = await _transactionService.CreateTransaction(dto, userid.AccountId,carerid);
                 url= paymentUrl;
                 return Ok(new ApiResponse
                 {
@@ -259,7 +272,7 @@ namespace API.Controllers
             try
             {
                 //var transactionList = await _unitOfWork.CarerRepository.GetCarerTransactionHistoryAsync(carerId);
-                //var carerTransactions = _mapper.Map<List<TransactionDto>>(transactionList);
+                //var carerTransactions = _mapper.Map<List<CarerTransactionDto>>(transactionList);
                 //foreach (var transaction in carerTransactions)
                 //{
                 //    var carerCus = await _unitOfWork.CarerRepository.GetCarerCustomerFromIdAsync(transactionList[carerTransactions.IndexOf(transaction)].CarercusId);
@@ -268,7 +281,7 @@ namespace API.Controllers
                 //        (transaction.CarerId, transaction.CustomerId) = (carerCus.CarerId, carerCus.CustomerId);
                 //    }
                 //}
-                var carerTransactions = await _transactionService.GetTransactionHistoryAsyncByCarerId(carerId);
+                var carerTransactions = await _carerService.GetCarerTransactionHistoryAsyncByCarerId(carerId);
                 return Ok(carerTransactions);
             }
             catch (Exception ex)
@@ -283,7 +296,7 @@ namespace API.Controllers
             try
             {
                 //var transactionList = await _unitOfWork.CarerRepository.GetCarerTransactionHistoryAsync(carerId);
-                //var carerTransactions = _mapper.Map<List<TransactionDto>>(transactionList);
+                //var carerTransactions = _mapper.Map<List<CarerTransactionDto>>(transactionList);
                 //foreach (var transaction in carerTransactions)
                 //{
                 //    var carerCus = await _unitOfWork.CarerRepository.GetCarerCustomerFromIdAsync(transactionList[carerTransactions.IndexOf(transaction)].CarercusId);
@@ -292,7 +305,7 @@ namespace API.Controllers
                 //        (transaction.CarerId, transaction.CustomerId) = (carerCus.CarerId, carerCus.CustomerId);
                 //    }
                 //}
-                var carerTransactions = await _transactionService.GetTransactionHistoryAsyncByCustomerId(customerId);
+                var carerTransactions = await _carerService.GetCarerTransactionHistoryAsyncByCustomerId(customerId);
                 return Ok(carerTransactions);
             }
             catch (Exception ex)

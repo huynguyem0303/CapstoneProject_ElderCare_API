@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using CorePush.Apple;
 using ElderCare_Domain.Models;
 using ElderCare_Repository.DTO;
@@ -31,13 +31,30 @@ namespace ElderCare_Service.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<string> CreateTransaction(TrasactionDto dto, int accountId)
+        public async Task<string> CreateTransaction(TrasactionDto dto, int accountId,int carerid)
         {
             dto.DateTime = DateTime.Now;
             var id = _unitOfWork.TransactionRepo.GetAll().OrderByDescending(i => i.TransactionId).FirstOrDefault().TransactionId;
             Transaction obj = _mapper.Map<Transaction>(dto);
             obj.AccountId = accountId;
             obj.TransactionId = id + 1;
+            var check = _unitOfWork.CarerRepository.FindAsync(carerid, accountId);
+            if (check == null)
+            {
+                CarersCustomer carersCustomer = new CarersCustomer();
+                carersCustomer.Datetime = DateTime.Now;
+                carersCustomer.CarerId = carerid;
+                carersCustomer.CustomerId = accountId;
+                var carecusid = _unitOfWork.CarerRepository.GetLastest().Result.CarercusId;
+                carersCustomer.CarercusId = carecusid + 1;
+                await _unitOfWork.CarerRepository.AddCarerCusAsync(carersCustomer);
+                obj.CarercusId = carersCustomer.CarercusId;
+            }
+            if (check != null)
+            {
+                obj.CarercusId=check.Result.CarercusId;
+            }
+           
             obj.Status = "PENDING";
             await _unitOfWork.TransactionRepo.AddAsync(obj);
             try
@@ -64,8 +81,7 @@ namespace ElderCare_Service.Services
                 vnpay.AddRequestData("vnp_Locale", "vn");
 
 
-                //vnpay.AddRequestData("vnp_OrderInfo", "https://elder-care-api.monoinfinity.net/process-payment");
-                vnpay.AddRequestData("vnp_OrderInfo", VNP_RETURNURL);
+                vnpay.AddRequestData("vnp_OrderInfo", "https://elder-care-api.monoinfinity.net/process-payment");
                 vnpay.AddRequestData("vnp_OrderType", "other"); //default value: other
 
                 vnpay.AddRequestData("vnp_ReturnUrl", vnp_Returnurl);
@@ -220,36 +236,6 @@ namespace ElderCare_Service.Services
         public IEnumerable<Transaction> GetAll()
         {
             return _unitOfWork.TransactionRepo.GetAll();
-        }
-
-
-        public async Task<List<TransactionDto>> GetTransactionHistoryAsyncByCarerId(int carerId)
-        {
-            var transactionList = await _unitOfWork.TransactionRepo.GetCarerTransaction(carerId);
-            var carerTransactions = _mapper.Map<List<TransactionDto>>(transactionList);
-            foreach (var transaction in carerTransactions)
-            {
-                var carerCus = await _unitOfWork.CarerRepository.GetCarerCustomerFromIdAsync(transactionList[carerTransactions.IndexOf(transaction)].CarercusId);
-                if (carerCus != null)
-                {
-                    (transaction.CarerId, transaction.CustomerId) = (carerCus.CarerId, carerCus.CustomerId);
-                }
-            }
-            return carerTransactions;
-        }
-        public async Task<List<TransactionDto>> GetTransactionHistoryAsyncByCustomerId(int customerId)
-        {
-            var transactionList = await _unitOfWork.TransactionRepo.GetCustomerTransaction(customerId);
-            var carerTransactions = _mapper.Map<List<TransactionDto>>(transactionList);
-            foreach (var transaction in carerTransactions)
-            {
-                var carerCus = await _unitOfWork.CarerRepository.GetCarerCustomerFromIdAsync(transactionList[carerTransactions.IndexOf(transaction)].CarercusId);
-                if (carerCus != null)
-                {
-                    (transaction.CarerId, transaction.CustomerId) = (carerCus.CarerId, carerCus.CustomerId);
-                }
-            }
-            return carerTransactions;
         }
     }
 }
