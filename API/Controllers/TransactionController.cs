@@ -259,7 +259,7 @@ namespace API.Controllers
             try
             {
                 //var transactionList = await _unitOfWork.CarerRepository.GetCarerTransactionHistoryAsync(carerId);
-                //var carerTransactions = _mapper.Map<List<CarerTransactionDto>>(transactionList);
+                //var carerTransactions = _mapper.Map<List<TransactionDto>>(transactionList);
                 //foreach (var transaction in carerTransactions)
                 //{
                 //    var carerCus = await _unitOfWork.CarerRepository.GetCarerCustomerFromIdAsync(transactionList[carerTransactions.IndexOf(transaction)].CarercusId);
@@ -283,7 +283,7 @@ namespace API.Controllers
             try
             {
                 //var transactionList = await _unitOfWork.CarerRepository.GetCarerTransactionHistoryAsync(carerId);
-                //var carerTransactions = _mapper.Map<List<CarerTransactionDto>>(transactionList);
+                //var carerTransactions = _mapper.Map<List<TransactionDto>>(transactionList);
                 //foreach (var transaction in carerTransactions)
                 //{
                 //    var carerCus = await _unitOfWork.CarerRepository.GetCarerCustomerFromIdAsync(transactionList[carerTransactions.IndexOf(transaction)].CarercusId);

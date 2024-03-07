@@ -19,8 +19,5 @@ namespace ElderCare_Service.Interfaces
         Task DeleteCarer(int id);
         Task<bool> CarerExists(int id);
         Task<List<Carer>?> SearchCarer(SearchCarerDto dto);
-       
-        //Task<List<CarerTransactionDto>> GetCarerTransactionHistoryAsyncByCarerId(int carerId);
-        //Task<List<CarerTransactionDto>> GetCarerTransactionHistoryAsyncByCustomerId(int customerId);
     }
 }

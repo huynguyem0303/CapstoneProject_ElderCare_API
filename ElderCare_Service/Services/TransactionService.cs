@@ -223,10 +223,10 @@ namespace ElderCare_Service.Services
         }
 
 
-        public async Task<List<CarerTransactionDto>> GetTransactionHistoryAsyncByCarerId(int carerId)
+        public async Task<List<TransactionDto>> GetTransactionHistoryAsyncByCarerId(int carerId)
         {
             var transactionList = await _unitOfWork.TransactionRepo.GetCarerTransaction(carerId);
-            var carerTransactions = _mapper.Map<List<CarerTransactionDto>>(transactionList);
+            var carerTransactions = _mapper.Map<List<TransactionDto>>(transactionList);
             foreach (var transaction in carerTransactions)
             {
                 var carerCus = await _unitOfWork.CarerRepository.GetCarerCustomerFromIdAsync(transactionList[carerTransactions.IndexOf(transaction)].CarercusId);
@@ -237,10 +237,10 @@ namespace ElderCare_Service.Services
             }
             return carerTransactions;
         }
-        public async Task<List<CarerTransactionDto>> GetTransactionHistoryAsyncByCustomerId(int customerId)
+        public async Task<List<TransactionDto>> GetTransactionHistoryAsyncByCustomerId(int customerId)
         {
             var transactionList = await _unitOfWork.TransactionRepo.GetCustomerTransaction(customerId);
-            var carerTransactions = _mapper.Map<List<CarerTransactionDto>>(transactionList);
+            var carerTransactions = _mapper.Map<List<TransactionDto>>(transactionList);
             foreach (var transaction in carerTransactions)
             {
                 var carerCus = await _unitOfWork.CarerRepository.GetCarerCustomerFromIdAsync(transactionList[carerTransactions.IndexOf(transaction)].CarercusId);
