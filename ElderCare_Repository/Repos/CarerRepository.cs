@@ -96,7 +96,7 @@ namespace ElderCare_Repository.Repos
                 //CheckIfNullException();
                 entity.CarerId = _dbSet.OrderBy(e => e.CarerId).Last().CarerId + 1;
                 entity.Status = (int)AccountStatus.Active;
-                if(entity.Bankinfo == null)
+                if (entity.Bankinfo == null)
                 {
                     throw new Exception("Missing Bank Info");
                 }
@@ -133,14 +133,35 @@ namespace ElderCare_Repository.Repos
             _ = _context.Bankinformations.Select(e => e.Branch).ToList();
         }
 
+        public async Task<List<Transaction>> GetCarerTransaction(int carerId)
+        {
+            var carerCusIdList = await _context.CarersCustomers.Where(x => x.CarerId == carerId).Select(x => x.CarercusId).ToListAsync();
+            if (carerCusIdList.IsNullOrEmpty())
+            {
+                throw new Exception("Empty transaction history");
+            }
+            var transactionList = await _context.Transactions.Where(x => carerCusIdList.Contains((int)x.CarercusId!)).ToListAsync();
+            return transactionList;
+        }
+        public async Task<List<Transaction>> GetCustomerTransaction(int customerId)
+        {
+            var carerCusIdList = await _context.CarersCustomers.Where(x => x.CustomerId == customerId).Select(x => x.CustomerId).ToListAsync();
+            if (carerCusIdList.IsNullOrEmpty())
+            {
+                throw new Exception("Empty transaction history");
+            }
+            var transactionList = await _context.Transactions.Where(x => carerCusIdList.Contains((int)x.CarercusId!)).ToListAsync();
+            return transactionList;
+        }
+
         public async Task<CarersCustomer?> GetCarerCustomerFromIdAsync(int? carercusId)
         {
-            return await _context.CarersCustomers.FirstOrDefaultAsync(x=>x.CarercusId == carercusId);
+            return await _context.CarersCustomers.FirstOrDefaultAsync(x => x.CarercusId == carercusId);
         }
 
         public async Task<CarersCustomer?> GetLastest()
         {
-            return await _context.CarersCustomers.OrderByDescending(x=>x.CarercusId).FirstOrDefaultAsync();
+            return await _context.CarersCustomers.OrderByDescending(x => x.CarercusId).FirstOrDefaultAsync();
         }
 
         public async Task<CarersCustomer> AddCarerCusAsync(CarersCustomer entity)
@@ -162,7 +183,7 @@ namespace ElderCare_Repository.Repos
 
         public async Task<CarersCustomer> FindAsync(int carerid, int cusid)
         {
-           return await _context.CarersCustomers.Where(x => x.CarerId == carerid && x.CustomerId == cusid).FirstOrDefaultAsync();
+            return await _context.CarersCustomers.Where(x => x.CarerId == carerid && x.CustomerId == cusid).FirstOrDefaultAsync();
         }
     }
 }
