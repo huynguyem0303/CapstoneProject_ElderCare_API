@@ -143,6 +143,16 @@ namespace ElderCare_Repository.Repos
             var transactionList = await _context.Transactions.Where(x => carerCusIdList.Contains((int)x.CarercusId!)).ToListAsync();
             return transactionList;
         }
+        public async Task<List<Transaction>> GetCustomerTransaction(int customerId)
+        {
+            var carerCusIdList = await _context.CarersCustomers.Where(x => x.CustomerId == customerId).Select(x => x.CustomerId).ToListAsync();
+            if (carerCusIdList.IsNullOrEmpty())
+            {
+                throw new Exception("Empty transaction history");
+            }
+            var transactionList = await _context.Transactions.Where(x => carerCusIdList.Contains((int)x.CarercusId!)).ToListAsync();
+            return transactionList;
+        }
 
         public async Task<CarersCustomer?> GetCarerCustomerFromIdAsync(int? carercusId)
         {

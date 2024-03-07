@@ -1,4 +1,5 @@
-﻿using ElderCare_Repository.DTO;
+﻿using ElderCare_Domain.Models;
+using ElderCare_Repository.DTO;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ namespace ElderCare_Service.Interfaces
 {
     public interface ITransactionService
     {
+        IEnumerable<Transaction> GetAll();
         Task<string> CreateTransaction(TrasactionDto dto, int accountId);
         string LinkPayment(int accountId);
         Task<string> ProcessPayment();

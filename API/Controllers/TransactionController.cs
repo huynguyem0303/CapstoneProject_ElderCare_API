@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
 using Microsoft.EntityFrameworkCore;
 using ElderCare_Service.Interfaces;
+using ElderCare_Service.Services;
 
 
 namespace API.Controllers
@@ -21,17 +22,30 @@ namespace API.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public static string? url;
+   
+        private readonly ICarerService _carerService;
+
 
         private readonly ITransactionService _transactionService;
-        public TransactionController(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor, ITransactionService transactionService)
+        public static string? url;
+
+        public TransactionController(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor, ICarerService carerService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _httpContextAccessor = httpContextAccessor;
-            _transactionService = transactionService;
+            _carerService = carerService;
         }
 
+        [HttpGet]
+        [EnableQuery]
+        public IActionResult GetAllTransactions()
+        {
+            var list = _unitOfWork.TransactionRepo.GetAll();
+            //var list = _transactionService.GetAll();
+
+            return Ok(list);
+        }
         [HttpPost]
         [EnableQuery]
         [Authorize]
@@ -249,7 +263,55 @@ namespace API.Controllers
 
             return Redirect(url);
         }
-
+        [HttpGet("getTransactionHistoryByCarerId")]
+        [EnableQuery]
+        
+        public async Task<IActionResult> GetCarerTransactionHistoryByCarer(int carerId)
+        {
+            try
+            {
+                //var transactionList = await _unitOfWork.CarerRepository.GetCarerTransactionHistoryAsync(carerId);
+                //var carerTransactions = _mapper.Map<List<CarerTransactionDto>>(transactionList);
+                //foreach (var transaction in carerTransactions)
+                //{
+                //    var carerCus = await _unitOfWork.CarerRepository.GetCarerCustomerFromIdAsync(transactionList[carerTransactions.IndexOf(transaction)].CarercusId);
+                //    if(carerCus != null)
+                //    {
+                //        (transaction.CarerId, transaction.CustomerId) = (carerCus.CarerId, carerCus.CustomerId);
+                //    }
+                //}
+                var carerTransactions = await _carerService.GetCarerTransactionHistoryAsyncByCarerId(carerId);
+                return Ok(carerTransactions);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("getTransactionHistoryByCustomerId")]
+        [EnableQuery]
+        public async Task<IActionResult> GetCarerTransactionHistoryByCus(int customerId)
+        {
+            try
+            {
+                //var transactionList = await _unitOfWork.CarerRepository.GetCarerTransactionHistoryAsync(carerId);
+                //var carerTransactions = _mapper.Map<List<CarerTransactionDto>>(transactionList);
+                //foreach (var transaction in carerTransactions)
+                //{
+                //    var carerCus = await _unitOfWork.CarerRepository.GetCarerCustomerFromIdAsync(transactionList[carerTransactions.IndexOf(transaction)].CarercusId);
+                //    if(carerCus != null)
+                //    {
+                //        (transaction.CarerId, transaction.CustomerId) = (carerCus.CarerId, carerCus.CustomerId);
+                //    }
+                //}
+                var carerTransactions = await _carerService.GetCarerTransactionHistoryAsyncByCustomerId(customerId);
+                return Ok(carerTransactions);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 
 }
