@@ -15,6 +15,8 @@ namespace ElderCare_Repository.Interfaces
         Task<Transaction> GetLastestTransaction(int id);
         Task<Transaction> GetTransaction(long id);
         Task UpdateOrderInfoInDatabase(Transaction transaction);
+        Task<List<Transaction>> GetCarerTransaction(int carerId);
+        Task<List<Transaction>> GetCustomerTransaction(int customerId);
 
     }
 }

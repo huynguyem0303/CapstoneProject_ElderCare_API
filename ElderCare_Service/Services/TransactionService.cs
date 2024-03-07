@@ -221,5 +221,35 @@ namespace ElderCare_Service.Services
         {
             return _unitOfWork.TransactionRepo.GetAll();
         }
+
+
+        public async Task<List<TransactionDto>> GetTransactionHistoryAsyncByCarerId(int carerId)
+        {
+            var transactionList = await _unitOfWork.TransactionRepo.GetCarerTransaction(carerId);
+            var carerTransactions = _mapper.Map<List<TransactionDto>>(transactionList);
+            foreach (var transaction in carerTransactions)
+            {
+                var carerCus = await _unitOfWork.CarerRepository.GetCarerCustomerFromIdAsync(transactionList[carerTransactions.IndexOf(transaction)].CarercusId);
+                if (carerCus != null)
+                {
+                    (transaction.CarerId, transaction.CustomerId) = (carerCus.CarerId, carerCus.CustomerId);
+                }
+            }
+            return carerTransactions;
+        }
+        public async Task<List<TransactionDto>> GetTransactionHistoryAsyncByCustomerId(int customerId)
+        {
+            var transactionList = await _unitOfWork.TransactionRepo.GetCustomerTransaction(customerId);
+            var carerTransactions = _mapper.Map<List<TransactionDto>>(transactionList);
+            foreach (var transaction in carerTransactions)
+            {
+                var carerCus = await _unitOfWork.CarerRepository.GetCarerCustomerFromIdAsync(transactionList[carerTransactions.IndexOf(transaction)].CarercusId);
+                if (carerCus != null)
+                {
+                    (transaction.CarerId, transaction.CustomerId) = (carerCus.CarerId, carerCus.CustomerId);
+                }
+            }
+            return carerTransactions;
+        }
     }
 }

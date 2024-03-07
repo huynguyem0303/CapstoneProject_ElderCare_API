@@ -61,35 +61,6 @@ namespace ElderCare_Service.Services
             return await _unitOfWork.CarerRepository.GetByIdAsync(id);
         }
 
-        public async Task<List<CarerTransactionDto>> GetCarerTransactionHistoryAsyncByCarerId(int carerId)
-        {
-            var transactionList = await _unitOfWork.CarerRepository.GetCarerTransaction(carerId);
-            var carerTransactions = _mapper.Map<List<CarerTransactionDto>>(transactionList);
-            foreach (var transaction in carerTransactions)
-            {
-                var carerCus = await _unitOfWork.CarerRepository.GetCarerCustomerFromIdAsync(transactionList[carerTransactions.IndexOf(transaction)].CarercusId);
-                if (carerCus != null)
-                {
-                    (transaction.CarerId, transaction.CustomerId) = (carerCus.CarerId, carerCus.CustomerId);
-                }
-            }
-            return carerTransactions;
-        }
-        public async Task<List<CarerTransactionDto>> GetCarerTransactionHistoryAsyncByCustomerId(int customerId)
-        {
-            var transactionList = await _unitOfWork.CarerRepository.GetCustomerTransaction(customerId);
-            var carerTransactions = _mapper.Map<List<CarerTransactionDto>>(transactionList);
-            foreach (var transaction in carerTransactions)
-            {
-                var carerCus = await _unitOfWork.CarerRepository.GetCarerCustomerFromIdAsync(transactionList[carerTransactions.IndexOf(transaction)].CarercusId);
-                if (carerCus != null)
-                {
-                    (transaction.CarerId, transaction.CustomerId) = (carerCus.CarerId, carerCus.CustomerId);
-                }
-            }
-            return carerTransactions;
-        }
-
         public async Task<List<Carer>?> SearchCarer(SearchCarerDto dto)
         {
             return await _unitOfWork.CarerRepository.searchCarer(dto);
