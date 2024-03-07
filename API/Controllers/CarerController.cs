@@ -80,31 +80,31 @@ namespace API.Controllers
             return NoContent();
         }
 
-        [HttpGet("getTransactionHistory")]
-        [EnableQuery]
-        [Authorize(Roles = "Carer")]
-        public async Task<IActionResult> GetCarerTransactionHistory(int carerId)
-        {
-            try
-            {
-                //var transactionList = await _unitOfWork.CarerRepository.GetCarerTransactionHistoryAsync(carerId);
-                //var carerTransactions = _mapper.Map<List<CarerTransactionDto>>(transactionList);
-                //foreach (var transaction in carerTransactions)
-                //{
-                //    var carerCus = await _unitOfWork.CarerRepository.GetCarerCustomerFromIdAsync(transactionList[carerTransactions.IndexOf(transaction)].CarercusId);
-                //    if(carerCus != null)
-                //    {
-                //        (transaction.CarerId, transaction.CustomerId) = (carerCus.CarerId, carerCus.CustomerId);
-                //    }
-                //}
-                var carerTransactions = await _carerService.GetCarerTransactionHistoryAsync(carerId);
-                return Ok(carerTransactions);
-            }
-            catch(Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+        //[HttpGet("getTransactionHistory")]
+        //[EnableQuery]
+        //[Authorize(Roles = "Carer")]
+        //public async Task<IActionResult> GetCarerTransactionHistory(int carerId)
+        //{
+        //    try
+        //    {
+        //        //var transactionList = await _unitOfWork.CarerRepository.GetCarerTransactionHistoryAsync(carerId);
+        //        //var carerTransactions = _mapper.Map<List<CarerTransactionDto>>(transactionList);
+        //        //foreach (var transaction in carerTransactions)
+        //        //{
+        //        //    var carerCus = await _unitOfWork.CarerRepository.GetCarerCustomerFromIdAsync(transactionList[carerTransactions.IndexOf(transaction)].CarercusId);
+        //        //    if(carerCus != null)
+        //        //    {
+        //        //        (transaction.CarerId, transaction.CustomerId) = (carerCus.CarerId, carerCus.CustomerId);
+        //        //    }
+        //        //}
+        //        var carerTransactions = await _carerService.GetCarerTransactionHistoryAsync(carerId);
+        //        return Ok(carerTransactions);
+        //    }
+        //    catch(Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
 
         //private async Task<bool> CarerExists(int id)
         //{
