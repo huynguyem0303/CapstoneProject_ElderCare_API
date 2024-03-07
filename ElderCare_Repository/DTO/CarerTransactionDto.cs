@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ElderCare_Repository.DTO
 {
-    public class TransactionDto
+    public class CarerTransactionDto
     {
         [JsonProperty("transaction_id")]
         public int TransactionId { get; set; }

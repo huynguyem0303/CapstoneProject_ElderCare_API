@@ -15,7 +15,7 @@ namespace ElderCare_Service.Interfaces
         Task<string> CreateTransaction(TrasactionDto dto, int accountId);
         string LinkPayment(int accountId);
         Task<string> ProcessPayment();
-        Task<List<TransactionDto>> GetTransactionHistoryAsyncByCarerId(int carerId);
-        Task<List<TransactionDto>> GetTransactionHistoryAsyncByCustomerId(int customerId);
+        Task<List<CarerTransactionDto>> GetTransactionHistoryAsyncByCarerId(int carerId);
+        Task<List<CarerTransactionDto>> GetTransactionHistoryAsyncByCustomerId(int customerId);
     }
 }
