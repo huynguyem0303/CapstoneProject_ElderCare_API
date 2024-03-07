@@ -145,7 +145,7 @@ namespace ElderCare_Repository.Repos
         }
         public async Task<List<Transaction>> GetCustomerTransaction(int customerId)
         {
-            var carerCusIdList = await _context.CarersCustomers.Where(x => x.CustomerId == customerId).Select(x => x.CustomerId).ToListAsync();
+            var carerCusIdList = await _context.CarersCustomers.Where(x => x.CustomerId == customerId).Select(x => x.CarercusId).ToListAsync();
             if (carerCusIdList.IsNullOrEmpty())
             {
                 throw new Exception("Empty transaction history");
