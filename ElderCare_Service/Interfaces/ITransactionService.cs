@@ -12,7 +12,7 @@ namespace ElderCare_Service.Interfaces
     public interface ITransactionService
     {
         IEnumerable<Transaction> GetAll();
-        Task<string> CreateTransaction(TrasactionDto dto, int accountId,int carerid);
+        Task<string> CreateTransaction(TrasactionDto dto, int accountId,int carerid,int cusid);
         string LinkPayment(int accountId);
         Task<string> ProcessPayment();
     }
