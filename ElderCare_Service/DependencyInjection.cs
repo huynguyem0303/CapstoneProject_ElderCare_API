@@ -28,7 +28,7 @@ namespace ElderCare_Service
             services.AddScoped<ILoginService, LoginService>();
             services.AddScoped<ISignupService, SignupService>();
             services.AddScoped<IElderService, ElderService>();
-            services.AddScoped<ICarerService, CarerService>();
+            services.AddScoped<ICarerService, Services.CarerService>();
             services.AddScoped<ITransactionService, TransactionService>();
             services.AddHttpContextAccessor();
             services.AddAutoMapper(typeof(MapperConfigurationProfile).Assembly);
