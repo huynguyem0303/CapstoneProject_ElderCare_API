@@ -11,7 +11,7 @@ public partial class Timetable
 
     //public int? ContractServicesId { get; set; } //
 
-    //public DateTime? ReportDate { get; set; } //
+    public DateTime? ReportDate { get; set; }
 
     public string Timeframe { get; set; }
 

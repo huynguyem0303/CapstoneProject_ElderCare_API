@@ -25,7 +25,7 @@ public partial class Carer
 
     public int? BankinfoId { get; set; }
 
-    public int? TransactionId { get; set; } //removed soon
+    //public int? TransactionId { get; set; } //removed soon
 
     public virtual Bankinformation? Bankinfo { get; set; }
 

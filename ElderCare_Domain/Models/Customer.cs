@@ -21,7 +21,7 @@ public partial class Customer
 
     //public int? TransactionId { get; set; } //removed soon
 
-    public int? ElderlyId { get; set; }
+    //public int? ElderlyId { get; set; }
 
     public virtual Bankinformation Bankinfo { get; set; }
 
