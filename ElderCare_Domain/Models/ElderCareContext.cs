@@ -82,6 +82,8 @@ public partial class ElderCareContext : DbContext
     public virtual DbSet<Device> FCMTokens { get; set; }
 
     public virtual DbSet<CarerService> CarerServices { get; set; }
+
+    public virtual DbSet<Notification> Notifications { get; set; }
     #endregion
 
     //    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -128,6 +130,10 @@ public partial class ElderCareContext : DbContext
             entity.Property(e => e.Username)
                 .HasMaxLength(100)
                 .HasColumnName("username");
+            entity.Property(e => e.BankInfoId).HasColumnName("bankinfo_id");
+            entity.HasOne(d => d.Bankinfo).WithMany(p => p.Accounts)
+                .HasForeignKey(d => d.BankInfoId)
+                .HasConstraintName("FK_Account_Bankinformation");
         });
 
         modelBuilder.Entity<Bankinformation>(entity =>
@@ -261,11 +267,12 @@ public partial class ElderCareContext : DbContext
         {
             entity.HasKey(e => e.CarerServiceId);
 
-            entity.Property(e => e.CarerId)
+            entity.Property(e => e.CarerServiceId)
                 .ValueGeneratedNever()
+                .HasColumnName("carer_service_id");
+            entity.Property(e => e.CarerId)
                 .HasColumnName("carer_id");
             entity.Property(e => e.ServiceId)
-                .ValueGeneratedNever()
                 .HasColumnName("service_id");
 
             entity.HasOne(d => d.Carer).WithMany(p => p.CarerServices)
@@ -501,7 +508,7 @@ public partial class ElderCareContext : DbContext
                 .HasMaxLength(300)
                 .HasColumnName("description");
             entity.Property(e => e.Ratng).HasColumnName("ratng");
-            entity.Property(e => e.CreatedDate).HasColumnName("created_date");
+            entity.Property(e => e.CreatedDate).HasColumnType("datetime").HasColumnName("created_date");
 
             //entity.HasOne(d => d.Carer).WithMany(p => p.Feedbacks)
             //    .HasForeignKey(d => d.CarerId)
@@ -671,7 +678,7 @@ public partial class ElderCareContext : DbContext
             entity.Property(e => e.Description)
                 .HasMaxLength(300)
                 .HasColumnName("description");
-            entity.Property(e => e.CreatedDate).HasColumnName("created_date");
+            entity.Property(e => e.CreatedDate).HasColumnType("datetime").HasColumnName("created_date");
             entity.HasOne(d => d.Carer).WithMany(p => p.Reports)
                 .HasForeignKey(d => d.CarerId)
                 .HasConstraintName("FK_Report_Carer");
@@ -799,7 +806,7 @@ public partial class ElderCareContext : DbContext
 
         modelBuilder.Entity<Device>(entity =>
         {
-            entity.ToTable("Device");
+            entity.ToTable("FCMToken");
 
             entity.HasKey(e => e.DeviceId);
             entity.Property(e => e.DeviceId)
@@ -812,9 +819,24 @@ public partial class ElderCareContext : DbContext
                   .HasColumnName("token_description")
                   .HasMaxLength(255);
 
-            entity.HasOne(e => e.Account).WithMany(e => e.FCMTokens)
+            entity.HasOne(e => e.Account).WithMany(e => e.Devices)
                   .HasForeignKey(e => e.AccountId)
                   .HasConstraintName("FK_FCMToken_Account");
+        });
+
+        modelBuilder.Entity<Notification>(entity =>
+        {
+            entity.HasKey(e => e.NotificationId);
+
+            entity.Property(e => e.NotificationId)
+                .HasColumnName("noti_id")
+                .HasColumnType("uniqueidentifier")
+                .ValueGeneratedOnAdd()
+                .HasValueGenerator<GuidValueGenerator>();
+            entity.Property(e => e.AccountId).HasColumnName("account_id").IsRequired();
+            entity.Property(e => e.Title).HasColumnName("title");
+            entity.Property(e => e.Description).HasColumnName("description");
+            entity.Property(e => e.CreatedDate).HasColumnType("datetime").HasColumnName("created_date");
         });
 
         OnModelCreatingPartial(modelBuilder);

@@ -28,5 +28,6 @@ public partial class Account
 
     public int? BankInfoId { get; set; }
 
-    public virtual ICollection<Device> FCMTokens { get; set; }
+    public virtual Bankinformation? Bankinfo { get; set; }
+    public virtual ICollection<Device> Devices { get; set; }
 }
