@@ -13,6 +13,8 @@ public partial class Report
 
     public string Description { get; set; }
 
+    public DateTime CreatedDate { get; set; } = DateTime.Now;
+
     public virtual Carer Carer { get; set; }
 
     public virtual Customer Customer { get; set; }

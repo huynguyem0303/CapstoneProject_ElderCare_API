@@ -17,5 +17,5 @@ public partial class ContractService
 
     public virtual Service Service { get; set; }
 
-    public virtual ICollection<Timetable> Timetables { get; set; } = new List<Timetable>();
+    //public virtual ICollection<Timetable> Timetables { get; set; } = new List<Timetable>();//removed
 }

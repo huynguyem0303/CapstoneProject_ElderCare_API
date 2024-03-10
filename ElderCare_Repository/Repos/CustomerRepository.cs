@@ -49,11 +49,11 @@ namespace ElderCare_Repository.Repos
             _ = _dbSet.Select(e => e.Phone).ToList();
             _ = _dbSet.Select(e => e.Status).ToList();
             _ = _dbSet.Select(e => e.BankinfoId).ToList();
-            _ = _dbSet.Select(e => e.TransactionId).ToList();
+            //_ = _dbSet.Select(e => e.TransactionId).ToList();
             _ = _dbSet.Select(e => e.Bankinfo).ToList();
             _ = _context.Bankinformations.Select(e => e.BankinfoId).ToList();
-            _ = _context.Bankinformations.Select(e => e.AccountName).ToList();
-            _ = _context.Bankinformations.Select(e => e.AccountNumber).ToList();
+            _ = _context.Bankinformations.Select(e => e.BankAccountName).ToList();
+            _ = _context.Bankinformations.Select(e => e.BankAccountNumber).ToList();
             _ = _context.Bankinformations.Select(e => e.BankName).ToList();
             _ = _context.Bankinformations.Select(e => e.Branch).ToList();
         }
