@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.ValueGeneration;
 using Microsoft.Extensions.Configuration;
 
@@ -84,6 +83,8 @@ public partial class ElderCareContext : DbContext
     public virtual DbSet<CarerService> CarerServices { get; set; }
 
     public virtual DbSet<Notification> Notifications { get; set; }
+    
+    public virtual DbSet<Tracking> Trackings { get; set; }
     #endregion
 
     //    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -187,7 +188,7 @@ public partial class ElderCareContext : DbContext
                 .HasMaxLength(50)
                 .HasColumnName("phone");
             entity.Property(e => e.Status).HasColumnName("status");
-            entity.Property(e => e.TransactionId).HasColumnName("transaction_id");
+            //entity.Property(e => e.TransactionId).HasColumnName("transaction_id");
 
             entity.HasOne(d => d.Bankinfo).WithMany(p => p.Carers)
                 .HasForeignKey(d => d.BankinfoId)
@@ -268,7 +269,9 @@ public partial class ElderCareContext : DbContext
             entity.HasKey(e => e.CarerServiceId);
 
             entity.Property(e => e.CarerServiceId)
-                .ValueGeneratedNever()
+                .ValueGeneratedOnAdd()
+                .HasValueGenerator<GuidValueGenerator>()
+                .HasColumnType("uniqueidentifier")
                 .HasColumnName("carer_service_id");
             entity.Property(e => e.CarerId)
                 .HasColumnName("carer_id");
@@ -431,7 +434,7 @@ public partial class ElderCareContext : DbContext
             entity.Property(e => e.CustomerName)
                 .HasMaxLength(100)
                 .HasColumnName("customer_name");
-            entity.Property(e => e.ElderlyId).HasColumnName("elderly_id");
+            //entity.Property(e => e.ElderlyId).HasColumnName("elderly_id");
             entity.Property(e => e.Email)
                 .HasMaxLength(100)
                 .HasColumnName("email");
@@ -444,7 +447,6 @@ public partial class ElderCareContext : DbContext
             entity.HasOne(d => d.Bankinfo).WithMany(p => p.Customers)
                 .HasForeignKey(d => d.BankinfoId)
                 .HasConstraintName("FK_Customer_Bankinformation");
-
             //entity.HasOne(d => d.Elderly).WithMany(p => p.Customers)
             //    .HasForeignKey(d => d.ElderlyId)
             //    .HasConstraintName("FK_Customer_Elderly");
@@ -471,6 +473,7 @@ public partial class ElderCareContext : DbContext
                 .HasMaxLength(100)
                 .HasColumnName("image");
             entity.Property(e => e.LivingconditionId).HasColumnName("livingcondition_id").IsRequired(false);
+            entity.Property(e => e.CustomerId).HasColumnName("customer_id");
             entity.Property(e => e.Name)
                 .HasMaxLength(100)
                 .HasColumnName("name");
@@ -492,6 +495,10 @@ public partial class ElderCareContext : DbContext
             entity.HasOne(d => d.Livingcondition).WithMany(p => p.Elderlies)
                 .HasForeignKey(d => d.LivingconditionId)
                 .HasConstraintName("FK_Elderly_LivingCondition");
+
+            entity.HasOne(d => d.Customer).WithMany(p => p.Elders)
+                .HasForeignKey(d => d.CustomerId)
+                .HasConstraintName("FK_Elderly_Customer");
         });
 
         modelBuilder.Entity<Feedback>(entity =>
@@ -750,9 +757,9 @@ public partial class ElderCareContext : DbContext
                 .HasColumnName("timetable_id");
             entity.Property(e => e.CarerId).HasColumnName("carer_id");
             //entity.Property(e => e.ContractServicesId).HasColumnName("contract_services_id");
-            //entity.Property(e => e.CreatedDate)
-            //    .HasColumnType("datetime")
-            //    .HasColumnName("created_date");
+            entity.Property(e => e.CreatedDate)
+                .HasColumnType("datetime")
+                .HasColumnName("created_date");
             //entity.Property(e => e.CusApprove).HasColumnName("cus_approve");
             //entity.Property(e => e.CusContent)
             //    .HasMaxLength(300)
@@ -764,9 +771,9 @@ public partial class ElderCareContext : DbContext
             //entity.Property(e => e.ReportContent)
             //    .HasMaxLength(300)
             //    .HasColumnName("report_content");
-            //entity.Property(e => e.ReportDate)
-            //    .HasColumnType("datetime")
-            //    .HasColumnName("report_date");
+            entity.Property(e => e.ReportDate)
+                .HasColumnType("datetime")
+                .HasColumnName("report_date");
             entity.Property(e => e.Status).HasColumnName("status");
             entity.Property(e => e.Timeframe)
                 .HasMaxLength(100)
