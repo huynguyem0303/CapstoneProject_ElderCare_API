@@ -79,7 +79,7 @@ public partial class ElderCareContext : DbContext
 
     public virtual DbSet<Transaction> Transactions { get; set; }
 
-    public virtual DbSet<FCMToken> FCMTokens { get; set; }
+    public virtual DbSet<Device> FCMTokens { get; set; }
     #endregion
 
     //    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -137,10 +137,10 @@ public partial class ElderCareContext : DbContext
             entity.Property(e => e.BankinfoId)
                 .ValueGeneratedNever()
                 .HasColumnName("bankinfo_id");
-            entity.Property(e => e.AccountName)
+            entity.Property(e => e.BankAccountName)
                 .HasMaxLength(100)
                 .HasColumnName("account_name");
-            entity.Property(e => e.AccountNumber)
+            entity.Property(e => e.BankAccountNumber)
                 .HasMaxLength(50)
                 .HasColumnName("account_number");
             entity.Property(e => e.BankName)
@@ -766,18 +766,18 @@ public partial class ElderCareContext : DbContext
             entity.Property(e => e.Type).HasColumnName("type");
         });
 
-        modelBuilder.Entity<FCMToken>(entity =>
+        modelBuilder.Entity<Device>(entity =>
         {
-            entity.ToTable("FCMToken");
+            entity.ToTable("Device");
 
-            entity.HasKey(e => e.TokenId);
-            entity.Property(e => e.TokenId)
+            entity.HasKey(e => e.DeviceId);
+            entity.Property(e => e.DeviceId)
                   .HasColumnName("token_id")
                   .HasColumnType("uniqueidentifier")
                   .ValueGeneratedOnAdd()
                   .HasValueGenerator<GuidValueGenerator>();
             entity.Property(e => e.AccountId).HasColumnName("account_id").IsRequired();
-            entity.Property(e => e.TokenValue)
+            entity.Property(e => e.DeviceFCMToken)
                   .HasColumnName("token_description")
                   .HasMaxLength(255);
 

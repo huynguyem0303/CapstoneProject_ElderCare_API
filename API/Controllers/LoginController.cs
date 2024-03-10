@@ -52,9 +52,9 @@ namespace API.Controllers
             //{
             //    return Unauthorized();
             //}
-            //else if(!loginDto.FCMToken.IsNullOrEmpty())
+            //else if(!loginDto.Device.IsNullOrEmpty())
             //{
-            //    var response = await checkAccountFCMToken(account.AccountId, loginDto.FCMToken);
+            //    var response = await checkAccountFCMToken(account.AccountId, loginDto.Device);
             //    if (!response.IsSuccess)
             //    {
             //        return Ok(response);
@@ -88,9 +88,9 @@ namespace API.Controllers
             // {
             //     return Unauthorized();
             // }
-            // else if (!loginDto.FCMToken.IsNullOrEmpty())
+            // else if (!loginDto.Device.IsNullOrEmpty())
             // {
-            //     var response = await checkAccountFCMToken(account.AccountId, loginDto.FCMToken);
+            //     var response = await checkAccountFCMToken(account.AccountId, loginDto.Device);
             //     if (!response.IsSuccess)
             //     {
             //         return Ok(response);
@@ -169,7 +169,7 @@ namespace API.Controllers
         //    }
         //    else
         //    {
-        //        response.Message = $"Invalid FCMToken: {response.Message}";
+        //        response.Message = $"Invalid Device: {response.Message}";
         //    }
         //    return response;
         //}

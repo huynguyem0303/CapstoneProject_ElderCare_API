@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿    using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -26,5 +26,7 @@ public partial class Account
 
     public int? CarerId { get; set; }
 
-    public virtual ICollection<FCMToken> FCMTokens { get; set; }
+    public int? BankInfoId { get; set; }
+
+    public virtual ICollection<Device> FCMTokens { get; set; }
 }

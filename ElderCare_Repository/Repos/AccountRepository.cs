@@ -74,7 +74,7 @@ namespace ElderCare_Repository.Repos
                 throw new Exception(ex.Message);
             }
         }
-        public async Task<List<FCMToken>?> GetFCMTokensByAccountId(int accountId)
+        public async Task<List<Device>?> GetFCMTokensByAccountId(int accountId)
         {
             return await _context.FCMTokens.Where(e => e.AccountId.Equals(accountId)).ToListAsync();
         }
@@ -83,11 +83,11 @@ namespace ElderCare_Repository.Repos
         {
             var isDublicate = await _context.FCMTokens.AnyAsync(e => e.AccountId.Equals(accountId)
                                                                    && e.Account.Status == (int)AccountStatus.Active
-                                                                   && e.TokenValue == tokenValue);
+                                                                   && e.DeviceFCMToken == tokenValue);
 
             if (!isDublicate && !tokenValue.IsNullOrEmpty())
             {
-                await _context.FCMTokens.AddAsync(new FCMToken() { AccountId = accountId, TokenValue = tokenValue });
+                await _context.FCMTokens.AddAsync(new Device() { AccountId = accountId, DeviceFCMToken = tokenValue });
             }
 
         }

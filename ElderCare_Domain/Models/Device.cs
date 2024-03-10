@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace ElderCare_Domain.Models
 {
-    public class FCMToken
+    public class Device
     {
-        public Guid TokenId { get; set; }
+        public Guid DeviceId { get; set; }
         public int AccountId { get; set; }
-        public string TokenValue { get; set; }
+        public string DeviceFCMToken { get; set; }
 
         public virtual Account Account { get; set; }
     }

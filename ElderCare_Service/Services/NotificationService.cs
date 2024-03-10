@@ -110,7 +110,7 @@ namespace ElderCare_Service.Services
                 }
                 for(var i=0; i < fcmTokens.Count(); i++)
                 {
-                    notificationModel.DeviceId = fcmTokens[i].TokenValue;
+                    notificationModel.DeviceId = fcmTokens[i].DeviceFCMToken;
                     var result = await SendNotification(notificationModel);
                     resultList.Add(result);
                     message += $"device [{i+1}]: {result.Message}, ";

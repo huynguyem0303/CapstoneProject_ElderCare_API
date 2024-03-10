@@ -102,7 +102,7 @@ namespace ElderCare_Service.Services
             }
             else
             {
-                response.Message = $"Invalid FCMToken: {response.Message}";
+                response.Message = $"Invalid Device: {response.Message}";
             }
             return response;
         }
