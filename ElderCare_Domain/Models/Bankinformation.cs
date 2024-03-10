@@ -18,5 +18,5 @@ public partial class Bankinformation
     public virtual ICollection<Carer> Carers { get; set; } = new List<Carer>();
 
     public virtual ICollection<Customer> Customers { get; set; } = new List<Customer>();
-    public virtual ICollection<Account> Accounts { get; set; } = new List<Account>();
+    //public virtual ICollection<Account> Accounts { get; set; } = new List<Account>();
 }

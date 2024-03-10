@@ -130,10 +130,10 @@ public partial class ElderCareContext : DbContext
             entity.Property(e => e.Username)
                 .HasMaxLength(100)
                 .HasColumnName("username");
-            entity.Property(e => e.BankInfoId).HasColumnName("bankinfo_id");
-            entity.HasOne(d => d.Bankinfo).WithMany(p => p.Accounts)
-                .HasForeignKey(d => d.BankInfoId)
-                .HasConstraintName("FK_Account_Bankinformation");
+            //entity.Property(e => e.BankInfoId).HasColumnName("bankinfo_id");
+            //entity.HasOne(d => d.Bankinfo).WithMany(p => p.Accounts)
+            //    .HasForeignKey(d => d.BankInfoId)
+            //    .HasConstraintName("FK_Account_Bankinformation");
         });
 
         modelBuilder.Entity<Bankinformation>(entity =>

@@ -26,8 +26,8 @@ public partial class Account
 
     public int? CarerId { get; set; }
 
-    public int? BankInfoId { get; set; }
+    //public int? BankInfoId { get; set; }
 
-    public virtual Bankinformation? Bankinfo { get; set; }
+    //public virtual Bankinformation? Bankinfo { get; set; }
     public virtual ICollection<Device> Devices { get; set; }
 }
