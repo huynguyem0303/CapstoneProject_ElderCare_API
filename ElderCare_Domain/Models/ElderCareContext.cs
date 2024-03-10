@@ -80,6 +80,8 @@ public partial class ElderCareContext : DbContext
     public virtual DbSet<Transaction> Transactions { get; set; }
 
     public virtual DbSet<Device> FCMTokens { get; set; }
+
+    public virtual DbSet<CarerService> CarerServices { get; set; }
     #endregion
 
     //    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -255,6 +257,25 @@ public partial class ElderCareContext : DbContext
                 .HasConstraintName("FK_CarersCustomers_Customer");
         });
 
+        modelBuilder.Entity<CarerService>(entity =>
+        {
+            entity.HasKey(e => e.CarerServiceId);
+
+            entity.Property(e => e.CarerId)
+                .ValueGeneratedNever()
+                .HasColumnName("carer_id");
+            entity.Property(e => e.ServiceId)
+                .ValueGeneratedNever()
+                .HasColumnName("service_id");
+
+            entity.HasOne(d => d.Carer).WithMany(p => p.CarerServices)
+                .HasForeignKey(d => d.CarerId)
+                .HasConstraintName("FK_CarerService_Carer");
+            entity.HasOne(d => d.Service).WithMany()
+                .HasForeignKey(d => d.ServiceId)
+                .HasConstraintName("FK_CarerService_Service");
+        });
+
         modelBuilder.Entity<Category>(entity =>
         {
             entity.HasKey(e => e.CateId);
@@ -411,15 +432,15 @@ public partial class ElderCareContext : DbContext
                 .HasMaxLength(50)
                 .HasColumnName("phone");
             entity.Property(e => e.Status).HasColumnName("status");
-            entity.Property(e => e.TransactionId).HasColumnName("transaction_id");
+            //entity.Property(e => e.TransactionId).HasColumnName("transaction_id");
 
             entity.HasOne(d => d.Bankinfo).WithMany(p => p.Customers)
                 .HasForeignKey(d => d.BankinfoId)
                 .HasConstraintName("FK_Customer_Bankinformation");
 
-            entity.HasOne(d => d.Elderly).WithMany(p => p.Customers)
-                .HasForeignKey(d => d.ElderlyId)
-                .HasConstraintName("FK_Customer_Elderly");
+            //entity.HasOne(d => d.Elderly).WithMany(p => p.Customers)
+            //    .HasForeignKey(d => d.ElderlyId)
+            //    .HasConstraintName("FK_Customer_Elderly");
 
             //entity.HasOne(d => d.Transaction).WithMany(p => p.Customers)
             //    .HasForeignKey(d => d.TransactionId)
@@ -438,7 +459,7 @@ public partial class ElderCareContext : DbContext
                 .HasColumnName("address");
             entity.Property(e => e.Age).HasColumnName("age");
             entity.Property(e => e.HealthDetailId).HasColumnName("health_detail_id").IsRequired(false);
-            entity.Property(e => e.HobbyId).HasColumnName("hobby_id").IsRequired(false);
+            //entity.Property(e => e.HobbyId).HasColumnName("hobby_id").IsRequired(false);
             entity.Property(e => e.Image)
                 .HasMaxLength(100)
                 .HasColumnName("image");
@@ -457,9 +478,9 @@ public partial class ElderCareContext : DbContext
                 .HasForeignKey(d => d.HealthDetailId)
                 .HasConstraintName("FK_Elderly_HealthDetail");
 
-            entity.HasOne(d => d.Hobby).WithMany(p => p.Elderlies)
-                .HasForeignKey(d => d.HobbyId)
-                .HasConstraintName("FK_Elderly_Hobby");
+            //entity.HasOne(d => d.Hobby).WithMany(p => p.Elderlies)
+            //    .HasForeignKey(d => d.HobbyId)
+            //    .HasConstraintName("FK_Elderly_Hobby");
 
             entity.HasOne(d => d.Livingcondition).WithMany(p => p.Elderlies)
                 .HasForeignKey(d => d.LivingconditionId)
@@ -473,20 +494,26 @@ public partial class ElderCareContext : DbContext
             entity.Property(e => e.FeedbackId)
                 .ValueGeneratedNever()
                 .HasColumnName("feedback_id");
-            entity.Property(e => e.CarerId).HasColumnName("carer_id");
+            //entity.Property(e => e.CarerId).HasColumnName("carer_id");
+            entity.Property(e => e.CarerServiceId).HasColumnName("carer_service_id");
             entity.Property(e => e.CustomerId).HasColumnName("customer_id");
             entity.Property(e => e.Description)
                 .HasMaxLength(300)
                 .HasColumnName("description");
             entity.Property(e => e.Ratng).HasColumnName("ratng");
+            entity.Property(e => e.CreatedDate).HasColumnName("created_date");
 
-            entity.HasOne(d => d.Carer).WithMany(p => p.Feedbacks)
-                .HasForeignKey(d => d.CarerId)
-                .HasConstraintName("FK_Feedback_Carer");
+            //entity.HasOne(d => d.Carer).WithMany(p => p.Feedbacks)
+            //    .HasForeignKey(d => d.CarerId)
+            //    .HasConstraintName("FK_Feedback_Carer");
 
             entity.HasOne(d => d.Customer).WithMany(p => p.Feedbacks)
                 .HasForeignKey(d => d.CustomerId)
                 .HasConstraintName("FK_Feedback_Customer");
+
+            entity.HasOne(d => d.CarerService).WithMany(p => p.Feedbacks)
+                .HasForeignKey(d => d.CarerServiceId)
+                .HasConstraintName("FK_Feedback_CarerService");
         });
 
         modelBuilder.Entity<HealthDetail>(entity =>
@@ -536,6 +563,10 @@ public partial class ElderCareContext : DbContext
                 .HasMaxLength(100)
                 .HasColumnName("name");
             entity.Property(e => e.Status).HasColumnName("status");
+
+            entity.HasOne(d => d.Elderly).WithMany(p => p.Hobbies)
+                .HasForeignKey(d => d.ElderlyId)
+                .HasConstraintName("FK_Hobby_Elderly");
         });
 
         modelBuilder.Entity<LivingCondition>(entity =>
@@ -640,7 +671,7 @@ public partial class ElderCareContext : DbContext
             entity.Property(e => e.Description)
                 .HasMaxLength(300)
                 .HasColumnName("description");
-
+            entity.Property(e => e.CreatedDate).HasColumnName("created_date");
             entity.HasOne(d => d.Carer).WithMany(p => p.Reports)
                 .HasForeignKey(d => d.CarerId)
                 .HasConstraintName("FK_Report_Carer");

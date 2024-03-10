@@ -15,5 +15,7 @@ public partial class Hobby
 
     public bool? Status { get; set; }
 
-    public virtual ICollection<Elderly> Elderlies { get; set; } = new List<Elderly>();
+    //public virtual ICollection<Elderly> Elderlies { get; set; } = new List<Elderly>();
+
+    public virtual Elderly Elderly { get; set; }
 }

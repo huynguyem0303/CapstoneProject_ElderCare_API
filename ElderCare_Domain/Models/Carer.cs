@@ -25,7 +25,7 @@ public partial class Carer
 
     public int? BankinfoId { get; set; }
 
-    public int? TransactionId { get; set; }
+    public int? TransactionId { get; set; } //removed soon
 
     public virtual Bankinformation? Bankinfo { get; set; }
 
@@ -33,7 +33,8 @@ public partial class Carer
 
     public virtual ICollection<Contract> Contracts { get; set; } = new List<Contract>();
 
-    public virtual ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
+    //public virtual ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
+    public virtual ICollection<CarerService> CarerServices { get; set; }
 
     public virtual ICollection<Report> Reports { get; set; } = new List<Report>();
 }

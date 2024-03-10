@@ -31,7 +31,7 @@ namespace ElderCare_Repository.Repos
             _ = _dbSet.Select(e => e.Address).ToList();
             _ = _dbSet.Select(e => e.Image).ToList();
             _ = _dbSet.Select(e => e.Note).ToList();
-            _ = _dbSet.Select(e => e.HobbyId).ToList();
+            //_ = _dbSet.Select(e => e.HobbyId).ToList();
 
         }
     }
