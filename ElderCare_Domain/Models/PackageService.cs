@@ -13,5 +13,5 @@ public partial class PackageService
 
     public virtual Package Package { get; set; }
 
-    public virtual ICollection<Timetable> Timetables { get; set; } = new List<Timetable>();
+    //public virtual ICollection<Timetable> Timetables { get; set; } = new List<Timetable>();//removed
 }

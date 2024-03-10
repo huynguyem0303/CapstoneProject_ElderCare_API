@@ -749,18 +749,64 @@ public partial class ElderCareContext : DbContext
                 .ValueGeneratedNever()
                 .HasColumnName("timetable_id");
             entity.Property(e => e.CarerId).HasColumnName("carer_id");
-            entity.Property(e => e.ContractServicesId).HasColumnName("contract_services_id");
-            entity.Property(e => e.CreatedDate)
-                .HasColumnType("datetime")
-                .HasColumnName("created_date");
+            //entity.Property(e => e.ContractServicesId).HasColumnName("contract_services_id");
+            //entity.Property(e => e.CreatedDate)
+            //    .HasColumnType("datetime")
+            //    .HasColumnName("created_date");
+            //entity.Property(e => e.CusApprove).HasColumnName("cus_approve");
+            //entity.Property(e => e.CusContent)
+            //    .HasMaxLength(300)
+            //    .HasColumnName("cus_content");
+            //entity.Property(e => e.Image)
+            //    .HasMaxLength(300)
+            //    .HasColumnName("image");
+            //entity.Property(e => e.PackageServicesId).HasColumnName("package_services_id");
+            //entity.Property(e => e.ReportContent)
+            //    .HasMaxLength(300)
+            //    .HasColumnName("report_content");
+            //entity.Property(e => e.ReportDate)
+            //    .HasColumnType("datetime")
+            //    .HasColumnName("report_date");
+            entity.Property(e => e.Status).HasColumnName("status");
+            entity.Property(e => e.Timeframe)
+                .HasMaxLength(100)
+                .HasColumnName("timeframe");
+            //entity.Property(e => e.UpdatedDate)
+            //    .HasColumnType("datetime")
+            //    .HasColumnName("updated_date");
+
+            //entity.HasOne(d => d.ContractServices).WithMany(p => p.Timetables)
+            //    .HasForeignKey(d => d.ContractServicesId)
+            //    .HasConstraintName("FK_Timetable_ContractServices");
+
+            //entity.HasOne(d => d.PackageServices).WithMany(p => p.Timetables)
+            //    .HasForeignKey(d => d.PackageServicesId)
+            //    .HasConstraintName("FK_Timetable_PackageServices");
+        });
+
+        modelBuilder.Entity<Tracking>(entity =>
+        {
+            entity.HasKey(e => e.TrackingId);
+
+            entity.Property(e => e.TrackingId)
+                .HasColumnType("uniqueidentifier")
+                .HasColumnName("tracking_id")
+                .ValueGeneratedOnAdd()
+                .HasValueGenerator<GuidValueGenerator>();
+
+            entity.Property(e => e.TimetableId).HasColumnName("timetable_id");
+
             entity.Property(e => e.CusApprove).HasColumnName("cus_approve");
-            entity.Property(e => e.CusContent)
+            entity.Property(e => e.CusFeedback)
                 .HasMaxLength(300)
-                .HasColumnName("cus_content");
+                .HasColumnName("cus_feedback");
             entity.Property(e => e.Image)
                 .HasMaxLength(300)
                 .HasColumnName("image");
             entity.Property(e => e.PackageServicesId).HasColumnName("package_services_id");
+            entity.Property(e => e.Title)
+                .HasMaxLength(50)
+                .HasColumnName("title");
             entity.Property(e => e.ReportContent)
                 .HasMaxLength(300)
                 .HasColumnName("report_content");
@@ -768,20 +814,18 @@ public partial class ElderCareContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("report_date");
             entity.Property(e => e.Status).HasColumnName("status");
-            entity.Property(e => e.Timeframe)
-                .HasMaxLength(100)
-                .HasColumnName("timeframe");
-            entity.Property(e => e.UpdatedDate)
-                .HasColumnType("datetime")
-                .HasColumnName("updated_date");
 
-            entity.HasOne(d => d.ContractServices).WithMany(p => p.Timetables)
+            entity.HasOne(d => d.ContractServices).WithMany()
                 .HasForeignKey(d => d.ContractServicesId)
-                .HasConstraintName("FK_Timetable_ContractServices");
+                .HasConstraintName("FK_Tracking_ContractServices");
 
-            entity.HasOne(d => d.PackageServices).WithMany(p => p.Timetables)
+            entity.HasOne(d => d.PackageServices).WithMany()
                 .HasForeignKey(d => d.PackageServicesId)
-                .HasConstraintName("FK_Timetable_PackageServices");
+                .HasConstraintName("FK_Tracking_PackageServices");
+
+            entity.HasOne(d => d.Timetable).WithMany(p => p.Trackings)
+                .HasForeignKey(d => d.TimetableId)
+                .HasConstraintName("FK_Tracking_Timetable");
         });
 
         modelBuilder.Entity<Transaction>(entity =>
