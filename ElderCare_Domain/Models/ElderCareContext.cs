@@ -98,7 +98,7 @@ public partial class ElderCareContext : DbContext
     {
         var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: false);
         IConfiguration configuration = builder.Build();
         var connectionString = configuration.GetConnectionString("DefaultDB");
         return connectionString!;
@@ -295,7 +295,6 @@ public partial class ElderCareContext : DbContext
             entity.Property(e => e.CateId)
                 .ValueGeneratedNever()
                 .HasColumnName("cate_id");
-            entity.Property(e => e.CateType).HasColumnName("cate_type");
             entity.Property(e => e.Description)
                 .IsRequired()
                 .HasMaxLength(50)
