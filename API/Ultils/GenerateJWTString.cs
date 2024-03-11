@@ -9,7 +9,7 @@ namespace API.Ultils
 {
     public static class GenerateJWTString
     {
-
+        
         public static string GenerateJsonWebToken(this Account account, string secretKey, DateTime now)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
@@ -76,6 +76,7 @@ namespace API.Ultils
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             var claims = new[]
             {
+            new Claim("Id" ,"0"),
             new Claim(ClaimTypes.Email ,email),
             new Claim(ClaimTypes.Role, "Admin"),
         };
