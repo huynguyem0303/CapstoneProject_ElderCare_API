@@ -70,12 +70,13 @@ namespace ElderCare_Service.Utils
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
-        public static string GenerateJsonWebTokenForAdmin(this string email, string secretKey, DateTime now)
+        public static string GenerateJsonWebTokenForAdmin(this string email, string secretKey, DateTime now, string id)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             var claims = new[]
             {
+             new Claim("Id" ,id),
             new Claim(ClaimTypes.Email ,email),
             new Claim(ClaimTypes.Role, "Admin"),
         };

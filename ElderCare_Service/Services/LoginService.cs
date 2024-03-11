@@ -66,9 +66,10 @@ namespace ElderCare_Service.Services
         {
             string adminEmail = config["AdminAccount:Email"];
             string adminPassword = config["AdminAccount:Password"];
+            string adminId = config["AdminAccount:Id"];
             if (email.ToLower().Equals(adminEmail.ToLower()) && password.Equals(adminPassword))
             {
-                return currentJWT = GenerateJWTString.GenerateJsonWebTokenForAdmin(adminEmail, config["AppSettings:SecretKey"], DateTime.Now);
+                return currentJWT = GenerateJWTString.GenerateJsonWebTokenForAdmin(adminEmail, config["AppSettings:SecretKey"], DateTime.Now, adminId);
             }
             var account = await _unitOfWork.AccountRepository.LoginStaffAsync(email, password);
             if (account == null)
