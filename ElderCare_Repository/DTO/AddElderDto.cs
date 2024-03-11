@@ -20,5 +20,6 @@ namespace ElderCare_Repository.DTO
 
         public string Note { get; set; }
 
+        public int CustomerId { get; set; }
     }
 }
