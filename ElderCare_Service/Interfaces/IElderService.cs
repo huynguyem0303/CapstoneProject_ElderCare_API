@@ -19,5 +19,6 @@ namespace ElderCare_Service.Interfaces
         Task DeleteElderly(int id);
         Task<bool> ElderExists(int id);
         Task UpdateElderlyDetail(UpdateElderDto model);
+        Task<ElderViewDto> AddELderlyAsyncWithReturnDto(AddElderDto model);
     }
 }

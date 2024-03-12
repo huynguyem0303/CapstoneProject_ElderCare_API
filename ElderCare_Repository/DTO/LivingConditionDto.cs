@@ -16,4 +16,8 @@ namespace ElderCare_Repository.DTO
 
         public string Others { get; set; }
     }
+    public partial class AddElderDto
+    {
+        public LivingConditionDto? LivingCondition { get; set; }
+    }
 }

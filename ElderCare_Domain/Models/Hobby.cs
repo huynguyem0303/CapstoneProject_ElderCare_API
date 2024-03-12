@@ -13,7 +13,7 @@ public partial class Hobby
 
     public string Description { get; set; }
 
-    public bool? Status { get; set; }
+    public int? Status { get; set; }
 
     //public virtual ICollection<Elderly> Elderlies { get; set; } = new List<Elderly>();
 

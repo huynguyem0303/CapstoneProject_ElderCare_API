@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ElderCare_Repository.DTO
 {
-    public class AddElderDto
+    public partial class AddElderDto
     {
         public string Name { get; set; }
 

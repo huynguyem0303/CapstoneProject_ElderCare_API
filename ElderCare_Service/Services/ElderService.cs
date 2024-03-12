@@ -27,6 +27,15 @@ namespace ElderCare_Service.Services
             await _unitOfWork.SaveChangeAsync();
             return elder;
         }
+        public async Task<ElderViewDto> AddELderlyAsyncWithReturnDto(AddElderDto model)
+        {
+            var elder = _mapper.Map<Elderly>(model);
+            var id = _unitOfWork.ElderRepo.GetAll().OrderByDescending(i => i.ElderlyId).FirstOrDefault().ElderlyId;
+            elder.ElderlyId = id + 1;
+            await _unitOfWork.ElderRepo.AddAsync(elder);
+            await _unitOfWork.SaveChangeAsync();
+            return _mapper.Map<ElderViewDto>(elder);
+        }
 
         public async Task DeleteElderly(int id)
         {

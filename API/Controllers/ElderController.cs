@@ -47,10 +47,10 @@ namespace API.Controllers
         [HttpGet("{id}")]
         [EnableQuery]
         //[Authorize]
-        public async Task<SingleResult<Elderly>> GetElder(int id)
+        public async Task<SingleResult> GetElder([FromRoute]int id)
         {
             //var model = await _unitOfWork.ElderRepo.FindAsync(x => x.ElderlyId == id);
-            var elder = await _elderService.FindAsync(x => x.ElderlyId == id);
+            var elder = await _elderService.FindAsync(e => e.ElderlyId == id); ;
             return SingleResult.Create(elder.AsQueryable());
         }
 
@@ -90,7 +90,7 @@ namespace API.Controllers
         
         [HttpPut("UpdateELder/{id}")]
         [EnableQuery]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> PutElderDetail(int id, UpdateElderDto model)
         {
             if (id != model.ElderlyId)
@@ -130,11 +130,12 @@ namespace API.Controllers
             //var id = _unitOfWork.ElderRepo.GetAll().OrderByDescending(i => i.ElderlyId).FirstOrDefault().ElderlyId;
             //model.ElderlyId = id+1;
             //await _unitOfWork.ElderRepo.AddAsync(model);
-            Elderly elder;
+            //Elderly elder;
+            ElderViewDto elder;
             try
             {
                 //await _unitOfWork.SaveChangeAsync();
-                elder = await _elderService.AddELderlyAsync(model);
+                elder = await _elderService.AddELderlyAsyncWithReturnDto(model);
             }
             catch (DbUpdateException e)
             {
@@ -147,7 +148,7 @@ namespace API.Controllers
         // DELETE: api/Accounts/5
         [HttpDelete("{id}")]
         [EnableQuery]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> DeleteElder(int id)
         {
             //if ((_unitOfWork.ElderRepo.GetAll()).IsNullOrEmpty())

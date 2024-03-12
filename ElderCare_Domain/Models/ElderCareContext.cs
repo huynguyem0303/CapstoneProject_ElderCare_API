@@ -579,7 +579,8 @@ public partial class ElderCareContext : DbContext
 
             entity.HasOne(d => d.Elderly).WithMany(p => p.Hobbies)
                 .HasForeignKey(d => d.ElderlyId)
-                .HasConstraintName("FK_Hobby_Elderly");
+                .HasConstraintName("FK_Hobby_Elderly")
+                .OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<LivingCondition>(entity =>
