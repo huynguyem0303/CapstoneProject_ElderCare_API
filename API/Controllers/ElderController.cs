@@ -34,7 +34,7 @@ namespace API.Controllers
         // GET: api/Accounts
         [HttpGet]
         [EnableQuery]
-        [Authorize]
+        //[Authorize]
         public IActionResult GetElders()
         {
             //var list = _unitOfWork.ElderRepo.GetAll();
@@ -46,10 +46,10 @@ namespace API.Controllers
         // GET: api/Accounts/5
         [HttpGet("{id}")]
         [EnableQuery]
-        [Authorize]
+        //[Authorize]
         public async Task<SingleResult<Elderly>> GetElder(int id)
         {
-            //var elder = await _unitOfWork.ElderRepo.FindAsync(x => x.ElderlyId == id);
+            //var model = await _unitOfWork.ElderRepo.FindAsync(x => x.ElderlyId == id);
             var elder = await _elderService.FindAsync(x => x.ElderlyId == id);
             return SingleResult.Create(elder.AsQueryable());
         }
@@ -66,11 +66,43 @@ namespace API.Controllers
                 return BadRequest();
             }
 
-            //_unitOfWork.ElderRepo.Update(elder);
+            //_unitOfWork.ElderRepo.Update(model);
 
             try
             {
                 await _elderService.UpdateElderly(elder);
+                //await _unitOfWork.SaveChangeAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!await _elderService.ElderExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+        
+        [HttpPut("UpdateELder/{id}")]
+        [EnableQuery]
+        //[Authorize]
+        public async Task<IActionResult> PutElderDetail(int id, UpdateElderDto model)
+        {
+            if (id != model.ElderlyId)
+            {
+                return BadRequest();
+            }
+
+            //_unitOfWork.ElderRepo.Update(model);
+
+            try
+            {
+                await _elderService.UpdateElderlyDetail(model);
                 //await _unitOfWork.SaveChangeAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -94,10 +126,10 @@ namespace API.Controllers
         [EnableQuery]
         public async Task<ActionResult<Account>> PostElder(AddElderDto model)
         {
-            //var elder = _mapper.Map<Elderly>(model);
+            //var model = _mapper.Map<Elderly>(model);
             //var id = _unitOfWork.ElderRepo.GetAll().OrderByDescending(i => i.ElderlyId).FirstOrDefault().ElderlyId;
-            //elder.ElderlyId = id+1;
-            //await _unitOfWork.ElderRepo.AddAsync(elder);
+            //model.ElderlyId = id+1;
+            //await _unitOfWork.ElderRepo.AddAsync(model);
             Elderly elder;
             try
             {
@@ -122,13 +154,13 @@ namespace API.Controllers
             //{
             //    return NotFound();
             //}
-            //var elder = await _unitOfWork.ElderRepo.GetByIdAsync(id);
-            //if (elder == null)
+            //var model = await _unitOfWork.ElderRepo.GetByIdAsync(id);
+            //if (model == null)
             //{
             //    return NotFound();
             //}
 
-            //_unitOfWork.ElderRepo.Delete(elder);
+            //_unitOfWork.ElderRepo.Delete(model);
             //await _unitOfWork.SaveChangeAsync();
             if(!await _elderService.ElderExists(id))
             {

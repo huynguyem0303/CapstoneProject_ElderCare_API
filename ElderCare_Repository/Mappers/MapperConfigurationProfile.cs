@@ -18,6 +18,9 @@ namespace ElderCare_Repository.Mappers
             CreateMap(typeof(Pagination<>), typeof(Pagination<>));
             CreateMap<SignInDto, Account>();
             CreateMap<AddElderDto, Elderly>();
+            CreateMap<UpdateElderDto, Elderly>();
+            CreateMap<LivingConditionDto, LivingCondition>();
+
             CreateMap<Transaction, TrasactionDto>().ReverseMap().ForMember(des => des.Type,
                 opt => opt.MapFrom(src => EnumMapper<TransactionType>.MapType(src.Type)));
             CreateMap<Transaction, CarerTransactionDto>().ReverseMap();

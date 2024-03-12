@@ -2,6 +2,7 @@
 using ElderCare_Domain.Models;
 using ElderCare_Repository.DTO;
 using ElderCare_Service.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace ElderCare_Service.Services
@@ -59,6 +60,14 @@ namespace ElderCare_Service.Services
 
         public async Task UpdateElderly(Elderly elderly)
         {
+            _unitOfWork.ElderRepo.Update(elderly);
+            await _unitOfWork.SaveChangeAsync();
+        }
+
+        public async Task UpdateElderlyDetail(UpdateElderDto model)
+        {
+            var elderly = (await _unitOfWork.ElderRepo.FindAsync(e => e.ElderlyId == model.ElderlyId, p => p.Livingcondition)).First() ?? throw new DbUpdateConcurrencyException();
+            _mapper.Map(model, elderly);
             _unitOfWork.ElderRepo.Update(elderly);
             await _unitOfWork.SaveChangeAsync();
         }

@@ -1,6 +1,7 @@
 ﻿using DataAccess.Repositories;
 using ElderCare_Domain.Models;
 using ElderCare_Repository.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,24 @@ namespace ElderCare_Repository.Repos
             //CheckIfNullException();
             return _dbSet;
         }
+
+        public new void Update(Elderly entity)
+        {
+            try
+            {
+                if (!entity.LivingconditionId.HasValue)
+                {
+                    entity.LivingconditionId = _context.LivingConditions.OrderBy(e => e.LivingconId).Select(e => e.LivingconId).Last()+1;
+                    entity.Livingcondition.LivingconId = (int)entity.LivingconditionId;
+                }
+                _context.Entry(entity).State = EntityState.Modified;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         private void CheckIfNullException()
         {
             _ = _dbSet.Select(e => e.ElderlyId).ToList();
