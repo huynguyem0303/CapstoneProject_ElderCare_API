@@ -20,7 +20,9 @@ namespace ElderCare_Repository.Mappers
             CreateMap<AddElderDto, Elderly>();
             CreateMap<UpdateElderDto, Elderly>();
             CreateMap<LivingConditionDto, LivingCondition>().ReverseMap();
+            CreateMap<HobbyDto, Hobby>().ReverseMap();
             CreateMap<AddElderDto.AddHobbyDto, Hobby>().ReverseMap();
+            CreateMap<AddElderHobbyDto, Hobby>().ReverseMap();
             CreateMap<Elderly, ElderViewDto>().ReverseMap();
             CreateMap<Hobby, ElderViewDto.HobbyDto>().ReverseMap();
 

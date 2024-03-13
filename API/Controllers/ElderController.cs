@@ -34,7 +34,7 @@ namespace API.Controllers
         // GET: api/Accounts
         [HttpGet]
         [EnableQuery]
-        //[Authorize]
+        [Authorize]
         public IActionResult GetElders()
         {
             //var list = _unitOfWork.ElderRepo.GetAll();
@@ -46,7 +46,7 @@ namespace API.Controllers
         // GET: api/Accounts/5
         [HttpGet("{id}")]
         [EnableQuery]
-        //[Authorize]
+        [Authorize]
         public async Task<SingleResult> GetElder([FromRoute]int id)
         {
             //var model = await _unitOfWork.ElderRepo.FindAsync(x => x.ElderlyId == id);
@@ -88,7 +88,7 @@ namespace API.Controllers
             return NoContent();
         }
         
-        [HttpPut("UpdateELder/{id}")]
+        [HttpPut("Update/{id}")]
         [EnableQuery]
         [Authorize]
         public async Task<IActionResult> PutElderDetail(int id, UpdateElderDto model)
@@ -98,12 +98,9 @@ namespace API.Controllers
                 return BadRequest();
             }
 
-            //_unitOfWork.ElderRepo.Update(model);
-
             try
             {
                 await _elderService.UpdateElderlyDetail(model);
-                //await _unitOfWork.SaveChangeAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -118,6 +115,63 @@ namespace API.Controllers
             }
 
             return NoContent();
+        }
+
+        [HttpPut("Update/{id}/Hobby")]
+        [EnableQuery]
+        [Authorize]
+        public async Task<IActionResult> PutHobby(int id, HobbyDto model)
+        {
+            if (id != model.ElderlyId)
+            {
+                return BadRequest();
+            }
+
+            try
+            {
+                await _elderService.UpdateElderlyHobby(model);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!await _elderService.ElderExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+        [HttpPost("Update/{id}/Hobby")]
+        [EnableQuery]
+        [Authorize]
+        public async Task<IActionResult> PostElderHobby(int id, AddElderHobbyDto model)
+        {
+            if (id != model.ElderlyId)
+            {
+                return BadRequest();
+            }
+            HobbyDto hobby;
+            try
+            {
+                hobby = await _elderService.AddElderlyHobby(model);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!await _elderService.ElderExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return CreatedAtAction("GetElder", new { id }, hobby);
         }
 
         // POST: api/Accounts
@@ -148,7 +202,7 @@ namespace API.Controllers
         // DELETE: api/Accounts/5
         [HttpDelete("{id}")]
         [EnableQuery]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> DeleteElder(int id)
         {
             //if ((_unitOfWork.ElderRepo.GetAll()).IsNullOrEmpty())

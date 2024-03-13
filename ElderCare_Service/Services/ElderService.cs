@@ -80,5 +80,22 @@ namespace ElderCare_Service.Services
             _unitOfWork.ElderRepo.Update(elderly);
             await _unitOfWork.SaveChangeAsync();
         }
+
+        public async Task UpdateElderlyHobby(HobbyDto model)
+        {
+            var hobby = await _unitOfWork.HobbyRepo.GetByIdAsync(model.HobbyId);
+            _mapper.Map(model, hobby);
+            _unitOfWork.HobbyRepo.Update(hobby);
+            await _unitOfWork.SaveChangeAsync();
+        }
+
+        public async Task<HobbyDto> AddElderlyHobby(AddElderHobbyDto model)
+        {
+            var hobby = _mapper.Map<Hobby>(model);
+            hobby.HobbyId = _unitOfWork.HobbyRepo.GetAll().OrderBy(e => e.HobbyId).Select(e => e.HobbyId).Last() + 1;
+            await _unitOfWork.HobbyRepo.AddAsync(hobby);
+            await _unitOfWork.SaveChangeAsync();
+            return _mapper.Map<HobbyDto>(hobby);
+        }
     }
 }
