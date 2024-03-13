@@ -120,7 +120,7 @@ namespace API.Controllers
         [HttpPut("Update/{id}/Hobby")]
         [EnableQuery]
         [Authorize]
-        public async Task<IActionResult> PutHobby(int id, UpdateHobbyDto model)
+        public async Task<IActionResult> PutHobby(int id, HobbyDto model)
         {
             if (id != model.ElderlyId)
             {
@@ -144,6 +144,34 @@ namespace API.Controllers
             }
 
             return NoContent();
+        }
+        [HttpPost("Update/{id}/Hobby")]
+        [EnableQuery]
+        [Authorize]
+        public async Task<IActionResult> PostElderHobby(int id, AddElderHobbyDto model)
+        {
+            if (id != model.ElderlyId)
+            {
+                return BadRequest();
+            }
+            HobbyDto hobby;
+            try
+            {
+                hobby = await _elderService.AddElderlyHobby(model);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!await _elderService.ElderExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return CreatedAtAction("GetElder", new { id }, hobby);
         }
 
         // POST: api/Accounts
