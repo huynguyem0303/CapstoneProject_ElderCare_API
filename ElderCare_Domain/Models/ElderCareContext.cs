@@ -45,9 +45,9 @@ public partial class ElderCareContext : DbContext
 
     public virtual DbSet<Customer> Customers { get; set; }
 
-    public virtual DbSet<Elderly> Elderlies { get; set; }
+    public virtual DbSet<Device> Devices { get; set; }
 
-    public virtual DbSet<Fcmtoken> Fcmtokens { get; set; }
+    public virtual DbSet<Elderly> Elderlies { get; set; }
 
     public virtual DbSet<Feedback> Feedbacks { get; set; }
 
@@ -211,11 +211,13 @@ public partial class ElderCareContext : DbContext
 
         modelBuilder.Entity<CarerService>(entity =>
         {
+            entity.HasKey(e => e.CarerService1);
+
             entity.ToTable("CarerService");
 
-            entity.Property(e => e.CarerServiceId)
+            entity.Property(e => e.CarerService1)
                 .ValueGeneratedNever()
-                .HasColumnName("carer_service_id");
+                .HasColumnName("carer_service");
             entity.Property(e => e.CarerId).HasColumnName("carer_id");
             entity.Property(e => e.ServiceId).HasColumnName("service_id");
 
@@ -421,6 +423,26 @@ public partial class ElderCareContext : DbContext
                 .HasConstraintName("FK_Customer_Bankinformation");
         });
 
+        modelBuilder.Entity<Device>(entity =>
+        {
+            entity.HasKey(e => e.DeviceId).HasName("PK_FCMToken");
+
+            entity.ToTable("Device");
+
+            entity.Property(e => e.DeviceId)
+                .ValueGeneratedNever()
+                .HasColumnName("device_id");
+            entity.Property(e => e.AccountId).HasColumnName("account_id");
+            entity.Property(e => e.DeviceFcmToken)
+                .HasMaxLength(255)
+                .HasColumnName("device_fcm_token");
+
+            entity.HasOne(d => d.Account).WithMany(p => p.Devices)
+                .HasForeignKey(d => d.AccountId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Device_Account");
+        });
+
         modelBuilder.Entity<Elderly>(entity =>
         {
             entity.ToTable("Elderly");
@@ -461,26 +483,6 @@ public partial class ElderCareContext : DbContext
                 .HasConstraintName("FK_Elderly_LivingCondition");
         });
 
-        modelBuilder.Entity<Fcmtoken>(entity =>
-        {
-            entity.HasKey(e => e.TokenId);
-
-            entity.ToTable("FCMToken");
-
-            entity.Property(e => e.TokenId)
-                .ValueGeneratedNever()
-                .HasColumnName("token_id");
-            entity.Property(e => e.AccountId).HasColumnName("account_id");
-            entity.Property(e => e.TokenDescription)
-                .HasMaxLength(255)
-                .HasColumnName("token_description");
-
-            entity.HasOne(d => d.Account).WithMany(p => p.Fcmtokens)
-                .HasForeignKey(d => d.AccountId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_FCMToken_Account");
-        });
-
         modelBuilder.Entity<Feedback>(entity =>
         {
             entity.ToTable("Feedback");
@@ -497,6 +499,10 @@ public partial class ElderCareContext : DbContext
                 .HasMaxLength(300)
                 .HasColumnName("description");
             entity.Property(e => e.Ratng).HasColumnName("ratng");
+
+            entity.HasOne(d => d.CarerService).WithMany(p => p.Feedbacks)
+                .HasForeignKey(d => d.CarerServiceId)
+                .HasConstraintName("FK_Feedback_CarerService");
 
             entity.HasOne(d => d.Customer).WithMany(p => p.Feedbacks)
                 .HasForeignKey(d => d.CustomerId)

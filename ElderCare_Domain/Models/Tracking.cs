@@ -23,13 +23,13 @@ public partial class Tracking
 
     public bool? CusApprove { get; set; }
 
-    public string? CusFeedback { get; set; }
+    public string CusFeedback { get; set; }
 
     public int? Status { get; set; }
 
-    public virtual ContractService? ContractServices { get; set; }
+    public virtual ContractService ContractServices { get; set; }
 
-    public virtual PackageService? PackageServices { get; set; }
+    public virtual PackageService PackageServices { get; set; }
 
-    public virtual Timetable? Timetable { get; set; }
+    public virtual Timetable Timetable { get; set; }
 }

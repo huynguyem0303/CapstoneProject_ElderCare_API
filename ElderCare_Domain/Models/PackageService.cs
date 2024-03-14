@@ -11,7 +11,7 @@ public partial class PackageService
 
     public int PackageServicesId { get; set; }
 
-    public virtual Package? Package { get; set; }
+    public virtual Package Package { get; set; }
 
     public virtual ICollection<Tracking> Trackings { get; set; } = new List<Tracking>();
 }
