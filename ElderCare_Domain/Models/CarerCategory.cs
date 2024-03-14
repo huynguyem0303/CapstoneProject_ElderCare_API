@@ -9,7 +9,7 @@ public partial class CarerCategory
 
     public int Cateid { get; set; }
 
-    public virtual Carer Carer { get; set; }
+    public virtual Carer? Carer { get; set; }
 
-    public virtual Category Cate { get; set; }
+    public virtual Category? Cate { get; set; }
 }

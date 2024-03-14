@@ -11,19 +11,19 @@ public partial class HealthDetail
 
     public double? Weight { get; set; }
 
-    public string MedicalCondition { get; set; }
+    public string? MedicalCondition { get; set; }
 
-    public string BloodPressure { get; set; }
+    public string? BloodPressure { get; set; }
 
-    public string HeartProblems { get; set; }
+    public string? HeartProblems { get; set; }
 
-    public string DiabetesType { get; set; }
+    public string? DiabetesType { get; set; }
 
-    public string StomachAche { get; set; }
+    public string? StomachAche { get; set; }
 
-    public string VestibularDisorders { get; set; }
+    public string? VestibularDisorders { get; set; }
 
-    public string Allergy { get; set; }
+    public string? Allergy { get; set; }
 
     public virtual ICollection<Elderly> Elderlies { get; set; } = new List<Elderly>();
 

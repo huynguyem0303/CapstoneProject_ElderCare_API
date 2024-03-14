@@ -9,7 +9,7 @@ public partial class CarerShilft
 
     public int? ShilftId { get; set; }
 
-    public virtual Carer Carer { get; set; }
+    public virtual Carer? Carer { get; set; }
 
-    public virtual Shilft Shilft { get; set; }
+    public virtual Shilft? Shilft { get; set; }
 }

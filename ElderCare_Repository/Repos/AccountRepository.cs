@@ -87,7 +87,7 @@ namespace ElderCare_Repository.Repos
 
             if (!isDublicate && !tokenValue.IsNullOrEmpty())
             {
-                await _context.Devices.AddAsync(new Device() { AccountId = accountId, DeviceFCMToken = tokenValue });
+                await _context.Devices.AddAsync(new Device() { AccountId = accountId, DeviceFcmToken = tokenValue });
             }
 
         }

@@ -7,7 +7,7 @@ public partial class Shilft
 {
     public int ShilftId { get; set; }
 
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
-    public string Desciption { get; set; }
+    public string? Desciption { get; set; }
 }
