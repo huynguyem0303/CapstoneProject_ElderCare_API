@@ -178,6 +178,28 @@ namespace API.Controllers
             return NoContent();
         }
 
+        [HttpPut("HealthDetail/{id}/PsychomotorHealth")]
+        [EnableQuery]
+        [Authorize]
+        public async Task<IActionResult> PutPsychomotorHealth(int id, PsychomotorHealthDto model)
+        {
+            if (id != model.HealthDetailId)
+            {
+                return BadRequest();
+            }
+
+            try
+            {
+                await _elderService.UpdateElderlyPsychomotorHealth(model);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+            return NoContent();
+        }
+
         [HttpPost("Update/{id}/HealthDetail")]
         [EnableQuery]
         //[Authorize]
@@ -264,7 +286,7 @@ namespace API.Controllers
         // DELETE: api/Accounts/5
         [HttpDelete("{id}")]
         [EnableQuery]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> DeleteElder(int id)
         {
             //if ((_unitOfWork.ElderRepo.GetAll()).IsNullOrEmpty())

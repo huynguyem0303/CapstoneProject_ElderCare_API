@@ -114,15 +114,20 @@ namespace ElderCare_Service.Services
         {
             var healtDetail = _mapper.Map<HealthDetail>(model);
             healtDetail.HealthDetailId = _unitOfWork.HealthDetailRepo.GetAll().OrderBy(e => e.HealthDetailId).Select(e => e.HealthDetailId).Last() + 1;
-            var psychomotorHealths = _mapper.Map<List<PsychomotorHealth>>(model.PsychomotorHealthDetails);
             await _unitOfWork.HealthDetailRepo.AddHealthDetail(model.ElderlyId, healtDetail);
-            //foreach (var item in psychomotorHealths)
-            //{
-            //    item.HealthDetailId = healtDetail.HealthDetailId;
-            //    await _unitOfWork.PsychomotorHealthRepo.AddAsync(item);
-            //}
             await _unitOfWork.SaveChangeAsync();
-            return _mapper.Map<HealthDetailDto>(healtDetail);
+            var result = _mapper.Map<HealthDetailDto>(healtDetail);
+            result.ElderlyId = model.ElderlyId;
+            return result;
+        }
+
+        public async Task UpdateElderlyPsychomotorHealth(PsychomotorHealthDto model)
+        {
+            var psychomotorHealth = (await _unitOfWork.PsychomotorHealthRepo
+                .FindAsync(e => e.HealthDetailId == model.HealthDetailId && e.PsychomotorHealthId == model.PsychomotorHealthId)).First();
+            _mapper.Map(model, psychomotorHealth);
+            _unitOfWork.PsychomotorHealthRepo.Update(psychomotorHealth);
+            await _unitOfWork.SaveChangeAsync();
         }
     }
 }

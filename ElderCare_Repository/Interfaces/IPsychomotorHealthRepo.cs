@@ -5,6 +5,5 @@ namespace ElderCare_Repository.Interfaces
 {
     public interface IPsychomotorHealthRepo : IGenericRepo<PsychomotorHealth>
     {
-
     }
 }

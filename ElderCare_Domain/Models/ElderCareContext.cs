@@ -483,7 +483,7 @@ public partial class ElderCareContext : DbContext
                 .HasMaxLength(100)
                 .HasColumnName("relationshiptocustomer");
 
-            entity.HasOne(d => d.HealthDetail).WithMany(p => p.Elderlies)
+            entity.HasOne(d => d.HealthDetail).WithMany()
                 .HasForeignKey(d => d.HealthDetailId)
                 .HasConstraintName("FK_Elderly_HealthDetail");
 
@@ -654,8 +654,15 @@ public partial class ElderCareContext : DbContext
         modelBuilder.Entity<PsychomotorHealth>(entity =>
         {
             entity
-                .HasNoKey()
                 .ToTable("PsychomotorHealth");
+
+            entity.HasKey(e => e.PsychomotorHealthDetailId);
+            entity.Property(e => e.PsychomotorHealthDetailId)
+                .ValueGeneratedOnAdd()
+                .HasColumnType("uniqueidentifier")
+                .HasValueGenerator<GuidValueGenerator>()
+                .HasColumnName("psychomotor_health_detail_id");
+
 
             entity.Property(e => e.Description)
                 .HasMaxLength(300)
@@ -664,9 +671,10 @@ public partial class ElderCareContext : DbContext
             entity.Property(e => e.PsychomotorHealthId).HasColumnName("psychomotor_health_id");
             entity.Property(e => e.Status).HasColumnName("status");
 
-            entity.HasOne(d => d.HealthDetail).WithMany()
+            entity.HasOne(d => d.HealthDetail).WithMany(s => s.PsychomotorHealths)
                 .HasForeignKey(d => d.HealthDetailId)
-                .HasConstraintName("FK_PsychomotorHealth_HealthDetail");
+                .HasConstraintName("FK_PsychomotorHealth_HealthDetail")
+                .OnDelete(DeleteBehavior.Cascade);
 
             entity.HasOne(d => d.PsychomotorHealthNavigation).WithMany()
                 .HasForeignKey(d => d.PsychomotorHealthId)

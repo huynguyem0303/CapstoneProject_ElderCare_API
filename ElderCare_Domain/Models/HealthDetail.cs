@@ -25,5 +25,6 @@ public partial class HealthDetail
 
     public string? Allergy { get; set; }
 
-    public virtual ICollection<Elderly> Elderlies { get; set; } = new List<Elderly>();
+    //public virtual ICollection<Elderly> Elderlies { get; set; } = new List<Elderly>();
+    public virtual ICollection<PsychomotorHealth> PsychomotorHealths { get; set; }
 }

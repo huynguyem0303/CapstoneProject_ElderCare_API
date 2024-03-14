@@ -24,5 +24,6 @@ namespace ElderCare_Service.Interfaces
         Task<HobbyDto> AddElderlyHobby(AddElderHobbyDto model);
         Task UpdateElderlyHealthDetail(UpdateHealthDetailDto model);
         Task<HealthDetailDto> AddElderlyHealthDetail(AddHealthDetailDto model);
+        Task UpdateElderlyPsychomotorHealth(PsychomotorHealthDto model);
     }
 }
