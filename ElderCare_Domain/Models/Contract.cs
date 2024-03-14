@@ -29,11 +29,11 @@ public partial class Contract
 
     public virtual ICollection<ContractVersion> ContractVersions { get; set; } = new List<ContractVersion>();
 
-    public virtual Customer Customer { get; set; } = new Customer();
+    public virtual Customer Customer { get; set; }
 
-    public virtual Elderly Elderly { get; set; } = new Elderly();
+    public virtual Elderly Elderly { get; set; }
 
-    public virtual Package Package { get; set; } = new Package();
+    public virtual Package Package { get; set; }
 
     public virtual ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
 }

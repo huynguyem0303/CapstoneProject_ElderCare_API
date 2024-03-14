@@ -9,7 +9,7 @@ public partial class Device
 
     public int AccountId { get; set; }
 
-    public string? DeviceFcmToken { get; set; }
+    public string DeviceFcmToken { get; set; }
 
-    public virtual Account Account { get; set; } = new Account();
+    public virtual Account Account { get; set; }
 }
