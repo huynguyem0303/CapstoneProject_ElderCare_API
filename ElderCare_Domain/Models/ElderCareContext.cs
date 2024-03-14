@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ValueGeneration;
 
 namespace ElderCare_Domain.Models;
 
@@ -47,7 +48,7 @@ public partial class ElderCareContext : DbContext
 
     public virtual DbSet<Elderly> Elderlies { get; set; }
 
-    public virtual DbSet<Fcmtoken> Fcmtokens { get; set; }
+    public virtual DbSet<Device> Devices { get; set; }
 
     public virtual DbSet<Feedback> Feedbacks { get; set; }
 
@@ -461,24 +462,24 @@ public partial class ElderCareContext : DbContext
                 .HasConstraintName("FK_Elderly_LivingCondition");
         });
 
-        modelBuilder.Entity<Fcmtoken>(entity =>
+        modelBuilder.Entity<Device>(entity =>
         {
-            entity.HasKey(e => e.TokenId);
+            entity.ToTable("Device");
 
-            entity.ToTable("FCMToken");
+            entity.HasKey(e => e.DeviceId);
+            entity.Property(e => e.DeviceId)
+                  .HasColumnName("device_id")
+                  .HasColumnType("uniqueidentifier")
+                  .ValueGeneratedOnAdd()
+                  .HasValueGenerator<GuidValueGenerator>();
+            entity.Property(e => e.AccountId).HasColumnName("account_id").IsRequired();
+            entity.Property(e => e.DeviceFCMToken)
+                  .HasColumnName("device_fcm_token")
+                  .HasMaxLength(255);
 
-            entity.Property(e => e.TokenId)
-                .ValueGeneratedNever()
-                .HasColumnName("token_id");
-            entity.Property(e => e.AccountId).HasColumnName("account_id");
-            entity.Property(e => e.TokenDescription)
-                .HasMaxLength(255)
-                .HasColumnName("token_description");
-
-            entity.HasOne(d => d.Account).WithMany(p => p.Fcmtokens)
-                .HasForeignKey(d => d.AccountId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_FCMToken_Account");
+            entity.HasOne(e => e.Account).WithMany(e => e.Devices)
+                  .HasForeignKey(e => e.AccountId)
+                  .HasConstraintName("FK_Device_Account");
         });
 
         modelBuilder.Entity<Feedback>(entity =>
