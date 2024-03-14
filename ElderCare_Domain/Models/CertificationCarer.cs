@@ -9,9 +9,9 @@ public partial class CertificationCarer
 
     public int? CarerId { get; set; }
 
-    public string Qualificationurl { get; set; }
+    public string? Qualificationurl { get; set; }
 
-    public virtual Carer Carer { get; set; }
+    public virtual Carer? Carer { get; set; }
 
-    public virtual Certification Cert { get; set; }
+    public virtual Certification? Cert { get; set; }
 }

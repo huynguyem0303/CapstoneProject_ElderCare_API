@@ -490,25 +490,6 @@ public partial class ElderCareContext : DbContext
                 .HasConstraintName("FK_Elderly_LivingCondition");
         });
 
-        modelBuilder.Entity<Fcmtoken>(entity =>
-        {
-            entity.HasKey(e => e.TokenId);
-
-            entity.ToTable("FCMToken");
-
-            entity.Property(e => e.TokenId)
-                .ValueGeneratedNever()
-                .HasColumnName("token_id");
-            entity.Property(e => e.AccountId).HasColumnName("account_id");
-            entity.Property(e => e.TokenDescription)
-                .HasMaxLength(255)
-                .HasColumnName("token_description");
-
-            entity.HasOne(d => d.Account).WithMany(p => p.Fcmtokens)
-                .HasForeignKey(d => d.AccountId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_FCMToken_Account");
-        });
 
         modelBuilder.Entity<Feedback>(entity =>
         {

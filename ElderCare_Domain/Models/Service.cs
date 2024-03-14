@@ -7,9 +7,9 @@ public partial class Service
 {
     public int ServiceId { get; set; }
 
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
-    public string Desciption { get; set; }
+    public string? Desciption { get; set; }
 
     public double? Price { get; set; }
 
