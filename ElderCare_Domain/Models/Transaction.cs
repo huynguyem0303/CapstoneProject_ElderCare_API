@@ -13,7 +13,7 @@ public partial class Transaction
 
     public int? Type { get; set; }
 
-    public string? Description { get; set; }
+    public string Description { get; set; }
 
     public DateTime? Datetime { get; set; }
 
@@ -21,5 +21,9 @@ public partial class Transaction
 
     public int? CarercusId { get; set; }
 
-    public string? Status { get; set; }
+    public string Status { get; set; }
+
+    public virtual Account Account { get; set; }
+
+    public virtual Contract Contract { get; set; }
 }

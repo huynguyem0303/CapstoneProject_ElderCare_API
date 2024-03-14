@@ -83,7 +83,7 @@ namespace ElderCare_Repository.Repos
         {
             var isDublicate = await _context.Devices.AnyAsync(e => e.AccountId.Equals(accountId)
                                                                    && e.Account.Status == (int)AccountStatus.Active
-                                                                   && e.DeviceFCMToken == tokenValue);
+                                                                   && e.DeviceFcmToken == tokenValue);
 
             if (!isDublicate && !tokenValue.IsNullOrEmpty())
             {

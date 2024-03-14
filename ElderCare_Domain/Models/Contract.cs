@@ -34,4 +34,6 @@ public partial class Contract
     public virtual Elderly Elderly { get; set; }
 
     public virtual Package Package { get; set; }
+
+    public virtual ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
 }

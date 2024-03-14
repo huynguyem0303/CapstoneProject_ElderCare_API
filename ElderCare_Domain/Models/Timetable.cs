@@ -9,7 +9,7 @@ public partial class Timetable
 
     public DateTime? ReportDate { get; set; }
 
-    public string? Timeframe { get; set; }
+    public string Timeframe { get; set; }
 
     public DateTime? CreatedDate { get; set; }
 
