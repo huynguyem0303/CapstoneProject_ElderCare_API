@@ -60,7 +60,7 @@ namespace ElderCare_Repository.Repos
             {
                 for (int i = 0; i < shift.Count; i++)
                 {
-                    if (timelist.Contains(shift[i].Shilf.Name))
+                    if (timelist.Contains(shift[i].Shilft.Name))
                         CarerShilft.Add(shift[i]);
                 }
                 for (int i = 0; i < CarerShilft.Count; i++)
