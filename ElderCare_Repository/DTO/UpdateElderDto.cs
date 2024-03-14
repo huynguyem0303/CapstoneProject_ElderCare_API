@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace ElderCare_Repository.DTO
 {
-    public partial class AddElderDto
+    public class UpdateElderDto
     {
+        public int ElderlyId { get; set; }
+
         public string Name { get; set; }
 
         public int? Age { get; set; }
@@ -20,15 +22,6 @@ namespace ElderCare_Repository.DTO
 
         public string Note { get; set; }
 
-        public int CustomerId { get; set; }
-        public class AddHobbyDto
-        {
-            public string Name { get; set; }
-
-            public string Description { get; set; }
-
-            public bool? Status { get; set; }
-        }
-        public List<AddHobbyDto>? Hobbies { get; set; }
+        public LivingConditionDto LivingCondition { get; set; }
     }
 }

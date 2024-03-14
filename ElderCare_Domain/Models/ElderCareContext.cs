@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ValueGeneration;
 
 namespace ElderCare_Domain.Models;
 
@@ -45,9 +46,11 @@ public partial class ElderCareContext : DbContext
 
     public virtual DbSet<Customer> Customers { get; set; }
 
-    public virtual DbSet<Device> Devices { get; set; }
+   
 
     public virtual DbSet<Elderly> Elderlies { get; set; }
+
+    public virtual DbSet<Device> Devices { get; set; }
 
     public virtual DbSet<Feedback> Feedbacks { get; set; }
 
@@ -487,6 +490,26 @@ public partial class ElderCareContext : DbContext
                 .HasConstraintName("FK_Elderly_LivingCondition");
         });
 
+        modelBuilder.Entity<Fcmtoken>(entity =>
+        {
+            entity.HasKey(e => e.TokenId);
+
+            entity.ToTable("FCMToken");
+
+            entity.Property(e => e.TokenId)
+                .ValueGeneratedNever()
+                .HasColumnName("token_id");
+            entity.Property(e => e.AccountId).HasColumnName("account_id");
+            entity.Property(e => e.TokenDescription)
+                .HasMaxLength(255)
+                .HasColumnName("token_description");
+
+            entity.HasOne(d => d.Account).WithMany(p => p.Fcmtokens)
+                .HasForeignKey(d => d.AccountId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_FCMToken_Account");
+        });
+
         modelBuilder.Entity<Feedback>(entity =>
         {
             entity.ToTable("Feedback");
@@ -554,7 +577,7 @@ public partial class ElderCareContext : DbContext
                 .HasColumnName("hobby_id");
             entity.Property(e => e.Description)
                 .HasMaxLength(300)
-                .HasColumnName("description");
+                .HasColumnName("description").IsRequired(false);
             entity.Property(e => e.ElderlyId).HasColumnName("elderly_id");
             entity.Property(e => e.Name)
                 .HasMaxLength(100)
@@ -565,6 +588,7 @@ public partial class ElderCareContext : DbContext
                 .HasForeignKey(d => d.ElderlyId)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_Hobby_Elderly");
+
         });
 
         modelBuilder.Entity<LivingCondition>(entity =>
