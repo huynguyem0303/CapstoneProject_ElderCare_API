@@ -11,11 +11,11 @@ public partial class Report
 
     public int? CustomerId { get; set; }
 
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
     public DateTime? CreatedDate { get; set; }
 
-    public virtual Carer Carer { get; set; }
+    public virtual Carer Carer { get; set; } = new Carer();
 
-    public virtual Customer Customer { get; set; }
+    public virtual Customer Customer { get; set; } = new Customer();
 }

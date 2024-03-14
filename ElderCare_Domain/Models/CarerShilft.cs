@@ -7,9 +7,9 @@ public partial class CarerShilft
 {
     public int? CarerId { get; set; }
 
-    public int? ShilfId { get; set; }
+    public int? ShilftId { get; set; }
 
-    public virtual Carer Carer { get; set; }
+    public virtual Carer? Carer { get; set; } = new Carer();
 
-    public virtual Shilft Shilf { get; set; }
+    public virtual Shilft? Shilft { get; set; } = new Shilft();
 }

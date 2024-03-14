@@ -21,5 +21,9 @@ public partial class Transaction
 
     public int? CarercusId { get; set; }
 
-    public string? Status { get; set; }
+    public string Status { get; set; }
+
+    public virtual Account Account { get; set; } = new Account();
+
+    public virtual Contract Contract { get; set; } = new Contract();
 }

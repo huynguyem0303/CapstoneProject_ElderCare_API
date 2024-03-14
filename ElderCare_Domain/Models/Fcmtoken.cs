@@ -9,7 +9,7 @@ public partial class Fcmtoken
 
     public int AccountId { get; set; }
 
-    public string TokenDescription { get; set; }
+    public string? TokenDescription { get; set; }
 
-    public virtual Account Account { get; set; }
+    public virtual Account? Account { get; set; } = new Account();
 }
