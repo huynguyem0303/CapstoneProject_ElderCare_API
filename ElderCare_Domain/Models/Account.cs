@@ -25,7 +25,7 @@ public partial class Account
 
     public int? CarerId { get; set; }
 
-    public virtual ICollection<Fcmtoken> Fcmtokens { get; set; } = new List<Fcmtoken>();
+    public virtual ICollection<Device> Devices { get; set; } = new List<Device>();
 
     public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
 
