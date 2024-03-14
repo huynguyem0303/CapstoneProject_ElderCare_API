@@ -544,7 +544,7 @@ public partial class ElderCareContext : DbContext
                 .HasColumnName("hobby_id");
             entity.Property(e => e.Description)
                 .HasMaxLength(300)
-                .HasColumnName("description");
+                .HasColumnName("description").IsRequired(false);
             entity.Property(e => e.ElderlyId).HasColumnName("elderly_id");
             entity.Property(e => e.Name)
                 .HasMaxLength(100)
@@ -555,6 +555,7 @@ public partial class ElderCareContext : DbContext
                 .HasForeignKey(d => d.ElderlyId)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_Hobby_Elderly");
+
         });
 
         modelBuilder.Entity<LivingCondition>(entity =>

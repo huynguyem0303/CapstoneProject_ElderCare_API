@@ -15,8 +15,9 @@ namespace ElderCare_Service
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IElderRepo _elderRepo;
         private readonly Interfaces.IEmailService _emailService;
+        private readonly IHobbyRepo _hobbyRepo;
 
-        public UnitOfWork(ElderCareContext context, IAccountRepository accountRepository, ICustomerRepository customerRepository, ICarerRepository carerRepository, Interfaces.INotificationService notificationService, ITransactionRepo transactionRepository, IHttpContextAccessor httpContextAccessor, IElderRepo elderRepo, Interfaces.IEmailService emailService)
+        public UnitOfWork(ElderCareContext context, IAccountRepository accountRepository, ICustomerRepository customerRepository, ICarerRepository carerRepository, Interfaces.INotificationService notificationService, ITransactionRepo transactionRepository, IHttpContextAccessor httpContextAccessor, IElderRepo elderRepo, Interfaces.IEmailService emailService, IHobbyRepo hobbyRepo)
         {
             _context = context;
             _accountRepository = accountRepository;
@@ -27,6 +28,7 @@ namespace ElderCare_Service
             _httpContextAccessor = httpContextAccessor;
             _elderRepo = elderRepo;
             _emailService = emailService;
+            _hobbyRepo = hobbyRepo;
         }
 
         public IAccountRepository AccountRepository => _accountRepository;
@@ -40,6 +42,8 @@ namespace ElderCare_Service
         public IElderRepo ElderRepo => _elderRepo;
 
         public Interfaces.IEmailService emailService => _emailService;
+
+        public IHobbyRepo HobbyRepo => _hobbyRepo;
 
         public async Task<int> SaveChangeAsync()
         {
