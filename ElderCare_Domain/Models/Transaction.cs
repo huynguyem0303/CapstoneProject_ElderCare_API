@@ -20,6 +20,6 @@ public partial class Transaction
     public int? ContractId { get; set; }
 
     public int? CarercusId { get; set; }
+
     public string? Status { get; set; }
-    public virtual ICollection<Customer> Customers { get; set; } = new List<Customer>();
 }
