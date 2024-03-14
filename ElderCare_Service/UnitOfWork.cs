@@ -16,8 +16,10 @@ namespace ElderCare_Service
         private readonly IElderRepo _elderRepo;
         private readonly Interfaces.IEmailService _emailService;
         private readonly IHobbyRepo _hobbyRepo;
+        private readonly IPsychomotorHealthRepo _psychomotorRepo;
+        private readonly IHealthDetailRepo _healthDetailRepo;
 
-        public UnitOfWork(ElderCareContext context, IAccountRepository accountRepository, ICustomerRepository customerRepository, ICarerRepository carerRepository, Interfaces.INotificationService notificationService, ITransactionRepo transactionRepository, IHttpContextAccessor httpContextAccessor, IElderRepo elderRepo, Interfaces.IEmailService emailService, IHobbyRepo hobbyRepo)
+        public UnitOfWork(ElderCareContext context, IAccountRepository accountRepository, ICustomerRepository customerRepository, ICarerRepository carerRepository, Interfaces.INotificationService notificationService, ITransactionRepo transactionRepository, IHttpContextAccessor httpContextAccessor, IElderRepo elderRepo, Interfaces.IEmailService emailService, IHobbyRepo hobbyRepo, IPsychomotorHealthRepo psychomotorRepo, IHealthDetailRepo healthDetailRepo)
         {
             _context = context;
             _accountRepository = accountRepository;
@@ -29,6 +31,8 @@ namespace ElderCare_Service
             _elderRepo = elderRepo;
             _emailService = emailService;
             _hobbyRepo = hobbyRepo;
+            _psychomotorRepo = psychomotorRepo;
+            _healthDetailRepo = healthDetailRepo;
         }
 
         public IAccountRepository AccountRepository => _accountRepository;
@@ -44,6 +48,10 @@ namespace ElderCare_Service
         public Interfaces.IEmailService emailService => _emailService;
 
         public IHobbyRepo HobbyRepo => _hobbyRepo;
+
+        public IPsychomotorHealthRepo PsychomotorHealthRepo => _psychomotorRepo;
+
+        public IHealthDetailRepo HealthDetailRepo => _healthDetailRepo;
 
         public async Task<int> SaveChangeAsync()
         {

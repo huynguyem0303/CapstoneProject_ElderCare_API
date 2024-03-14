@@ -1,6 +1,6 @@
 ﻿namespace ElderCare_Repository.DTO
 {
-    public class HealthDetailDto
+    public class UpdateHealthDetailDto
     {
         public int ElderlyId { get; set; }
 
@@ -23,15 +23,5 @@
         public string VestibularDisorders { get; set; }
 
         public string Allergy { get; set; }
-
-        public class AddPsychomotorHealthDto
-        {
-            public int? PsychomotorHealthId { get; set; }
-
-            public string Description { get; set; }
-
-            public int? Status { get; set; }
-        }
-        public List<AddPsychomotorHealthDto> PsychomotorHealthDetails { get; set; }
-    }
+            }
 }

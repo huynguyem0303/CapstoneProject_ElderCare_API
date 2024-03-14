@@ -145,6 +145,68 @@ namespace API.Controllers
 
             return NoContent();
         }
+
+        [HttpPut("Update/{id}/HealthDetail")]
+        [EnableQuery]
+        [Authorize]
+        public async Task<IActionResult> PutHealthDetail(int id, UpdateHealthDetailDto model)
+        {
+            if (id != model.ElderlyId)
+            {
+                return BadRequest();
+            }
+
+            try
+            {
+                await _elderService.UpdateElderlyHealthDetail(model);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!await _elderService.ElderExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            } catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+            return NoContent();
+        }
+
+        [HttpPost("Update/{id}/HealthDetail")]
+        [EnableQuery]
+        //[Authorize]
+        public async Task<IActionResult> PostElderHealthDetail(int id, AddHealthDetailDto model)
+        {
+            if (id != model.ElderlyId)
+            {
+                return BadRequest();
+            }
+            HealthDetailDto healthDetail;
+            try
+            {
+                healthDetail = await _elderService.AddElderlyHealthDetail(model);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!await _elderService.ElderExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return CreatedAtAction("GetElder", new { id }, healthDetail);
+        }
+
         [HttpPost("Update/{id}/Hobby")]
         [EnableQuery]
         [Authorize]

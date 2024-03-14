@@ -22,5 +22,7 @@ namespace ElderCare_Service.Interfaces
         Task<ElderViewDto> AddELderlyAsyncWithReturnDto(AddElderDto model);
         Task UpdateElderlyHobby(HobbyDto model);
         Task<HobbyDto> AddElderlyHobby(AddElderHobbyDto model);
+        Task UpdateElderlyHealthDetail(UpdateHealthDetailDto model);
+        Task<HealthDetailDto> AddElderlyHealthDetail(AddHealthDetailDto model);
     }
 }

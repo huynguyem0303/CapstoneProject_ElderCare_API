@@ -97,5 +97,32 @@ namespace ElderCare_Service.Services
             await _unitOfWork.SaveChangeAsync();
             return _mapper.Map<HobbyDto>(hobby);
         }
+
+        public async Task UpdateElderlyHealthDetail(UpdateHealthDetailDto model)
+        {
+            var elderly = (await _unitOfWork.ElderRepo.FindAsync(e => e.ElderlyId == model.ElderlyId, p => p.HealthDetail)).First() ?? throw new DbUpdateConcurrencyException();
+            if (elderly.HealthDetailId != model.HealthDetailId)
+            {
+                throw new Exception("HealthDetailId doesn't match with elderly's HealthDetailId");
+            }
+            _mapper.Map(model, elderly.HealthDetail);
+            _unitOfWork.HealthDetailRepo.Update(elderly.HealthDetail);
+            await _unitOfWork.SaveChangeAsync();
+        }
+
+        public async Task<HealthDetailDto> AddElderlyHealthDetail(AddHealthDetailDto model)
+        {
+            var healtDetail = _mapper.Map<HealthDetail>(model);
+            healtDetail.HealthDetailId = _unitOfWork.HealthDetailRepo.GetAll().OrderBy(e => e.HealthDetailId).Select(e => e.HealthDetailId).Last() + 1;
+            var psychomotorHealths = _mapper.Map<List<PsychomotorHealth>>(model.PsychomotorHealthDetails);
+            await _unitOfWork.HealthDetailRepo.AddHealthDetail(model.ElderlyId, healtDetail);
+            //foreach (var item in psychomotorHealths)
+            //{
+            //    item.HealthDetailId = healtDetail.HealthDetailId;
+            //    await _unitOfWork.PsychomotorHealthRepo.AddAsync(item);
+            //}
+            await _unitOfWork.SaveChangeAsync();
+            return _mapper.Map<HealthDetailDto>(healtDetail);
+        }
     }
 }

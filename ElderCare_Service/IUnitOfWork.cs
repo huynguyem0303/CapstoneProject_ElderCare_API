@@ -11,6 +11,8 @@ namespace ElderCare_Service
         public ITransactionRepo TransactionRepo { get; }
         public IElderRepo ElderRepo { get; }
         public IHobbyRepo HobbyRepo { get; }
+        public IPsychomotorHealthRepo PsychomotorHealthRepo { get; }
+        public IHealthDetailRepo HealthDetailRepo { get; }
         public IEmailService emailService { get; }
 
 
