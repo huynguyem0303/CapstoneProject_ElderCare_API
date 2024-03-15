@@ -27,5 +27,7 @@ namespace ElderCare_Service.Interfaces
         Task UpdateElderlyPsychomotorHealth(PsychomotorHealthDto model);
         Task AddElderlyPsychomotorHealth(PsychomotorHealthDto model);
         Task<bool> ElderlyPsychomotorHealtExists(int HealthDetailId, int PsychomotorHealthId);
+        Task<bool> HobbyExists(int id);
+        Task DeleteHobby(int id);
     }
 }

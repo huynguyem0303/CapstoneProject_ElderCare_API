@@ -140,5 +140,20 @@ namespace ElderCare_Service.Services
         {
             return await _unitOfWork.PsychomotorHealthRepo.GetByIdsAsync(HealthDetailId, PsychomotorHealthId) != null;
         }
+
+        public async Task<bool> HobbyExists(int id)
+        {
+            return await _unitOfWork.HobbyRepo.GetByIdAsync(id) != null;
+        }
+
+        public async Task DeleteHobby(int id)
+        {
+            var hobby = await _unitOfWork.HobbyRepo.GetByIdAsync(id);
+            if(hobby != null)
+            {
+                _unitOfWork.HobbyRepo.Delete(hobby);
+            }
+            await _unitOfWork.SaveChangeAsync();
+        }
     }
 }

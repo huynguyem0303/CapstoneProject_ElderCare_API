@@ -316,7 +316,7 @@ namespace API.Controllers
         // DELETE: api/Accounts/5
         [HttpDelete("{id}")]
         [EnableQuery]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> DeleteElder(int id)
         {
             //if ((_unitOfWork.ElderRepo.GetAll()).IsNullOrEmpty())
@@ -336,6 +336,19 @@ namespace API.Controllers
                 return NotFound();
             }
             await _elderService.DeleteElderly(id);
+
+            return NoContent();
+        }
+        [HttpDelete("Hobby/{id}")]
+        [EnableQuery]
+        [Authorize]
+        public async Task<IActionResult> DeleteHobby(int id)
+        {
+            if(!await _elderService.HobbyExists(id))
+            {
+                return NotFound();
+            }
+            await _elderService.DeleteHobby(id);
 
             return NoContent();
         }
