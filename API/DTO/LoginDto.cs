@@ -17,6 +17,6 @@ namespace API.DTO
         [JsonProperty("fcm_token")]
         [DefaultValue("")]
         [AllowNull]
-        public string FCMToken { get; set; }
+        public string? FCMToken { get; set; }
     }
 }
