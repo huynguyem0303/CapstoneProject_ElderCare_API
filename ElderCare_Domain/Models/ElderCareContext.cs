@@ -91,12 +91,13 @@ public partial class ElderCareContext : DbContext
 
         optionsBuilder.UseSqlServer(GetConnectionString());
 
+
     }
     private string GetConnectionString()
     {
         IConfiguration config = new ConfigurationBuilder()
              .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", true, true)
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
             .Build();
         return config["ConnectionStrings:DefaultDB"];
     }
