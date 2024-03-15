@@ -97,7 +97,7 @@ public partial class ElderCareContext : DbContext
     {
         IConfiguration config = new ConfigurationBuilder()
              .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
+            .AddJsonFile("appsettings.json", true, false)
             .Build();
         return config["ConnectionStrings:DefaultDB"];
     }
