@@ -97,5 +97,83 @@ namespace ElderCare_Service.Services
             await _unitOfWork.SaveChangeAsync();
             return _mapper.Map<HobbyDto>(hobby);
         }
+
+        public async Task UpdateElderlyHealthDetail(UpdateHealthDetailDto model)
+        {
+            var elderly = (await _unitOfWork.ElderRepo.FindAsync(e => e.ElderlyId == model.ElderlyId, p => p.HealthDetail)).First() ?? throw new DbUpdateConcurrencyException();
+            if (elderly.HealthDetailId != model.HealthDetailId)
+            {
+                throw new Exception("HealthDetailId doesn't match with elderly's HealthDetailId");
+            }
+            _mapper.Map(model, elderly.HealthDetail);
+            _unitOfWork.HealthDetailRepo.Update(elderly.HealthDetail);
+            await _unitOfWork.SaveChangeAsync();
+        }
+
+        public async Task<HealthDetailDto> AddElderlyHealthDetail(AddHealthDetailDto model)
+        {
+            var healtDetail = _mapper.Map<HealthDetail>(model);
+            healtDetail.HealthDetailId = _unitOfWork.HealthDetailRepo.GetAll().OrderBy(e => e.HealthDetailId).Select(e => e.HealthDetailId).Last() + 1;
+            await _unitOfWork.HealthDetailRepo.AddHealthDetail(model.ElderlyId, healtDetail);
+            await _unitOfWork.SaveChangeAsync();
+            var result = _mapper.Map<HealthDetailDto>(healtDetail);
+            result.ElderlyId = model.ElderlyId;
+            return result;
+        }
+
+        public async Task UpdateElderlyPsychomotorHealth(PsychomotorHealthDto model)
+        {
+            var psychomotorHealth = await _unitOfWork.PsychomotorHealthRepo.GetByIdsAsync(model.HealthDetailId, model.PsychomotorHealthId);
+            _mapper.Map(model, psychomotorHealth);
+            _unitOfWork.PsychomotorHealthRepo.Update(psychomotorHealth);
+            await _unitOfWork.SaveChangeAsync();
+        }
+
+        public async Task AddElderlyPsychomotorHealth(PsychomotorHealthDto model)
+        {
+            var psychomotorHealth = _mapper.Map<PsychomotorHealth>(model);
+            await _unitOfWork.PsychomotorHealthRepo.AddAsync(psychomotorHealth);
+            await _unitOfWork.SaveChangeAsync();
+        }
+
+        public async Task<bool> ElderlyPsychomotorHealtExists(int healthDetailId, int psychomotorHealthId)
+        {
+            return await _unitOfWork.PsychomotorHealthRepo.GetByIdsAsync(healthDetailId, psychomotorHealthId) != null;
+        }
+
+        public async Task<bool> HobbyExists(int id)
+        {
+            return await _unitOfWork.HobbyRepo.GetByIdAsync(id) != null;
+        }
+
+        public async Task DeleteHobby(int id)
+        {
+            var hobby = await _unitOfWork.HobbyRepo.GetByIdAsync(id);
+            if(hobby != null)
+            {
+                _unitOfWork.HobbyRepo.Delete(hobby);
+            }
+            await _unitOfWork.SaveChangeAsync();
+        }
+
+        public async Task RemoveElderlyPsychomotorHealth(int healthDetailId, int psychomotorHealthId)
+        {
+            var psychomotorHealth = await _unitOfWork.PsychomotorHealthRepo.GetByIdsAsync(healthDetailId, psychomotorHealthId);
+            if(psychomotorHealth != null)
+            {
+                _unitOfWork.PsychomotorHealthRepo.Delete(psychomotorHealth);
+            }
+            await _unitOfWork.SaveChangeAsync();
+        }
+
+        public async Task<bool> ElderHobbyExist(int elderId, int hobbyId)
+        {
+            return await _unitOfWork.HobbyRepo.FindAsync(e => e.HobbyId == hobbyId && e.ElderlyId == elderId) != null;
+        }
+
+        public async Task<bool> ElderHealthDetailExist(int elderId, int healthDetailId)
+        {
+            return await _unitOfWork.ElderRepo.FindAsync(e => e.ElderlyId == elderId && e.HealthDetailId == healthDetailId) != null;
+        }
     }
 }

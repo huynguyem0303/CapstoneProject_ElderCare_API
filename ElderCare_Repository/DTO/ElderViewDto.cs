@@ -10,6 +10,7 @@ namespace ElderCare_Repository.DTO
     public partial class ElderViewDto
     {
         public int ElderlyId { get; set; }
+
         public string Name { get; set; }
 
         public int? Age { get; set; }
@@ -23,7 +24,11 @@ namespace ElderCare_Repository.DTO
         public string Note { get; set; }
 
         public int CustomerId { get; set; }
+
+        public int LivingconditionId { get; set; }
+
         public LivingConditionDto? LivingCondition { get; set; }
+
         public class HobbyDto
         {
             public int HobbyId { get; set; }

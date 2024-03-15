@@ -24,8 +24,7 @@ public partial class HealthDetail
     public string? VestibularDisorders { get; set; }
 
     public string? Allergy { get; set; }
-
-    public virtual ICollection<Elderly> Elderlies { get; set; } = new List<Elderly>();
-
-    public virtual ICollection<PsychomotorHealth> PsychomotorHealths { get; set; } = new List<PsychomotorHealth>();
+  
+    //public virtual ICollection<Elderly> Elderlies { get; set; } = new List<Elderly>();
+    public virtual ICollection<PsychomotorHealth> PsychomotorHealths { get; set; }
 }

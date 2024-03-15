@@ -1,10 +1,14 @@
-﻿namespace ElderCare_Repository.DTO
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ElderCare_Repository.DTO
 {
-    public class HealthDetailDto
+    public class AddHealthDetailDto
     {
         public int ElderlyId { get; set; }
-
-        public int HealthDetailId { get; set; }
 
         public double? Height { get; set; }
 
@@ -28,7 +32,7 @@
         {
             public int? PsychomotorHealthId { get; set; }
 
-            public string Description { get; set; }
+            public string? Description { get; set; }
 
             public int? Status { get; set; }
         }

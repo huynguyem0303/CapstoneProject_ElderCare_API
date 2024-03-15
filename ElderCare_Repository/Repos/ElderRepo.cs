@@ -78,6 +78,11 @@ namespace ElderCare_Repository.Repos
                 {
                     _context.LivingConditions.Remove(livingCondition);
                 }
+                var healthDetail = _context.HealthDetails.FirstOrDefault(e => e.HealthDetailId == entity.HealthDetailId);
+                if(healthDetail != null)
+                {
+                    _context.HealthDetails.Remove(healthDetail);
+                }
             }
             catch (Exception ex)
             {
