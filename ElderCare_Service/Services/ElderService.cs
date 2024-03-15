@@ -123,11 +123,22 @@ namespace ElderCare_Service.Services
 
         public async Task UpdateElderlyPsychomotorHealth(PsychomotorHealthDto model)
         {
-            var psychomotorHealth = (await _unitOfWork.PsychomotorHealthRepo
-                .FindAsync(e => e.HealthDetailId == model.HealthDetailId && e.PsychomotorHealthId == model.PsychomotorHealthId)).First();
+            var psychomotorHealth = await _unitOfWork.PsychomotorHealthRepo.GetByIdsAsync(model.HealthDetailId, model.PsychomotorHealthId);
             _mapper.Map(model, psychomotorHealth);
             _unitOfWork.PsychomotorHealthRepo.Update(psychomotorHealth);
             await _unitOfWork.SaveChangeAsync();
+        }
+
+        public async Task AddElderlyPsychomotorHealth(PsychomotorHealthDto model)
+        {
+            var psychomotorHealth = _mapper.Map<PsychomotorHealth>(model);
+            await _unitOfWork.PsychomotorHealthRepo.AddAsync(psychomotorHealth);
+            await _unitOfWork.SaveChangeAsync();
+        }
+
+        public async Task<bool> ElderlyPsychomotorHealtExists(int HealthDetailId, int PsychomotorHealthId)
+        {
+            return await _unitOfWork.PsychomotorHealthRepo.GetByIdsAsync(HealthDetailId, PsychomotorHealthId) != null;
         }
     }
 }

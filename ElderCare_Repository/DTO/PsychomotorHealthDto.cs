@@ -8,9 +8,9 @@ namespace ElderCare_Repository.DTO
 {
     public class PsychomotorHealthDto
     {
-        public int? HealthDetailId { get; set; }
+        public int HealthDetailId { get; set; }
 
-        public int? PsychomotorHealthId { get; set; }
+        public int PsychomotorHealthId { get; set; }
 
         public string Description { get; set; }
 

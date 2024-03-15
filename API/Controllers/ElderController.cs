@@ -188,6 +188,11 @@ namespace API.Controllers
                 return BadRequest();
             }
 
+            if (!await _elderService.ElderlyPsychomotorHealtExists(model.HealthDetailId, model.PsychomotorHealthId))
+            {
+                return NotFound();
+            }
+
             try
             {
                 await _elderService.UpdateElderlyPsychomotorHealth(model);
@@ -200,9 +205,34 @@ namespace API.Controllers
             return NoContent();
         }
 
+        [HttpPost("HealthDetail/{id}/PsychomotorHealth")]
+        [EnableQuery]
+        [Authorize]
+        public async Task<IActionResult> PostPsychomotorHealth(int id, PsychomotorHealthDto model)
+        {
+            if (id != model.HealthDetailId)
+            {
+                return BadRequest();
+            }
+            if(await _elderService.ElderlyPsychomotorHealtExists(model.HealthDetailId, model.PsychomotorHealthId))
+            {
+                return BadRequest("Can not insert duplicate object with the same ids in the db");
+            }
+            try
+            {
+                await _elderService.AddElderlyPsychomotorHealth(model);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+            return NoContent();
+        }
+
         [HttpPost("Update/{id}/HealthDetail")]
         [EnableQuery]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> PostElderHealthDetail(int id, AddHealthDetailDto model)
         {
             if (id != model.ElderlyId)

@@ -1,6 +1,7 @@
 ﻿using DataAccess.Repositories;
 using ElderCare_Domain.Models;
 using ElderCare_Repository.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,11 @@ namespace ElderCare_Repository.Repos
     {
         public PsychomotorHealthRepo(ElderCareContext context) : base(context)
         {
+        }
+
+        public async Task<PsychomotorHealth?> GetByIdsAsync(int HealthDetailId, int PsychomotorHealthId)
+        {
+            return await _dbSet.FirstOrDefaultAsync(e => e.HealthDetailId == HealthDetailId && e.PsychomotorHealthId == PsychomotorHealthId);
         }
     }
 }
