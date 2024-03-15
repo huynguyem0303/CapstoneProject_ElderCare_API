@@ -13,9 +13,9 @@ public partial class ContractService
 
     public int ContractServicesId { get; set; }
 
-    public virtual Contract Contract { get; set; }
+    public virtual Contract? Contract { get; set; }
 
-    public virtual Service Service { get; set; }
-
-    //public virtual ICollection<Timetable> Timetables { get; set; } = new List<Timetable>();//removed
+    public virtual Service? Service { get; set; }
+    
+    public virtual ICollection<Tracking> Trackings { get; set; } = new List<Tracking>();
 }

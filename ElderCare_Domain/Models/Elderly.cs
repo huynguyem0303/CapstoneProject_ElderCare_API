@@ -23,19 +23,15 @@ public partial class Elderly
 
     public string? Note { get; set; }
 
-    public int CustomerId { get; set; }
-
-    //public int? HobbyId { get; set; }
+    public int? CustomerId { get; set; }
 
     public virtual ICollection<Contract> Contracts { get; set; } = new List<Contract>();
 
-    //public virtual ICollection<Customer> Customers { get; set; } = new List<Customer>();
-    public virtual Customer Customer { get; set; }
+    public virtual Customer? Customer { get; set; }
 
-    public virtual HealthDetail HealthDetail { get; set; }
+    public virtual HealthDetail? HealthDetail { get; set; }
 
-    //public virtual Hobby Hobby { get; set; }
-    public virtual ICollection<Hobby> Hobbies {  get; set; }
+    public virtual ICollection<Hobby> Hobbies { get; set; } = new List<Hobby>();
 
-    public virtual LivingCondition Livingcondition { get; set; }
+    public virtual LivingCondition? Livingcondition { get; set; }
 }

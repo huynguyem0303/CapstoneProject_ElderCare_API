@@ -9,11 +9,11 @@ public partial class LivingCondition
 
     public bool? LiveWithRelative { get; set; }
 
-    public string Regions { get; set; }
+    public string? Regions { get; set; }
 
     public bool? HaveSeperateRoom { get; set; }
 
-    public string Others { get; set; }
+    public string? Others { get; set; }
 
     public virtual ICollection<Elderly> Elderlies { get; set; } = new List<Elderly>();
 }

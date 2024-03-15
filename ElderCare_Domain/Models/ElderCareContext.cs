@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ValueGeneration;
-using Microsoft.Extensions.Configuration;
 
 namespace ElderCare_Domain.Models;
 
@@ -17,7 +16,6 @@ public partial class ElderCareContext : DbContext
     {
     }
 
-    #region DbSets
     public virtual DbSet<Account> Accounts { get; set; }
 
     public virtual DbSet<Bankinformation> Bankinformations { get; set; }
@@ -27,6 +25,8 @@ public partial class ElderCareContext : DbContext
     public virtual DbSet<CarerCategory> CarerCategories { get; set; }
 
     public virtual DbSet<CarerPoint> CarerPoints { get; set; }
+
+    public virtual DbSet<CarerService> CarerServices { get; set; }
 
     public virtual DbSet<CarerShilft> CarerShilfts { get; set; }
 
@@ -46,7 +46,11 @@ public partial class ElderCareContext : DbContext
 
     public virtual DbSet<Customer> Customers { get; set; }
 
+   
+
     public virtual DbSet<Elderly> Elderlies { get; set; }
+
+    public virtual DbSet<Device> Devices { get; set; }
 
     public virtual DbSet<Feedback> Feedbacks { get; set; }
 
@@ -55,6 +59,8 @@ public partial class ElderCareContext : DbContext
     public virtual DbSet<Hobby> Hobbies { get; set; }
 
     public virtual DbSet<LivingCondition> LivingConditions { get; set; }
+
+    public virtual DbSet<Notification> Notifications { get; set; }
 
     public virtual DbSet<Package> Packages { get; set; }
 
@@ -76,33 +82,14 @@ public partial class ElderCareContext : DbContext
 
     public virtual DbSet<Timetable> Timetables { get; set; }
 
+    public virtual DbSet<Tracking> Trackings { get; set; }
+
     public virtual DbSet<Transaction> Transactions { get; set; }
 
-    public virtual DbSet<Device> FCMTokens { get; set; }
-
-    public virtual DbSet<CarerService> CarerServices { get; set; }
-
-    public virtual DbSet<Notification> Notifications { get; set; }
-    
-    public virtual DbSet<Tracking> Trackings { get; set; }
-    #endregion
-
-    //    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-    //        => optionsBuilder.UseSqlServer("Data Source=(local);Initial Catalog=ElderCare;User ID=sa;Password=12345678;TrustServerCertificate=True");
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseSqlServer(GetConnectionString());
-    }
-    private static string GetConnectionString()
-    {
-        var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: false);
-        IConfiguration configuration = builder.Build();
-        var connectionString = configuration.GetConnectionString("DefaultDB");
-        return connectionString!;
-    }
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Data Source=database.monoinfinity.net, 1433;Initial Catalog=ElderCare;User ID=sa;Password=1234567890Aa;TrustServerCertificate=True");
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Account>(entity =>
@@ -115,8 +102,8 @@ public partial class ElderCareContext : DbContext
             entity.Property(e => e.Address)
                 .HasMaxLength(100)
                 .HasColumnName("address");
-            entity.Property(e => e.CarerId).HasColumnName("carer_id").IsRequired(false);
-            entity.Property(e => e.CustomerId).HasColumnName("customer_id").IsRequired(false);
+            entity.Property(e => e.CarerId).HasColumnName("carer_id");
+            entity.Property(e => e.CustomerId).HasColumnName("customer_id");
             entity.Property(e => e.Email)
                 .HasMaxLength(100)
                 .HasColumnName("email");
@@ -131,10 +118,11 @@ public partial class ElderCareContext : DbContext
             entity.Property(e => e.Username)
                 .HasMaxLength(100)
                 .HasColumnName("username");
-            //entity.Property(e => e.BankInfoId).HasColumnName("bankinfo_id");
-            //entity.HasOne(d => d.Bankinfo).WithMany(p => p.Accounts)
-            //    .HasForeignKey(d => d.BankInfoId)
-            //    .HasConstraintName("FK_Account_Bankinformation");
+
+            entity.HasOne(d => d.Role).WithMany(p => p.Accounts)
+                .HasForeignKey(d => d.RoleId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Account_Role");
         });
 
         modelBuilder.Entity<Bankinformation>(entity =>
@@ -146,10 +134,10 @@ public partial class ElderCareContext : DbContext
             entity.Property(e => e.BankinfoId)
                 .ValueGeneratedNever()
                 .HasColumnName("bankinfo_id");
-            entity.Property(e => e.BankAccountName)
+            entity.Property(e => e.AccountName)
                 .HasMaxLength(100)
                 .HasColumnName("account_name");
-            entity.Property(e => e.BankAccountNumber)
+            entity.Property(e => e.AccountNumber)
                 .HasMaxLength(50)
                 .HasColumnName("account_number");
             entity.Property(e => e.BankName)
@@ -188,11 +176,10 @@ public partial class ElderCareContext : DbContext
                 .HasMaxLength(50)
                 .HasColumnName("phone");
             entity.Property(e => e.Status).HasColumnName("status");
-            //entity.Property(e => e.TransactionId).HasColumnName("transaction_id");
 
             entity.HasOne(d => d.Bankinfo).WithMany(p => p.Carers)
                 .HasForeignKey(d => d.BankinfoId)
-                .HasConstraintName("FK_Carer_Bankinformation1");
+                .HasConstraintName("FK_Carer_Bankinformation");
         });
 
         modelBuilder.Entity<CarerCategory>(entity =>
@@ -201,15 +188,14 @@ public partial class ElderCareContext : DbContext
                 .HasNoKey()
                 .ToTable("CarerCategory");
 
-            entity.Property(e => e.CarerId).HasColumnName("carer_id");
-            entity.Property(e => e.CateId).HasColumnName("cate_id");
-
             entity.HasOne(d => d.Carer).WithMany()
-                .HasForeignKey(d => d.CarerId)
+                .HasForeignKey(d => d.Carerid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_CarerCategory_Carer");
 
             entity.HasOne(d => d.Cate).WithMany()
-                .HasForeignKey(d => d.CateId)
+                .HasForeignKey(d => d.Cateid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_CarerCategory_Category");
         });
 
@@ -226,25 +212,48 @@ public partial class ElderCareContext : DbContext
             entity.Property(e => e.Point).HasColumnName("point");
         });
 
+        modelBuilder.Entity<CarerService>(entity =>
+        {
+            entity.ToTable("CarerService");
+
+            entity.Property(e => e.CarerServiceId)
+                .ValueGeneratedNever()
+                .HasColumnName("carer_service_id");
+            entity.Property(e => e.CarerId).HasColumnName("carer_id");
+            entity.Property(e => e.ServiceId).HasColumnName("service_id");
+
+            entity.HasOne(d => d.Carer).WithMany(p => p.CarerServices)
+                .HasForeignKey(d => d.CarerId)
+                .HasConstraintName("FK_CarerService_Carer");
+
+            entity.HasOne(d => d.Service).WithMany(p => p.CarerServices)
+                .HasForeignKey(d => d.ServiceId)
+                .HasConstraintName("FK_CarerService_Service");
+        });
+
         modelBuilder.Entity<CarerShilft>(entity =>
         {
-            entity.HasNoKey();
+            entity
+                .HasNoKey()
+                .ToTable("CarerShilft");
 
             entity.Property(e => e.CarerId).HasColumnName("carer_id");
-            entity.Property(e => e.ShilfId).HasColumnName("shilf_id");
+            entity.Property(e => e.ShilftId).HasColumnName("shilft_id");
 
             entity.HasOne(d => d.Carer).WithMany()
                 .HasForeignKey(d => d.CarerId)
-                .HasConstraintName("FK_CarerShilfts_Carer");
+                .HasConstraintName("FK_CarerShilft_Carer");
 
-            entity.HasOne(d => d.Shilf).WithMany()
-                .HasForeignKey(d => d.ShilfId)
-                .HasConstraintName("FK_CarerShilfts_Shilft");
+            entity.HasOne(d => d.Shilft).WithMany()
+                .HasForeignKey(d => d.ShilftId)
+                .HasConstraintName("FK_CarerShilft_Shilft");
         });
 
         modelBuilder.Entity<CarersCustomer>(entity =>
         {
-            entity.HasKey(e => e.CarercusId);
+            entity.HasKey(e => e.CarercusId).HasName("PK_CarersCustomers");
+
+            entity.ToTable("CarersCustomer");
 
             entity.Property(e => e.CarercusId)
                 .ValueGeneratedNever()
@@ -257,33 +266,11 @@ public partial class ElderCareContext : DbContext
 
             entity.HasOne(d => d.Carer).WithMany(p => p.CarersCustomers)
                 .HasForeignKey(d => d.CarerId)
-                .HasConstraintName("FK_CarersCustomers_Carer");
+                .HasConstraintName("FK_CarersCustomer_Carer");
 
             entity.HasOne(d => d.Customer).WithMany(p => p.CarersCustomers)
                 .HasForeignKey(d => d.CustomerId)
-                .HasConstraintName("FK_CarersCustomers_Customer");
-        });
-
-        modelBuilder.Entity<CarerService>(entity =>
-        {
-            entity.HasKey(e => e.CarerServiceId);
-
-            entity.Property(e => e.CarerServiceId)
-                .ValueGeneratedOnAdd()
-                .HasValueGenerator<GuidValueGenerator>()
-                .HasColumnType("uniqueidentifier")
-                .HasColumnName("carer_service_id");
-            entity.Property(e => e.CarerId)
-                .HasColumnName("carer_id");
-            entity.Property(e => e.ServiceId)
-                .HasColumnName("service_id");
-
-            entity.HasOne(d => d.Carer).WithMany(p => p.CarerServices)
-                .HasForeignKey(d => d.CarerId)
-                .HasConstraintName("FK_CarerService_Carer");
-            entity.HasOne(d => d.Service).WithMany()
-                .HasForeignKey(d => d.ServiceId)
-                .HasConstraintName("FK_CarerService_Service");
+                .HasConstraintName("FK_CarersCustomer_Customer");
         });
 
         modelBuilder.Entity<Category>(entity =>
@@ -292,13 +279,8 @@ public partial class ElderCareContext : DbContext
 
             entity.ToTable("Category");
 
-            entity.Property(e => e.CateId)
-                .ValueGeneratedNever()
-                .HasColumnName("cate_id");
-            entity.Property(e => e.Description)
-                .IsRequired()
-                .HasMaxLength(50)
-                .HasColumnName("description");
+            entity.Property(e => e.CateId).ValueGeneratedNever();
+            entity.Property(e => e.Description).HasMaxLength(100);
         });
 
         modelBuilder.Entity<Certification>(entity =>
@@ -377,7 +359,9 @@ public partial class ElderCareContext : DbContext
 
         modelBuilder.Entity<ContractService>(entity =>
         {
-            entity.HasKey(e => e.ContractServicesId);
+            entity.HasKey(e => e.ContractServicesId).HasName("PK_ContractServices");
+
+            entity.ToTable("ContractService");
 
             entity.Property(e => e.ContractServicesId)
                 .ValueGeneratedNever()
@@ -388,11 +372,11 @@ public partial class ElderCareContext : DbContext
 
             entity.HasOne(d => d.Contract).WithMany(p => p.ContractServices)
                 .HasForeignKey(d => d.ContractId)
-                .HasConstraintName("FK_ContractServices_Contract");
+                .HasConstraintName("FK_ContractService_Contract");
 
             entity.HasOne(d => d.Service).WithMany(p => p.ContractServices)
                 .HasForeignKey(d => d.ServiceId)
-                .HasConstraintName("FK_ContractServices_Services");
+                .HasConstraintName("FK_ContractService_Service");
         });
 
         modelBuilder.Entity<ContractVersion>(entity =>
@@ -433,7 +417,6 @@ public partial class ElderCareContext : DbContext
             entity.Property(e => e.CustomerName)
                 .HasMaxLength(100)
                 .HasColumnName("customer_name");
-            //entity.Property(e => e.ElderlyId).HasColumnName("elderly_id");
             entity.Property(e => e.Email)
                 .HasMaxLength(100)
                 .HasColumnName("email");
@@ -441,18 +424,30 @@ public partial class ElderCareContext : DbContext
                 .HasMaxLength(50)
                 .HasColumnName("phone");
             entity.Property(e => e.Status).HasColumnName("status");
-            //entity.Property(e => e.TransactionId).HasColumnName("transaction_id");
 
             entity.HasOne(d => d.Bankinfo).WithMany(p => p.Customers)
                 .HasForeignKey(d => d.BankinfoId)
                 .HasConstraintName("FK_Customer_Bankinformation");
-            //entity.HasOne(d => d.Elderly).WithMany(p => p.Customers)
-            //    .HasForeignKey(d => d.ElderlyId)
-            //    .HasConstraintName("FK_Customer_Elderly");
+        });
 
-            //entity.HasOne(d => d.Transaction).WithMany(p => p.Customers)
-            //    .HasForeignKey(d => d.TransactionId)
-            //    .HasConstraintName("FK_Customer_Transaction");
+        modelBuilder.Entity<Device>(entity =>
+        {
+            entity.HasKey(e => e.DeviceId).HasName("PK_FCMToken");
+
+            entity.ToTable("Device");
+
+            entity.Property(e => e.DeviceId)
+                .ValueGeneratedNever()
+                .HasColumnName("device_id");
+            entity.Property(e => e.AccountId).HasColumnName("account_id");
+            entity.Property(e => e.DeviceFcmToken)
+                .HasMaxLength(255)
+                .HasColumnName("device_fcm_token");
+
+            entity.HasOne(d => d.Account).WithMany(p => p.Devices)
+                .HasForeignKey(d => d.AccountId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Device_Account");
         });
 
         modelBuilder.Entity<Elderly>(entity =>
@@ -466,13 +461,12 @@ public partial class ElderCareContext : DbContext
                 .HasMaxLength(100)
                 .HasColumnName("address");
             entity.Property(e => e.Age).HasColumnName("age");
-            entity.Property(e => e.HealthDetailId).HasColumnName("health_detail_id").IsRequired(false);
-            //entity.Property(e => e.HobbyId).HasColumnName("hobby_id").IsRequired(false);
+            entity.Property(e => e.CustomerId).HasColumnName("customer_id");
+            entity.Property(e => e.HealthDetailId).HasColumnName("health_detail_id");
             entity.Property(e => e.Image)
                 .HasMaxLength(100)
                 .HasColumnName("image");
-            entity.Property(e => e.LivingconditionId).HasColumnName("livingcondition_id").IsRequired(false);
-            entity.Property(e => e.CustomerId).HasColumnName("customer_id");
+            entity.Property(e => e.LivingconditionId).HasColumnName("livingcondition_id");
             entity.Property(e => e.Name)
                 .HasMaxLength(100)
                 .HasColumnName("name");
@@ -483,22 +477,19 @@ public partial class ElderCareContext : DbContext
                 .HasMaxLength(100)
                 .HasColumnName("relationshiptocustomer");
 
+            entity.HasOne(d => d.Customer).WithMany(p => p.Elderlies)
+                .HasForeignKey(d => d.CustomerId)
+                .HasConstraintName("FK_Elderly_Customer");
+
             entity.HasOne(d => d.HealthDetail).WithMany()
                 .HasForeignKey(d => d.HealthDetailId)
                 .HasConstraintName("FK_Elderly_HealthDetail");
 
-            //entity.HasOne(d => d.Hobby).WithMany(p => p.Elderlies)
-            //    .HasForeignKey(d => d.HobbyId)
-            //    .HasConstraintName("FK_Elderly_Hobby");
-
             entity.HasOne(d => d.Livingcondition).WithMany(p => p.Elderlies)
                 .HasForeignKey(d => d.LivingconditionId)
                 .HasConstraintName("FK_Elderly_LivingCondition");
-
-            entity.HasOne(d => d.Customer).WithMany(p => p.Elders)
-                .HasForeignKey(d => d.CustomerId)
-                .HasConstraintName("FK_Elderly_Customer");
         });
+
 
         modelBuilder.Entity<Feedback>(entity =>
         {
@@ -507,26 +498,23 @@ public partial class ElderCareContext : DbContext
             entity.Property(e => e.FeedbackId)
                 .ValueGeneratedNever()
                 .HasColumnName("feedback_id");
-            //entity.Property(e => e.CarerId).HasColumnName("carer_id");
             entity.Property(e => e.CarerServiceId).HasColumnName("carer_service_id");
+            entity.Property(e => e.CreatedDate)
+                .HasColumnType("datetime")
+                .HasColumnName("created_date");
             entity.Property(e => e.CustomerId).HasColumnName("customer_id");
             entity.Property(e => e.Description)
                 .HasMaxLength(300)
                 .HasColumnName("description");
             entity.Property(e => e.Ratng).HasColumnName("ratng");
-            entity.Property(e => e.CreatedDate).HasColumnType("datetime").HasColumnName("created_date");
-
-            //entity.HasOne(d => d.Carer).WithMany(p => p.Feedbacks)
-            //    .HasForeignKey(d => d.CarerId)
-            //    .HasConstraintName("FK_Feedback_Carer");
-
-            entity.HasOne(d => d.Customer).WithMany(p => p.Feedbacks)
-                .HasForeignKey(d => d.CustomerId)
-                .HasConstraintName("FK_Feedback_Customer");
 
             entity.HasOne(d => d.CarerService).WithMany(p => p.Feedbacks)
                 .HasForeignKey(d => d.CarerServiceId)
                 .HasConstraintName("FK_Feedback_CarerService");
+
+            entity.HasOne(d => d.Customer).WithMany(p => p.Feedbacks)
+                .HasForeignKey(d => d.CustomerId)
+                .HasConstraintName("FK_Feedback_Customer");
         });
 
         modelBuilder.Entity<HealthDetail>(entity =>
@@ -579,8 +567,9 @@ public partial class ElderCareContext : DbContext
 
             entity.HasOne(d => d.Elderly).WithMany(p => p.Hobbies)
                 .HasForeignKey(d => d.ElderlyId)
-                .HasConstraintName("FK_Hobby_Elderly")
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_Hobby_Elderly");
+
         });
 
         modelBuilder.Entity<LivingCondition>(entity =>
@@ -602,6 +591,29 @@ public partial class ElderCareContext : DbContext
                 .HasColumnName("regions");
         });
 
+        modelBuilder.Entity<Notification>(entity =>
+        {
+            entity.HasKey(e => e.NotiId);
+
+            entity.ToTable("Notification");
+
+            entity.Property(e => e.NotiId)
+                .ValueGeneratedNever()
+                .HasColumnName("noti_id");
+            entity.Property(e => e.AccountId).HasColumnName("account_id");
+            entity.Property(e => e.Description)
+                .HasMaxLength(250)
+                .HasColumnName("description");
+            entity.Property(e => e.Title)
+                .HasMaxLength(50)
+                .HasColumnName("title");
+
+            entity.HasOne(d => d.Account).WithMany(p => p.Notifications)
+                .HasForeignKey(d => d.AccountId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Notification_Account");
+        });
+
         modelBuilder.Entity<Package>(entity =>
         {
             entity.ToTable("Package");
@@ -620,7 +632,9 @@ public partial class ElderCareContext : DbContext
 
         modelBuilder.Entity<PackageService>(entity =>
         {
-            entity.HasKey(e => e.PackageServicesId);
+            entity.HasKey(e => e.PackageServicesId).HasName("PK_PackageServices");
+
+            entity.ToTable("PackageService");
 
             entity.Property(e => e.PackageServicesId)
                 .ValueGeneratedNever()
@@ -630,7 +644,7 @@ public partial class ElderCareContext : DbContext
 
             entity.HasOne(d => d.Package).WithMany(p => p.PackageServices)
                 .HasForeignKey(d => d.PackageId)
-                .HasConstraintName("FK_PackageServices_Package");
+                .HasConstraintName("FK_PackageService_Package");
         });
 
         modelBuilder.Entity<Psychomotor>(entity =>
@@ -653,30 +667,28 @@ public partial class ElderCareContext : DbContext
 
         modelBuilder.Entity<PsychomotorHealth>(entity =>
         {
-            entity
-                .ToTable("PsychomotorHealth");
+            entity.ToTable("PsychomotorHealth");
 
             entity.HasKey(e => e.PsychomotorHealthDetailId);
+            
             entity.Property(e => e.PsychomotorHealthDetailId)
                 .ValueGeneratedOnAdd()
                 .HasColumnType("uniqueidentifier")
                 .HasValueGenerator<GuidValueGenerator>()
                 .HasColumnName("psychomotor_health_detail_id");
-
-
+                
             entity.Property(e => e.Description)
                 .HasMaxLength(300)
                 .HasColumnName("description");
             entity.Property(e => e.HealthDetailId).HasColumnName("health_detail_id");
             entity.Property(e => e.PsychomotorHealthId).HasColumnName("psychomotor_health_id");
             entity.Property(e => e.Status).HasColumnName("status");
-
-            entity.HasOne(d => d.HealthDetail).WithMany(s => s.PsychomotorHealths)
+            
+            entity.HasOne(d => d.HealthDetail).WithMany(p => p.PsychomotorHealths)
                 .HasForeignKey(d => d.HealthDetailId)
-                .HasConstraintName("FK_PsychomotorHealth_HealthDetail")
-                .OnDelete(DeleteBehavior.Cascade);
-
-            entity.HasOne(d => d.PsychomotorHealthNavigation).WithMany()
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_PsychomotorHealth_HealthDetail");
+            entity.HasOne(d => d.PsychomotorHealthNavigation).WithMany(p => p.PsychomotorHealths)
                 .HasForeignKey(d => d.PsychomotorHealthId)
                 .HasConstraintName("FK_PsychomotorHealth_Psychomotor");
         });
@@ -689,11 +701,14 @@ public partial class ElderCareContext : DbContext
                 .ValueGeneratedNever()
                 .HasColumnName("report_id");
             entity.Property(e => e.CarerId).HasColumnName("carer_id");
+            entity.Property(e => e.CreatedDate)
+                .HasColumnType("datetime")
+                .HasColumnName("created_date");
             entity.Property(e => e.CustomerId).HasColumnName("customer_id");
             entity.Property(e => e.Description)
                 .HasMaxLength(300)
                 .HasColumnName("description");
-            entity.Property(e => e.CreatedDate).HasColumnType("datetime").HasColumnName("created_date");
+
             entity.HasOne(d => d.Carer).WithMany(p => p.Reports)
                 .HasForeignKey(d => d.CarerId)
                 .HasConstraintName("FK_Report_Carer");
@@ -714,13 +729,16 @@ public partial class ElderCareContext : DbContext
                 .HasMaxLength(50)
                 .HasColumnName("description");
             entity.Property(e => e.Name)
-                .IsRequired()
                 .HasMaxLength(100)
                 .HasColumnName("name");
         });
 
         modelBuilder.Entity<Service>(entity =>
         {
+            entity.HasKey(e => e.ServiceId).HasName("PK_Services");
+
+            entity.ToTable("Service");
+
             entity.Property(e => e.ServiceId)
                 .ValueGeneratedNever()
                 .HasColumnName("service_id");
@@ -736,13 +754,11 @@ public partial class ElderCareContext : DbContext
 
         modelBuilder.Entity<Shilft>(entity =>
         {
-            entity.HasKey(e => e.ShilfId);
-
             entity.ToTable("Shilft");
 
-            entity.Property(e => e.ShilfId)
+            entity.Property(e => e.ShilftId)
                 .ValueGeneratedNever()
-                .HasColumnName("shilf_id");
+                .HasColumnName("shilft_id");
             entity.Property(e => e.Desciption).HasMaxLength(300);
             entity.Property(e => e.Name).HasMaxLength(100);
         });
@@ -764,21 +780,9 @@ public partial class ElderCareContext : DbContext
                 .ValueGeneratedNever()
                 .HasColumnName("timetable_id");
             entity.Property(e => e.CarerId).HasColumnName("carer_id");
-            //entity.Property(e => e.ContractServicesId).HasColumnName("contract_services_id");
             entity.Property(e => e.CreatedDate)
                 .HasColumnType("datetime")
                 .HasColumnName("created_date");
-            //entity.Property(e => e.CusApprove).HasColumnName("cus_approve");
-            //entity.Property(e => e.CusContent)
-            //    .HasMaxLength(300)
-            //    .HasColumnName("cus_content");
-            //entity.Property(e => e.Image)
-            //    .HasMaxLength(300)
-            //    .HasColumnName("image");
-            //entity.Property(e => e.PackageServicesId).HasColumnName("package_services_id");
-            //entity.Property(e => e.ReportContent)
-            //    .HasMaxLength(300)
-            //    .HasColumnName("report_content");
             entity.Property(e => e.ReportDate)
                 .HasColumnType("datetime")
                 .HasColumnName("report_date");
@@ -786,31 +790,16 @@ public partial class ElderCareContext : DbContext
             entity.Property(e => e.Timeframe)
                 .HasMaxLength(100)
                 .HasColumnName("timeframe");
-            //entity.Property(e => e.UpdatedDate)
-            //    .HasColumnType("datetime")
-            //    .HasColumnName("updated_date");
-
-            //entity.HasOne(d => d.ContractServices).WithMany(p => p.Timetables)
-            //    .HasForeignKey(d => d.ContractServicesId)
-            //    .HasConstraintName("FK_Timetable_ContractServices");
-
-            //entity.HasOne(d => d.PackageServices).WithMany(p => p.Timetables)
-            //    .HasForeignKey(d => d.PackageServicesId)
-            //    .HasConstraintName("FK_Timetable_PackageServices");
         });
 
         modelBuilder.Entity<Tracking>(entity =>
         {
-            entity.HasKey(e => e.TrackingId);
+            entity.ToTable("Tracking");
 
             entity.Property(e => e.TrackingId)
-                .HasColumnType("uniqueidentifier")
-                .HasColumnName("tracking_id")
-                .ValueGeneratedOnAdd()
-                .HasValueGenerator<GuidValueGenerator>();
-
-            entity.Property(e => e.TimetableId).HasColumnName("timetable_id");
-
+                .ValueGeneratedNever()
+                .HasColumnName("tracking_id");
+            entity.Property(e => e.ContractServicesId).HasColumnName("contract_services_id");
             entity.Property(e => e.CusApprove).HasColumnName("cus_approve");
             entity.Property(e => e.CusFeedback)
                 .HasMaxLength(300)
@@ -819,9 +808,6 @@ public partial class ElderCareContext : DbContext
                 .HasMaxLength(300)
                 .HasColumnName("image");
             entity.Property(e => e.PackageServicesId).HasColumnName("package_services_id");
-            entity.Property(e => e.Title)
-                .HasMaxLength(50)
-                .HasColumnName("title");
             entity.Property(e => e.ReportContent)
                 .HasMaxLength(300)
                 .HasColumnName("report_content");
@@ -829,14 +815,18 @@ public partial class ElderCareContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("report_date");
             entity.Property(e => e.Status).HasColumnName("status");
+            entity.Property(e => e.TimetableId).HasColumnName("timetable_id");
+            entity.Property(e => e.Title)
+                .HasMaxLength(50)
+                .HasColumnName("title");
 
-            entity.HasOne(d => d.ContractServices).WithMany()
+            entity.HasOne(d => d.ContractServices).WithMany(p => p.Trackings)
                 .HasForeignKey(d => d.ContractServicesId)
-                .HasConstraintName("FK_Tracking_ContractServices");
+                .HasConstraintName("FK_Tracking_ContractService");
 
-            entity.HasOne(d => d.PackageServices).WithMany()
+            entity.HasOne(d => d.PackageServices).WithMany(p => p.Trackings)
                 .HasForeignKey(d => d.PackageServicesId)
-                .HasConstraintName("FK_Tracking_PackageServices");
+                .HasConstraintName("FK_Tracking_PackageService");
 
             entity.HasOne(d => d.Timetable).WithMany(p => p.Trackings)
                 .HasForeignKey(d => d.TimetableId)
@@ -860,42 +850,18 @@ public partial class ElderCareContext : DbContext
                 .HasMaxLength(100)
                 .HasColumnName("description");
             entity.Property(e => e.FigureMoney).HasColumnName("figure_money");
+            entity.Property(e => e.Status)
+                .HasMaxLength(50)
+                .HasColumnName("status");
             entity.Property(e => e.Type).HasColumnName("type");
-        });
 
-        modelBuilder.Entity<Device>(entity =>
-        {
-            entity.ToTable("FCMToken");
+            entity.HasOne(d => d.Account).WithMany(p => p.Transactions)
+                .HasForeignKey(d => d.AccountId)
+                .HasConstraintName("FK_Transaction_Account");
 
-            entity.HasKey(e => e.DeviceId);
-            entity.Property(e => e.DeviceId)
-                  .HasColumnName("token_id")
-                  .HasColumnType("uniqueidentifier")
-                  .ValueGeneratedOnAdd()
-                  .HasValueGenerator<GuidValueGenerator>();
-            entity.Property(e => e.AccountId).HasColumnName("account_id").IsRequired();
-            entity.Property(e => e.DeviceFCMToken)
-                  .HasColumnName("token_description")
-                  .HasMaxLength(255);
-
-            entity.HasOne(e => e.Account).WithMany(e => e.Devices)
-                  .HasForeignKey(e => e.AccountId)
-                  .HasConstraintName("FK_FCMToken_Account");
-        });
-
-        modelBuilder.Entity<Notification>(entity =>
-        {
-            entity.HasKey(e => e.NotificationId);
-
-            entity.Property(e => e.NotificationId)
-                .HasColumnName("noti_id")
-                .HasColumnType("uniqueidentifier")
-                .ValueGeneratedOnAdd()
-                .HasValueGenerator<GuidValueGenerator>();
-            entity.Property(e => e.AccountId).HasColumnName("account_id").IsRequired();
-            entity.Property(e => e.Title).HasColumnName("title");
-            entity.Property(e => e.Description).HasColumnName("description");
-            entity.Property(e => e.CreatedDate).HasColumnType("datetime").HasColumnName("created_date");
+            entity.HasOne(d => d.Contract).WithMany(p => p.Transactions)
+                .HasForeignKey(d => d.ContractId)
+                .HasConstraintName("FK_Transaction_Contract");
         });
 
         OnModelCreatingPartial(modelBuilder);

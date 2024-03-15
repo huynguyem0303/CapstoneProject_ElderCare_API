@@ -1,7 +1,5 @@
-﻿    using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 
 namespace ElderCare_Domain.Models;
 
@@ -22,12 +20,16 @@ public partial class Account
     public string? Address { get; set; }
 
     public int? Status { get; set; }
+
     public int? CustomerId { get; set; }
 
     public int? CarerId { get; set; }
 
-    //public int? BankInfoId { get; set; }
+    public virtual ICollection<Device> Devices { get; set; } = new List<Device>();
 
-    //public virtual Bankinformation? Bankinfo { get; set; }
-    public virtual ICollection<Device> Devices { get; set; }
+    public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
+
+    public virtual Role? Role { get; set; }
+
+    public virtual ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
 }

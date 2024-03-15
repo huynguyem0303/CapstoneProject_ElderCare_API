@@ -13,7 +13,7 @@ public partial class CarersCustomer
 
     public int CarercusId { get; set; }
 
-    public virtual Carer Carer { get; set; }
+    public virtual Carer? Carer { get; set; }
 
-    public virtual Customer Customer { get; set; }
+    public virtual Customer? Customer { get; set; }
 }

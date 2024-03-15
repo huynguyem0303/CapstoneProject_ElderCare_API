@@ -15,7 +15,7 @@ public partial class PsychomotorHealth
 
     public int? Status { get; set; }
 
-    public virtual HealthDetail HealthDetail { get; set; }
+    public virtual HealthDetail? HealthDetail { get; set; }
 
-    public virtual Psychomotor PsychomotorHealthNavigation { get; set; }
+    public virtual Psychomotor? PsychomotorHealthNavigation { get; set; }
 }

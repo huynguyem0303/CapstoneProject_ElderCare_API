@@ -5,9 +5,9 @@ namespace ElderCare_Domain.Models;
 
 public partial class Shilft
 {
-    public int ShilfId { get; set; }
+    public int ShilftId { get; set; }
 
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
-    public string Desciption { get; set; }
+    public string? Desciption { get; set; }
 }

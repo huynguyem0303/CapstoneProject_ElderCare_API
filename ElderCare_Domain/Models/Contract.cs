@@ -23,15 +23,17 @@ public partial class Contract
 
     public int? PackageId { get; set; }
 
-    public virtual Carer Carer { get; set; }
+    public virtual Carer? Carer { get; set; }
 
     public virtual ICollection<ContractService> ContractServices { get; set; } = new List<ContractService>();
 
     public virtual ICollection<ContractVersion> ContractVersions { get; set; } = new List<ContractVersion>();
 
-    public virtual Customer Customer { get; set; }
+    public virtual Customer? Customer { get; set; }
 
-    public virtual Elderly Elderly { get; set; }
+    public virtual Elderly? Elderly { get; set; }
 
-    public virtual Package Package { get; set; }
+    public virtual Package? Package { get; set; }
+
+    public virtual ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
 }

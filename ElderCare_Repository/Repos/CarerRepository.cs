@@ -25,29 +25,49 @@ namespace ElderCare_Repository.Repos
         public async Task<List<Carer?>> searchCarer(SearchCarerDto dto)
         {
             var list = GetAll().ToList();
+  
             List<Carer> carer = new List<Carer>();
             List<Carer> carershift = new List<Carer>();
             List<Carer> carercate = new List<Carer>();
-            List<CarerShilft> shift = await _context.Set<CarerShilft>().ToListAsync();
+            List<Carer> servicecarer = new List<Carer>();
+            List<Carer> duplicate = new List<Carer>();
+            List<CarerService> services = await _context.Set<CarerService>().Include(e => e.Service).ToListAsync();
+            List<CarerService> carerService = new List<CarerService>();
+            List<CarerShilft> shift = await _context.Set<CarerShilft>().Include(e => e.Shilft).Include(e => e.Carer).ToListAsync();
             List<CarerShilft> CarerShilft = new List<CarerShilft>();
-            List<CarerCategory> cate = await _context.Set<CarerCategory>().ToListAsync();
+            List<CarerCategory> cate = await _context.Set<CarerCategory>().Include(e => e.Cate).Include(e => e.Carer).ToListAsync();
             List<CarerCategory> CarerCategory = new List<CarerCategory>();
             string separator = " ";
+            string servicelist = String.Join(separator, dto.ServiceDes);
             string genderlist = String.Join(separator, dto.Gender);
             string timelist = String.Join(separator, dto.TimeShift);
             string agelist = String.Join(separator, dto.Age);
             string catelist = String.Join(separator, dto.Cate);
-
-            if (!timelist.IsNullOrEmpty())
+            if (!servicelist.IsNullOrEmpty())
+            {
+                for (int i = 0; i < services.Count; i++)
+                {
+                    if (servicelist.Contains(services[i].Service.Name))
+                        carerService.Add(services[i]);
+                }
+                for (int i = 0; i < carerService.Count; i++)
+                {
+                    var carerList = await _context.Set<Carer>().Where(x => (x.CarerId == carerService[i].CarerId)).Distinct().ToListAsync(); 
+                    servicecarer.AddRange(carerList);
+                }
+            }
+                if (!timelist.IsNullOrEmpty())
             {
                 for (int i = 0; i < shift.Count; i++)
                 {
-                    if (timelist.Contains(shift[i].Shilf.Name))
+                    if (timelist.Contains(shift[i].Shilft.Name))
                         CarerShilft.Add(shift[i]);
                 }
                 for (int i = 0; i < CarerShilft.Count; i++)
                 {
-                    carershift = await _context.Set<Carer>().Where(x => (x.CarerId == CarerShilft[i].CarerId)).ToListAsync(); ;
+                    carershift = servicecarer.Where(x => (x.CarerId == CarerShilft[i].CarerId)).ToList();
+                    List<Carer> duplicates = carershift.GroupBy(x => x.CarerId)
+                                   .SelectMany(g => g.Skip(1)).ToList();
                 }
 
             }
@@ -60,29 +80,29 @@ namespace ElderCare_Repository.Repos
                 }
                 for (int i = 0; i < CarerCategory.Count; i++)
                 {
-                    carercate = await _context.Set<Carer>().Where(x => (x.CarerId == CarerCategory[i].CarerId)).ToListAsync(); ;
+                    carercate = servicecarer.Where(x => (x.CarerId == CarerCategory[i].Carerid)).ToList(); ;
                 }
 
             }
 
 
             if (!agelist.IsNullOrEmpty() && !genderlist.IsNullOrEmpty())
-                for (int i = 0; i < list.Count; i++)
+                for (int i = 0; i < servicecarer.Count; i++)
                 {
-                    if (genderlist.Contains(list[i].Gender) && agelist.Contains(list[i].Age))
-                        carer.Add(list[i]);
+                    if (genderlist.Contains(servicecarer[i].Gender) && agelist.Contains(servicecarer[i].Age))
+                        carer.Add(servicecarer[i]);
                 }
             if (genderlist.IsNullOrEmpty() && !genderlist.IsNullOrEmpty())
-                for (int i = 0; i < list.Count; i++)
+                for (int i = 0; i < servicecarer.Count; i++)
                 {
-                    if (agelist.Contains(list[i].Age))
-                        carer.Add(list[i]);
+                    if (agelist.Contains(servicecarer[i].Age))
+                        carer.Add(servicecarer[i]);
                 }
             if (!agelist.IsNullOrEmpty() && genderlist.IsNullOrEmpty())
-                for (int i = 0; i < list.Count; i++)
+                for (int i = 0; i < servicecarer.Count; i++)
                 {
-                    if (agelist.Contains(list[i].Age))
-                        carer.Add(list[i]);
+                    if (agelist.Contains(servicecarer[i].Age))
+                        carer.Add(servicecarer[i]);
                 }
 
             var combine = carer.Union(carershift).ToList();
@@ -127,8 +147,8 @@ namespace ElderCare_Repository.Repos
             //_ = _dbSet.Select(e => e.TransactionId).ToList();
             _ = _dbSet.Select(e => e.Bankinfo).ToList();
             _ = _context.Bankinformations.Select(e => e.BankinfoId).ToList();
-            _ = _context.Bankinformations.Select(e => e.BankAccountName).ToList();
-            _ = _context.Bankinformations.Select(e => e.BankAccountNumber).ToList();
+            _ = _context.Bankinformations.Select(e => e.AccountName).ToList();
+            _ = _context.Bankinformations.Select(e => e.AccountNumber).ToList();
             _ = _context.Bankinformations.Select(e => e.BankName).ToList();
             _ = _context.Bankinformations.Select(e => e.Branch).ToList();
         }

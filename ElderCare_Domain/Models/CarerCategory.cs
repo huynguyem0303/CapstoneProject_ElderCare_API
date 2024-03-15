@@ -5,11 +5,11 @@ namespace ElderCare_Domain.Models;
 
 public partial class CarerCategory
 {
-    public int? CateId { get; set; }
+    public int Carerid { get; set; }
 
-    public int? CarerId { get; set; }
+    public int Cateid { get; set; }
 
-    public virtual Carer Carer { get; set; }
+    public virtual Carer? Carer { get; set; }
 
-    public virtual Category Cate { get; set; }
+    public virtual Category? Cate { get; set; }
 }

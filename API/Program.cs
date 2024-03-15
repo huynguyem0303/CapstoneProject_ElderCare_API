@@ -1,4 +1,5 @@
 using ElderCare_Domain.Commons;
+using ElderCare_Domain.Models;
 using ElderCare_Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.OData;
@@ -12,8 +13,9 @@ var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
-builder.Services.AddControllers().AddOData(options => options.EnableQueryFeatures(100));
+builder.Services.AddControllers().AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+).AddOData(options => options.EnableQueryFeatures(100));
 builder.Services.Configure<FcmNotificationSetting>(builder.Configuration.GetSection("FcmNotification"));
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
