@@ -165,5 +165,15 @@ namespace ElderCare_Service.Services
             }
             await _unitOfWork.SaveChangeAsync();
         }
+
+        public async Task<bool> ElderHobbyExist(int elderId, int hobbyId)
+        {
+            return await _unitOfWork.HobbyRepo.FindAsync(e => e.HobbyId == hobbyId && e.ElderlyId == elderId) != null;
+        }
+
+        public async Task<bool> ElderHealthDetailExist(int elderId, int healthDetailId)
+        {
+            return await _unitOfWork.ElderRepo.FindAsync(e => e.ElderlyId == elderId && e.HealthDetailId == healthDetailId) != null;
+        }
     }
 }

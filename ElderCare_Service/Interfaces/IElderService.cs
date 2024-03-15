@@ -30,5 +30,7 @@ namespace ElderCare_Service.Interfaces
         Task<bool> HobbyExists(int id);
         Task DeleteHobby(int id);
         Task RemoveElderlyPsychomotorHealth(int healthDetailId, int psychomotorHealthId);
+        Task<bool> ElderHobbyExist(int elderId, int hobbyId);
+        Task<bool> ElderHealthDetailExist(int elderId, int healthDetailId);
     }
 }
