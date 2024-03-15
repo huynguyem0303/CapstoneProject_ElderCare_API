@@ -33,9 +33,9 @@ namespace ElderCare_Repository.Repos
             List<Carer> duplicate = new List<Carer>();
             List<CarerService> services = await _context.Set<CarerService>().Include(e => e.Service).ToListAsync();
             List<CarerService> carerService = new List<CarerService>();
-            List<CarerShilft> shift = await _context.Set<CarerShilft>().ToListAsync();
+            List<CarerShilft> shift = await _context.Set<CarerShilft>().Include(e => e.Shilft).Include(e => e.Carer).ToListAsync();
             List<CarerShilft> CarerShilft = new List<CarerShilft>();
-            List<CarerCategory> cate = await _context.Set<CarerCategory>().ToListAsync();
+            List<CarerCategory> cate = await _context.Set<CarerCategory>().Include(e => e.Cate).Include(e => e.Carer).ToListAsync();
             List<CarerCategory> CarerCategory = new List<CarerCategory>();
             string separator = " ";
             string servicelist = String.Join(separator, dto.ServiceDes);
