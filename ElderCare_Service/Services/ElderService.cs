@@ -136,9 +136,9 @@ namespace ElderCare_Service.Services
             await _unitOfWork.SaveChangeAsync();
         }
 
-        public async Task<bool> ElderlyPsychomotorHealtExists(int HealthDetailId, int PsychomotorHealthId)
+        public async Task<bool> ElderlyPsychomotorHealtExists(int healthDetailId, int psychomotorHealthId)
         {
-            return await _unitOfWork.PsychomotorHealthRepo.GetByIdsAsync(HealthDetailId, PsychomotorHealthId) != null;
+            return await _unitOfWork.PsychomotorHealthRepo.GetByIdsAsync(healthDetailId, psychomotorHealthId) != null;
         }
 
         public async Task<bool> HobbyExists(int id)
@@ -152,6 +152,16 @@ namespace ElderCare_Service.Services
             if(hobby != null)
             {
                 _unitOfWork.HobbyRepo.Delete(hobby);
+            }
+            await _unitOfWork.SaveChangeAsync();
+        }
+
+        public async Task RemoveElderlyPsychomotorHealth(int healthDetailId, int psychomotorHealthId)
+        {
+            var psychomotorHealth = await _unitOfWork.PsychomotorHealthRepo.GetByIdsAsync(healthDetailId, psychomotorHealthId);
+            if(psychomotorHealth != null)
+            {
+                _unitOfWork.PsychomotorHealthRepo.Delete(psychomotorHealth);
             }
             await _unitOfWork.SaveChangeAsync();
         }

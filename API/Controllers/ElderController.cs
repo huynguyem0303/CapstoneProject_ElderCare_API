@@ -126,7 +126,10 @@ namespace API.Controllers
             {
                 return BadRequest();
             }
-
+            if(!await _elderService.HobbyExists(model.HobbyId))
+            {
+                return NotFound();
+            }
             try
             {
                 await _elderService.UpdateElderlyHobby(model);
@@ -353,6 +356,26 @@ namespace API.Controllers
             return NoContent();
         }
 
+        [HttpDelete("HealthDetail/{healthDetailId}/PsychomotorHealth/{psychomotorHealthId}")]
+        [EnableQuery]
+        [Authorize]
+        public async Task<IActionResult> RemovePsychomotorHealth(int healthDetailId, int psychomotorHealthId)
+        {
+            if (!await _elderService.ElderlyPsychomotorHealtExists(healthDetailId, psychomotorHealthId))
+            {
+                return NotFound();
+            }
+            try
+            {
+                await _elderService.RemoveElderlyPsychomotorHealth(healthDetailId, psychomotorHealthId);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+            return NoContent();
+        }
         //private async Task<bool> ElderExists(int id)
         //{
         //    return await _unitOfWork.ElderRepo.GetByIdAsync(id) != null;

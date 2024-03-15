@@ -16,9 +16,9 @@ namespace ElderCare_Repository.Repos
         {
         }
 
-        public async Task<PsychomotorHealth?> GetByIdsAsync(int HealthDetailId, int PsychomotorHealthId)
+        public async Task<PsychomotorHealth?> GetByIdsAsync(int healthDetailId, int psychomotorHealthId)
         {
-            return await _dbSet.FirstOrDefaultAsync(e => e.HealthDetailId == HealthDetailId && e.PsychomotorHealthId == PsychomotorHealthId);
+            return await _dbSet.FirstOrDefaultAsync(e => e.HealthDetailId == healthDetailId && e.PsychomotorHealthId == psychomotorHealthId);
         }
     }
 }
