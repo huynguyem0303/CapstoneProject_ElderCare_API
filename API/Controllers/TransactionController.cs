@@ -97,7 +97,7 @@ namespace API.Controllers
 
 
                 //string paymentUrl = vnpay.CreateRequestUrl(vnp_Url, vnp_HashSecret);
-                string paymentUrl = await _transactionService.CreateTransaction(dto, userid.AccountId,carerid, customerid);
+                string paymentUrl = await _transactionService.CreateTransaction(dto, (int)userid.AccountId,carerid, customerid);
                 url= paymentUrl;
                 return Ok(new ApiResponse
                 {
@@ -152,7 +152,7 @@ namespace API.Controllers
 
 
                 //string paymentUrl = vnpay.CreateRequestUrl(vnp_Url, vnp_HashSecret);
-                string paymentUrl =  _transactionService.LinkPayment(userid.AccountId);
+                string paymentUrl =  _transactionService.LinkPayment((int)userid.AccountId);
 
                 return Ok(paymentUrl);
             }

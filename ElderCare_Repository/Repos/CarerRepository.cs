@@ -31,8 +31,8 @@ namespace ElderCare_Repository.Repos
             List<Carer> carercate = new List<Carer>();
             List<Carer> servicecarer = new List<Carer>();
             List<Carer> duplicate = new List<Carer>();
-            List<CarerService> services = await _context.Set<CarerService>().ToListAsync();
-            List<CarerService> service = new List<CarerService>();
+            List<CarerService> services = await _context.Set<CarerService>().Include(e => e.Service).ToListAsync();
+            List<CarerService> carerService = new List<CarerService>();
             List<CarerShilft> shift = await _context.Set<CarerShilft>().ToListAsync();
             List<CarerShilft> CarerShilft = new List<CarerShilft>();
             List<CarerCategory> cate = await _context.Set<CarerCategory>().ToListAsync();
@@ -47,13 +47,13 @@ namespace ElderCare_Repository.Repos
             {
                 for (int i = 0; i < services.Count; i++)
                 {
-                    if (servicelist.Contains(service[i].Service.Desciption))
-                        service.Add(service[i]);
+                    if (servicelist.Contains(services[i].Service.Name))
+                        carerService.Add(services[i]);
                 }
-                for (int i = 0; i < service.Count; i++)
+                for (int i = 0; i < carerService.Count; i++)
                 {
-                    servicecarer = await _context.Set<Carer>().Where(x => (x.CarerId == service[i].CarerId)).Distinct().ToListAsync(); 
-                    
+                    var carerList = await _context.Set<Carer>().Where(x => (x.CarerId == carerService[i].CarerId)).Distinct().ToListAsync(); 
+                    servicecarer.AddRange(carerList);
                 }
             }
                 if (!timelist.IsNullOrEmpty())
