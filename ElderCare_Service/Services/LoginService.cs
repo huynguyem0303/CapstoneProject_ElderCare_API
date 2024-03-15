@@ -33,7 +33,7 @@ namespace ElderCare_Service.Services
                 throw new UnauthorizedAccessException("incorrect email or password");
             }else if (!FCMToken.IsNullOrEmpty())
             {
-                var response = await checkAccountFCMToken(account.AccountId, FCMToken);
+                var response = await checkAccountFCMToken((int)account.AccountId, FCMToken);
                 if (!response.IsSuccess)
                 {
                     throw new Exception(response.Message);
@@ -52,7 +52,7 @@ namespace ElderCare_Service.Services
             }
             else if (!FCMToken.IsNullOrEmpty())
             {
-                var response = await checkAccountFCMToken(account.AccountId, FCMToken);
+                var response = await checkAccountFCMToken((int)account.AccountId, FCMToken);
                 if (!response.IsSuccess)
                 {
                     throw new Exception(response.Message);
@@ -78,7 +78,7 @@ namespace ElderCare_Service.Services
             }
             else if (!FCMToken.IsNullOrEmpty())
             {
-                var response = await checkAccountFCMToken(account.AccountId, FCMToken);
+                var response = await checkAccountFCMToken( (int)account.AccountId, FCMToken);
                 if (!response.IsSuccess)
                 {
                     throw new Exception(response.Message);
