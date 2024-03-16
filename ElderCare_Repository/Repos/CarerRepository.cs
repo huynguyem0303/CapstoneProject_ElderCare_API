@@ -4,7 +4,9 @@ using ElderCare_Domain.Models;
 using ElderCare_Repository.DTO;
 using ElderCare_Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client.Extensions.Msal;
 using Microsoft.IdentityModel.Tokens;
+using MimeKit;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -25,51 +27,71 @@ namespace ElderCare_Repository.Repos
         public async Task<List<Carer?>> searchCarer(SearchCarerDto dto)
         {
             var list = GetAll().ToList();
-  
+
             List<Carer> carer = new List<Carer>();
             List<Carer> carershift = new List<Carer>();
             List<Carer> carercate = new List<Carer>();
             List<Carer> servicecarer = new List<Carer>();
-            List<Carer> duplicate = new List<Carer>();
             List<CarerService> services = await _context.Set<CarerService>().Include(e => e.Service).ToListAsync();
             List<CarerService> carerService = new List<CarerService>();
             List<CarerShilft> shift = await _context.Set<CarerShilft>().Include(e => e.Shilft).Include(e => e.Carer).ToListAsync();
             List<CarerShilft> CarerShilft = new List<CarerShilft>();
+            List<CarerShilft> duplicatescarershilf = new List<CarerShilft>();
+            List<CarerCategory> duplicatescarercate = new List<CarerCategory>();
             List<CarerCategory> cate = await _context.Set<CarerCategory>().Include(e => e.Cate).Include(e => e.Carer).ToListAsync();
             List<CarerCategory> CarerCategory = new List<CarerCategory>();
             string separator = " ";
-            string servicelist = String.Join(separator, dto.ServiceDes);
+            string service = String.Join(separator, dto.ServiceDes);
             string genderlist = String.Join(separator, dto.Gender);
             string timelist = String.Join(separator, dto.TimeShift);
             string agelist = String.Join(separator, dto.Age);
             string catelist = String.Join(separator, dto.Cate);
-            if (!servicelist.IsNullOrEmpty())
+            if (!service.IsNullOrEmpty())
             {
                 for (int i = 0; i < services.Count; i++)
                 {
-                    if (servicelist.Contains(services[i].Service.Name))
+                    if (dto.ServiceDes.Contains(services[i].Service.Name))
                         carerService.Add(services[i]);
+
                 }
                 for (int i = 0; i < carerService.Count; i++)
                 {
-                    var carerList = await _context.Set<Carer>().Where(x => (x.CarerId == carerService[i].CarerId)).Distinct().ToListAsync(); 
-                    servicecarer.AddRange(carerList);
+                    var checkcarer = await _context.Set<Carer>().Where(x => (x.CarerId == carerService[i].CarerId)).ToListAsync();
+                    if (!checkcarer.IsNullOrEmpty())
+                    {
+                        servicecarer.AddRange(checkcarer);
+                    }
                 }
             }
-                if (!timelist.IsNullOrEmpty())
+            if (!timelist.IsNullOrEmpty())
             {
                 for (int i = 0; i < shift.Count; i++)
                 {
                     if (timelist.Contains(shift[i].Shilft.Name))
                         CarerShilft.Add(shift[i]);
-                }
-                for (int i = 0; i < CarerShilft.Count; i++)
-                {
-                    carershift = servicecarer.Where(x => (x.CarerId == CarerShilft[i].CarerId)).ToList();
-                    List<Carer> duplicates = carershift.GroupBy(x => x.CarerId)
-                                   .SelectMany(g => g.Skip(1)).ToList();
-                }
+                    for (int j = 1; j < dto.TimeShift.Length; j++)
+                    {
+                        var duplicateExists = CarerShilft.GroupBy(n => n.CarerId).Any(g => g.Count() == j);
+                        if (duplicateExists)
+                        {
+                            if (duplicatescarershilf.IsNullOrEmpty())
+                            {
+                                duplicatescarershilf.Add(shift[i]);
+                            }
+                            duplicatescarershilf.Insert(0, shift[i]);
+                        }
+                    }
 
+                }
+                var priorityshilft = duplicatescarershilf.UnionBy(CarerShilft, x => x.CarerId).ToList();
+                for (int i = 0; i < priorityshilft.Count; i++)
+                {
+                    var checkcarer = servicecarer.Where(x => (x.CarerId == priorityshilft[i].CarerId)).ToList();
+                    if (!checkcarer.IsNullOrEmpty())
+                    {
+                        carershift.AddRange(checkcarer);
+                    }
+                }
             }
             if (!catelist.IsNullOrEmpty())
             {
@@ -77,25 +99,41 @@ namespace ElderCare_Repository.Repos
                 {
                     if (catelist.Contains(cate[i].Cate.Description))
                         CarerCategory.Add(cate[i]);
+                    for (int j = 1; j < dto.Cate.Length; j++)
+                    {
+                        var duplicateExists = CarerCategory.GroupBy(n => n.Carerid).Any(g => g.Count() == j);
+                        if (duplicateExists)
+                        {
+                            if (duplicatescarercate.IsNullOrEmpty())
+                            {
+                                duplicatescarercate.Add(cate[i]);
+                            }
+                            duplicatescarercate.Insert(0,cate[i]);
+                        }
+                    }
                 }
-                for (int i = 0; i < CarerCategory.Count; i++)
+                var prioritycate = duplicatescarercate.UnionBy(CarerCategory, x => x.Carerid).ToList();
+                for (int i = 0; i < prioritycate.Count; i++)
                 {
-                    carercate = servicecarer.Where(x => (x.CarerId == CarerCategory[i].Carerid)).ToList(); ;
+                    var checkcarer = servicecarer.Where(x => (x.CarerId == prioritycate[i].Carerid)).ToList();
+                    if (!checkcarer.IsNullOrEmpty())
+                    {
+                        carercate.AddRange(checkcarer);
+                    }
                 }
-
             }
 
 
             if (!agelist.IsNullOrEmpty() && !genderlist.IsNullOrEmpty())
                 for (int i = 0; i < servicecarer.Count; i++)
                 {
-                    if (genderlist.Contains(servicecarer[i].Gender) && agelist.Contains(servicecarer[i].Age))
+                    if (agelist.Contains(servicecarer[i].Age) && genderlist.Contains(servicecarer[i].Gender))
                         carer.Add(servicecarer[i]);
                 }
-            if (genderlist.IsNullOrEmpty() && !genderlist.IsNullOrEmpty())
+            if (agelist.IsNullOrEmpty() && !genderlist.IsNullOrEmpty())
                 for (int i = 0; i < servicecarer.Count; i++)
                 {
-                    if (agelist.Contains(servicecarer[i].Age))
+                    if (genderlist.Contains(servicecarer[i].Gender))
                         carer.Add(servicecarer[i]);
                 }
             if (!agelist.IsNullOrEmpty() && genderlist.IsNullOrEmpty())
@@ -105,9 +143,70 @@ namespace ElderCare_Repository.Repos
                         carer.Add(servicecarer[i]);
                 }
 
-            var combine = carer.Union(carershift).ToList();
-            var result = combine.Union(carercate).ToList();
-            return result;
+            var combine1 = carercate.Concat(carershift).ToList();
+            if (!combine1.IsNullOrEmpty())
+            {
+                var duplicate = new List<Carer>();
+                for (int j = 1; j < combine1.Count; j++)
+                {
+                   
+                    var duplicateExists = combine1.GroupBy(n => n.CarerId).Any(g => g.Count() == j);
+                    if (duplicateExists)
+                    {
+                      
+                        duplicate.Insert(0, combine1[j]);
+                        
+                    }
+                }
+                combine1= duplicate.Union(combine1).ToList();
+            
+            }
+            var combine2 = carercate.Concat(carer).ToList();
+            if (!combine2.IsNullOrEmpty())
+            {
+                var duplicate = new List<Carer>();
+                for (int j = 1; j < combine1.Count; j++)
+                {
+                    var duplicateExists = combine2.GroupBy(n => n.CarerId).Any(g => g.Count() == j);
+                    if (duplicateExists)
+                    {
+                        duplicate.Insert(0, combine2[j]);
+                    }
+                }
+                combine2= duplicate.Union(combine2).ToList();
+            }
+            var combine3 = carershift.Concat(carer).ToList();
+            if (!combine3.IsNullOrEmpty())
+            {
+                var duplicate = new List<Carer>();
+                for (int j = 1; j < combine3.Count; j++)
+                {
+                    var duplicateExists = combine3.GroupBy(n => n.CarerId).Any(g => g.Count() == j);
+                    if (duplicateExists)
+                    {
+
+                        duplicate.Insert(0, combine3[j]);
+                    }
+                }
+                combine3= duplicate.Union(combine3).ToList();
+            }
+            var result = combine1.Concat(combine2).Concat(combine3).ToList();
+            if (!result.IsNullOrEmpty()) {
+                var duplicate = new List<Carer>();
+                for (int j = 1; j < result.Count; j++)
+                {
+                    var duplicateExists = result.GroupBy(n => n.CarerId).Any(g => g.Count() == j);
+                    if (duplicateExists)
+                    {
+
+                        duplicate.Insert(0, result[j]);
+                    }
+                }
+                result = duplicate.Union(result).ToList();
+                return result;
+            }
+
+            return null; 
         }
         public new async Task<Carer> AddAsync(Carer entity)
         {
@@ -116,7 +215,7 @@ namespace ElderCare_Repository.Repos
                 //CheckIfNullException();
                 entity.CarerId = _dbSet.OrderBy(e => e.CarerId).Last().CarerId + 1;
                 entity.Status = (int)AccountStatus.Active;
-                if(entity.Bankinfo == null)
+                if (entity.Bankinfo == null)
                 {
                     throw new Exception("Missing Bank Info");
                 }
@@ -176,12 +275,12 @@ namespace ElderCare_Repository.Repos
 
         public async Task<CarersCustomer?> GetCarerCustomerFromIdAsync(int? carercusId)
         {
-            return await _context.CarersCustomers.FirstOrDefaultAsync(x=>x.CarercusId == carercusId);
+            return await _context.CarersCustomers.FirstOrDefaultAsync(x => x.CarercusId == carercusId);
         }
 
         public async Task<CarersCustomer?> GetLastest()
         {
-            return await _context.CarersCustomers.OrderByDescending(x=>x.CarercusId).FirstOrDefaultAsync();
+            return await _context.CarersCustomers.OrderByDescending(x => x.CarercusId).FirstOrDefaultAsync();
         }
 
         public async Task<CarersCustomer> AddCarerCusAsync(CarersCustomer entity)
@@ -203,7 +302,7 @@ namespace ElderCare_Repository.Repos
 
         public async Task<CarersCustomer?> FindAsync(int carerid, int cusid)
         {
-           return await _context.CarersCustomers.FirstOrDefaultAsync(x => x.CarerId == carerid && x.CustomerId == cusid);
+            return await _context.CarersCustomers.FirstOrDefaultAsync(x => x.CarerId == carerid && x.CustomerId == cusid);
         }
     }
 }

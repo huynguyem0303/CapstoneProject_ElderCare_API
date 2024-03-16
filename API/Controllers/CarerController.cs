@@ -37,8 +37,11 @@ namespace API.Controllers
         {
             //var carer = await _unitOfWork.CarerRepository.SearchCarer(dto);
             var carer = await _carerService.SearchCarer(dto);
-
-            return Ok(carer);
+            if (!carer.IsNullOrEmpty())
+            {
+                return Ok(carer);
+            }
+            return NotFound();
         }
         [HttpGet("{id}")]
         [EnableQuery]
