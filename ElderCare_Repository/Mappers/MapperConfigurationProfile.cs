@@ -21,6 +21,7 @@ namespace ElderCare_Repository.Mappers
             CreateMap<UpdateElderDto, Elderly>();
             CreateMap<LivingConditionDto, LivingCondition>().ReverseMap();
             CreateMap<HobbyDto, Hobby>().ReverseMap();
+            CreateMap<Carer, CarerViewDto>().ReverseMap();
             CreateMap<AddElderDto.AddHobbyDto, Hobby>().ReverseMap();
             CreateMap<AddElderHobbyDto, Hobby>().ReverseMap();
             CreateMap<Elderly, ElderViewDto>().ReverseMap();
@@ -34,7 +35,7 @@ namespace ElderCare_Repository.Mappers
             CreateMap<HealthDetailDto.AddPsychomotorHealthDto, PsychomotorHealth>().ReverseMap();
             CreateMap<HealthDetailDto, PsychomotorHealth>().ReverseMap();
             CreateMap<PsychomotorHealthDto, PsychomotorHealth>().ReverseMap();
-
+         
             CreateMap<Transaction, TrasactionDto>().ReverseMap().ForMember(des => des.Type,
                 opt => opt.MapFrom(src => EnumMapper<TransactionType>.MapType(src.Type)));
             CreateMap<Transaction, CarerTransactionDto>().ReverseMap();

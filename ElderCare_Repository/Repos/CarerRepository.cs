@@ -214,7 +214,7 @@ namespace ElderCare_Repository.Repos
             {
                 //CheckIfNullException();
                 entity.CarerId = _dbSet.OrderBy(e => e.CarerId).Last().CarerId + 1;
-                entity.Status = (int)AccountStatus.Active;
+                entity.Status = (int)CarerStatus.Pending;
                 if (entity.Bankinfo == null)
                 {
                     throw new Exception("Missing Bank Info");
@@ -303,6 +303,11 @@ namespace ElderCare_Repository.Repos
         public async Task<CarersCustomer?> FindAsync(int carerid, int cusid)
         {
             return await _context.CarersCustomers.FirstOrDefaultAsync(x => x.CarerId == carerid && x.CustomerId == cusid);
+        }
+
+        public async Task<List<Carer>> GetPendingCarerAsync()
+        {
+            return await _context.Carers.Where(x => x.Status == 0).ToListAsync();
         }
     }
 }

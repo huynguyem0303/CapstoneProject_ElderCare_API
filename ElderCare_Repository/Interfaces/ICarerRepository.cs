@@ -16,7 +16,8 @@ namespace ElderCare_Repository.Interfaces
         new Task<Carer> AddAsync(Carer entity);
         new Task<CarersCustomer> AddCarerCusAsync(CarersCustomer entity);
         Task<CarersCustomer?> FindAsync(int carerid, int cusid);
-       Task<List<Transaction>> GetCarerTransaction(int carerId);
+        Task<List<Carer>> GetPendingCarerAsync();
+        Task<List<Transaction>> GetCarerTransaction(int carerId);
         Task<List<Transaction>> GetCustomerTransaction(int customerId);
         Task<CarersCustomer?> GetCarerCustomerFromIdAsync(int? carercusId);
 

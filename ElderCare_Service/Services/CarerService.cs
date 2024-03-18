@@ -63,6 +63,13 @@ namespace ElderCare_Service.Services
             return await _unitOfWork.CarerRepository.GetByIdAsync(id);
         }
 
+        public async Task<List<CarerViewDto>> GetByPending()
+        {
+            var carer= await _unitOfWork.CarerRepository.GetPendingCarerAsync();
+            var carerview = _mapper.Map<List<CarerViewDto>>(carer);
+            return carerview;
+        }
+
         public async Task<List<CarerTransactionDto>> GetCarerTransactionHistoryAsyncByCarerId(int carerId)
         {
             var transactionList = await _unitOfWork.CarerRepository.GetCarerTransaction(carerId);
