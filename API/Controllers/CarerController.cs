@@ -51,6 +51,17 @@ namespace API.Controllers
             var carer = await _carerService.FindAsync(x => x.CarerId == id);
             return SingleResult.Create(carer.AsQueryable());
         }
+        [HttpGet("pending")]
+        [EnableQuery]
+        public async Task<IActionResult> GetPendingCarer()
+        {
+            var carer = await _carerService.GetByPending();
+            if (!carer.IsNullOrEmpty())
+            {
+                return Ok(carer);
+            }
+            return NotFound();
+        }
 
         [HttpPut("{id}")]
         [EnableQuery]
