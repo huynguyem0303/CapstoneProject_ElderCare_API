@@ -209,7 +209,7 @@ namespace ElderCare_Service.Services
                                 if (trans.Type == 1 && trans.Status.Equals("APPROVE"))
                                 {
                                     var contract = _unitOfWork.ContractRepository.FindAsync(x => x.ContractId == trans.ContractId).Result.FirstOrDefault() ?? throw new Exception("contract not found");
-                                    contract.Status = (int)ContractStatus.Processing;
+                                    contract.Status = (int)ContractStatus.Active;
                                     _unitOfWork.ContractRepository.Update(contract);
                                     await _unitOfWork.SaveChangeAsync();
                                 }

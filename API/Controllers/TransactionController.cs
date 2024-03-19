@@ -50,7 +50,7 @@ namespace API.Controllers
         [HttpPost]
         [EnableQuery]
         [Authorize]
-        public async Task<IActionResult> CreateTransaction([FromBody] TrasactionDto dto,int carerid,int customerid)
+        public async Task<IActionResult> CreateTransaction([FromBody] TrasactionDto dto,int carerid,int customerid,int contractid)
         {
             
             var idClaim = _unitOfWork.AccountRepository.GetMemberIdFromToken(HttpContext.User);
@@ -97,7 +97,7 @@ namespace API.Controllers
 
 
                 //string paymentUrl = vnpay.CreateRequestUrl(vnp_Url, vnp_HashSecret);
-                string paymentUrl = await _transactionService.CreateTransaction(dto, (int)userid.AccountId,carerid, customerid);
+                string paymentUrl = await _transactionService.CreateTransaction(dto, (int)userid.AccountId,carerid, customerid,contractid);
                 url= paymentUrl;
                 return Ok(new ApiResponse
                 {

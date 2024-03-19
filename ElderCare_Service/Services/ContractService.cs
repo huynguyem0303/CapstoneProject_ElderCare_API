@@ -57,11 +57,7 @@ namespace ElderCare_Service.Services
         {
             return await _unitOfWork.ContractRepository.FindAsync(expression, includes);
         }
-        public async Task UpdateContract(Contract contract)
-        {
-            _unitOfWork.ContractRepository.Update(contract);
-            await _unitOfWork.SaveChangeAsync();
-        }
+
 
         public async Task<Contract?> ApproveContract(int contractid, int status)
         {
