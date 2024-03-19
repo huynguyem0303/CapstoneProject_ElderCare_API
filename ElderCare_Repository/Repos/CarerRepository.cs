@@ -10,6 +10,7 @@ using MimeKit;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -213,6 +214,10 @@ namespace ElderCare_Repository.Repos
             try
             {
                 //CheckIfNullException();
+                if(await _dbSet.AnyAsync(e => e.Email == entity.Email!.Trim()) || await _context.Accounts.AnyAsync(e => e.Email == entity.Email!.Trim()))
+                {
+                    throw new DuplicateNameException("This email has already been registered");
+                }
                 entity.CarerId = _dbSet.OrderBy(e => e.CarerId).Last().CarerId + 1;
                 entity.Status = (int)CarerStatus.Pending;
                 if (entity.Bankinfo == null)

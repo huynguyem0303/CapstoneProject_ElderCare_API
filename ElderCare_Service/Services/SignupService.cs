@@ -18,19 +18,20 @@ namespace ElderCare_Service.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Account> SignInCarer(CarerSignInDto carerDto)
+        public async Task<Carer> SignInCarer(CarerSignInDto carerDto)
         {
             var carer = _mapper.Map<Carer>(carerDto);
-            var account = _mapper.Map<Account>(carerDto);
-            carer = await _unitOfWork.CarerRepository.AddAsync(carer);
-            account.CarerId = carer.CarerId;
-            account.RoleId = (int)AccountRole.Carer;
-            account.Status = (int)CarerStatus.Pending;
-            string randomString = Guid.NewGuid().ToString("N").Substring(0, 10);
-            account.Password = randomString;
-            await _unitOfWork.AccountRepository.AddAsync(account);
+            //var account = _mapper.Map<Account>(carerDto);
+            carer.Status = (int)CarerStatus.Pending;
+            await _unitOfWork.CarerRepository.AddAsync(carer);
+            //account.CarerId = carer.CarerId;
+            //account.RoleId = (int)AccountRole.Carer;
+            //account.Status = (int)CarerStatus.Pending;
+            //string randomString = Guid.NewGuid().ToString("N").Substring(0, 10);
+            //account.Password = randomString;
+            //await _unitOfWork.AccountRepository.AddAsync(account);
             await _unitOfWork.SaveChangeAsync();
-            return account;
+            return carer;
         }
 
         public async Task<Account> SignInCustomer(CustomerSignInDto customerDto)
