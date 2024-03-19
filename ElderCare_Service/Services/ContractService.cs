@@ -67,5 +67,10 @@ namespace ElderCare_Service.Services
             await _unitOfWork.SaveChangeAsync();
             return contract;
         }
+
+        public async Task<bool> ContractExists(int id)
+        {
+            return await _unitOfWork.ContractRepository.GetByIdAsync(id) != null;
+        }
     }
 }

@@ -23,7 +23,7 @@ namespace API.Controllers
             _contractService = contractService;
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{carerid}")]
         [EnableQuery]
         public async Task<SingleResult> GetContractByCarerId([FromRoute] int carerid)
         {
@@ -47,6 +47,33 @@ namespace API.Controllers
             }
 
             return CreatedAtAction("GetContractByCarerId",  contract.CarerId , contract);
+        }    /// <summary>
+             /// This method approved or denied customer's contract
+             /// </summary>
+             /// <param name="id">Contract id</param>
+             /// <param name="status">Contract status:
+             ///         0 - pending;
+             ///         1 - Signed (send noti to customer and then create new transaction);
+             ///         2 - Rejected(can be done by carer or customer when they dont want to make transaction)
+             ///         3 - Active 
+             ///         4 - Expired </param>
+             /// <returns></returns>
+        [HttpPut("{id}/Contract")]
+        [EnableQuery]
+        public async Task<IActionResult> ApproveCarer(int id, ContractStatus status)
+        {
+            if (!await _contractService.ContractExists(id))
+            {
+                return NotFound();
+            }
+
+            var contract = await _contractService.ApproveContract(id, (int)status);
+
+            if (contract != null)
+            {
+                return Ok(contract);
+            }
+            return NoContent();
         }
     }
 }

@@ -16,5 +16,6 @@ namespace ElderCare_Service.Interfaces
         Task<IEnumerable<Contract>> FindAsync(Expression<Func<Contract, bool>> expression, params Expression<Func<Contract, object>>[] includes);
         Task<List<Contract>> GetByCarerId(int id);
         Task<Contract?> ApproveContract(int contractid, int status);
+        Task<bool> ContractExists(int id);
     }
 }
