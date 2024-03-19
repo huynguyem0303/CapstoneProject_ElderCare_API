@@ -8,10 +8,10 @@ namespace ElderCare_Domain.Enums
 {
     public enum ContractStatus
     {
-        Pending=0,
-        Waiting=1,
-        Processing=2,
-        Completed=3,
-        Failed=4
+        Pending = 0,
+        Signed = 1,
+        Rejected = 2,
+        Active = 3,
+        Expired = 5,
     }
 }
