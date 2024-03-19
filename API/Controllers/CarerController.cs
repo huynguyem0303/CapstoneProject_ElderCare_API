@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.OData.Results;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using ElderCare_Service.Interfaces;
+using ElderCare_Domain.Enums;
 
 namespace API.Controllers
 {
@@ -90,6 +91,29 @@ namespace API.Controllers
                     throw;
                 }
             }
+
+            return NoContent();
+        }
+
+        /// <summary>
+        /// This method update status in the account table status with the carer id
+        /// </summary>
+        /// <param name="id">carer id</param>
+        /// <param name="status">carer account status:
+        ///         0 - pending;
+        ///         1 - approved;
+        ///         2 - declined</param>
+        /// <returns></returns>
+        [HttpPut("{id}/AccountStatus")]
+        [EnableQuery]
+        public async Task<IActionResult> ChangeCarerAccountStatus(int id, CarerStatus status)
+        {
+            if(!await _carerService.CarerExists(id))
+            {
+                return NotFound();
+            }
+
+            await _carerService.ChangeCarerAccountStatus(id, (int)status);
 
             return NoContent();
         }
