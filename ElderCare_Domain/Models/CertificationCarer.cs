@@ -5,6 +5,8 @@ namespace ElderCare_Domain.Models;
 
 public partial class CertificationCarer
 {
+    public Guid CarerCertId { get; set; }
+
     public int? CertId { get; set; }
 
     public int? CarerId { get; set; }

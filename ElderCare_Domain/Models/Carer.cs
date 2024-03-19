@@ -21,7 +21,7 @@ public partial class Carer
 
     public string? Image { get; set; }
 
-    public int? CertificateId { get; set; }
+    //public int? CertificateId { get; set; }
 
     public int? BankinfoId { get; set; }
 
@@ -34,4 +34,6 @@ public partial class Carer
     public virtual ICollection<Contract> Contracts { get; set; } = new List<Contract>();
 
     public virtual ICollection<Report> Reports { get; set; } = new List<Report>();
+
+    public virtual ICollection<CertificationCarer> Certifications { get; set; }
 }

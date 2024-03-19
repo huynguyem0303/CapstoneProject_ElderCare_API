@@ -11,46 +11,56 @@ namespace ElderCare_Repository.DTO
 {
     public class CarerSignInDto
     {
-        [JsonProperty("name")]
+        //[JsonProperty("name")]
         public string Name {  get; set; }
 
-        [JsonProperty("email")]
+        //[JsonProperty("email")]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
-        [JsonProperty("phone_number")]
+        //[JsonProperty("phone_number")]
         [DataType(DataType.PhoneNumber)]
         public string PhoneNumber { get; set; }
 
-        [JsonProperty("gender")]
+        //[JsonProperty("gender")]
         public string Gender { get; set; }
 
-        [JsonProperty("age")]
+        //[JsonProperty("age")]
         [Range(20, 50)]
         public string Age { get; set; }
 
-        [JsonProperty("image_url")]
+        //[JsonProperty("image_url")]
         public string? Image { get; set; }
 
-        [JsonProperty("address")]
+        //[JsonProperty("address")]
         public string? Address { get; set; }
         public class BankInfomation
         {
-            [JsonProperty("account_number")]
+            //[JsonProperty("account_number")]
             [DataType(DataType.CreditCard)]
             public string AccountNumber { get; set; }
 
-            [JsonProperty("bank_name")]
+            //[JsonProperty("bank_name")]
             public string BankName { get; set; }
 
-            [JsonProperty("branch")]
+            //[JsonProperty("branch")]
             public string Branch { get; set; }
 
-            [JsonProperty("account_name")]
+            //[JsonProperty("account_name")]
             public string AccountName { get; set; }
         }
         
-        [JsonProperty("bank_info")]
+        //[JsonProperty("bank_info")]
         public BankInfomation BankInfo { get; set; }
+
+        public class CarerCertification
+        {
+            public int? CertId { get; set; }
+
+            public string? Qualificationurl { get; set; }
+        }
+
+        //[JsonProperty("certifications")]
+        public List<CarerCertification> Certifications { get; set; }
     }
 }
