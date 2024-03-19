@@ -170,7 +170,7 @@ public partial class ElderCareContext : DbContext
                 .HasMaxLength(50)
                 .HasColumnName("age");
             entity.Property(e => e.BankinfoId).HasColumnName("bankinfo_id");
-            entity.Property(e => e.CertificateId).HasColumnName("certificate_id");
+            //entity.Property(e => e.CertificateId).HasColumnName("certificate_id");
             entity.Property(e => e.Email)
                 .HasMaxLength(100)
                 .HasColumnName("email");
@@ -314,9 +314,15 @@ public partial class ElderCareContext : DbContext
 
         modelBuilder.Entity<CertificationCarer>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("CertificationCarer");
+            entity.ToTable("CertificationCarer");
+
+            entity.HasKey(e => e.CarerCertId);
+
+            entity.Property(e =>e.CarerCertId)
+                .ValueGeneratedOnAdd()
+                .HasColumnType("uniqueidentifier")
+                .HasValueGenerator<GuidValueGenerator>()
+                .HasColumnName("carer_cert_id");
 
             entity.Property(e => e.CarerId).HasColumnName("carer_id");
             entity.Property(e => e.CertId).HasColumnName("cert_id");
@@ -324,7 +330,7 @@ public partial class ElderCareContext : DbContext
                 .HasMaxLength(300)
                 .HasColumnName("qualificationurl");
 
-            entity.HasOne(d => d.Carer).WithMany()
+            entity.HasOne(d => d.Carer).WithMany(p => p.Certifications)
                 .HasForeignKey(d => d.CarerId)
                 .HasConstraintName("FK_CertificationCarer_Carer");
 

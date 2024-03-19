@@ -9,10 +9,10 @@ namespace ElderCare_Repository.DTO
 {
     public class CarerTransactionDto
     {
-        [JsonProperty("transaction_id")]
+        //[JsonProperty("transaction_id")]
         public int TransactionId { get; set; }
 
-        [JsonProperty("figure_money")]
+        //[JsonProperty("figure_money")]
         public double? FigureMoney { get; set; }
 
         [JsonProperty("type")]
@@ -24,13 +24,13 @@ namespace ElderCare_Repository.DTO
         [JsonProperty("datetime")]
         public DateTime? Datetime { get; set; }
 
-        [JsonProperty("contract_id")]
+        //[JsonProperty("contract_id")]
         public int? ContractId { get; set; }
 
-        [JsonProperty("carer_id")]
+        //[JsonProperty("carer_id")]
         public int? CarerId { get; set; }
 
-        [JsonProperty("customer_id")]
+        //[JsonProperty("customer_id")]
         public int? CustomerId { get; set; }
 
         [JsonProperty("status")]

@@ -241,7 +241,7 @@ namespace ElderCare_Repository.Repos
             _ = _dbSet.Select(e => e.Age).ToList();
             _ = _dbSet.Select(e => e.Status).ToList();
             _ = _dbSet.Select(e => e.Image).ToList();
-            _ = _dbSet.Select(e => e.CertificateId).ToList();
+            //_ = _dbSet.Select(e => e.CertificateId).ToList();
             _ = _dbSet.Select(e => e.BankinfoId).ToList();
             //_ = _dbSet.Select(e => e.TransactionId).ToList();
             _ = _dbSet.Select(e => e.Bankinfo).ToList();
