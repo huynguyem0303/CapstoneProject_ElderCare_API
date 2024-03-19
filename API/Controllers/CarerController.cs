@@ -96,25 +96,29 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// This method update status in the account table status with the carer id
+        /// This method approved or denied carer's attempt to create account
         /// </summary>
         /// <param name="id">carer id</param>
         /// <param name="status">carer account status:
         ///         0 - pending;
-        ///         1 - approved;
+        ///         1 - approved (create a new account if not exist);
         ///         2 - declined</param>
         /// <returns></returns>
-        [HttpPut("{id}/AccountStatus")]
+        [HttpPut("{id}/Account")]
         [EnableQuery]
-        public async Task<IActionResult> ChangeCarerAccountStatus(int id, CarerStatus status)
+        public async Task<IActionResult> ApproveCarer(int id, CarerStatus status)
         {
             if(!await _carerService.CarerExists(id))
             {
                 return NotFound();
             }
 
-            await _carerService.ChangeCarerAccountStatus(id, (int)status);
+            var account = await _carerService.ApproveCarer(id, (int)status);
 
+            if (account != null && account.Status == (int)AccountStatus.Active)
+            {
+                return Ok(account);
+            }
             return NoContent();
         }
 

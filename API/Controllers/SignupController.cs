@@ -43,17 +43,17 @@ namespace API.Controllers
             //string randomString = guid.ToString("N").Substring(0, 10);
             //account.Password = randomString;
             //await _unitOfWork.AccountRepository.AddAsync(account);
-            Account account;
+            Carer carer;
             try
             {
                 //await _unitOfWork.SaveChangeAsync();
-                account = await _signinService.SignInCarer(carerDto);
+                carer = await _signinService.SignInCarer(carerDto);
             }
             catch (DbUpdateException e)
             {
                 return BadRequest(error: e.Message);
             }
-            return CreatedAtAction("GetAccount", controllerName: "Accounts", new { id = account.AccountId }, account);
+            return CreatedAtAction("GetCarerById", controllerName: "Carer", new { id = carer.CarerId }, carer);
         }
 
         [HttpPost("signinCustomer")]

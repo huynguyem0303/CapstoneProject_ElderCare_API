@@ -56,10 +56,14 @@ namespace ElderCare_Repository.Mappers
             CreateMap<CarerSignInDto, Account>()
                 .ForMember(d => d.Email, s => s.MapFrom(e => e.Email))
                 .ForMember(d => d.Username, s => s.MapFrom(e => e.Name))
-                .ForMember(d => d.Address, s => s.MapFrom(e => e.Address))
+                //.ForMember(d => d.Address, s => s.MapFrom(e => e.Address))
                 .ForMember(d => d.PhoneNumber, s => s.MapFrom(e => e.PhoneNumber));
             CreateMap<CarerSignInDto.CarerCertification, CertificationCarer>();
             CreateMap<CarerSignInDto, CertificationCarer>();
+            CreateMap<Carer, Account>()
+                .ForMember(d => d.Username, s => s.MapFrom(e => e.Name))
+                .ForMember(d => d.PhoneNumber, s => s.MapFrom(e => e.Phone))
+                .ForMember(d => d.CarerId, s => s.MapFrom(e => e.CarerId));
             //customer sign in
             CreateMap<CustomerSignInDto, Customer>()
                 .ForMember(d => d.CustomerName, s => s.MapFrom(e => e.Name))

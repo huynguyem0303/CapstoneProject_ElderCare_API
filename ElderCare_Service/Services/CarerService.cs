@@ -37,12 +37,23 @@ namespace ElderCare_Service.Services
             return await _unitOfWork.CarerRepository.GetByIdAsync(id) != null;
         }
 
-        public async Task ChangeCarerAccountStatus(int carerId, int status)
+        public async Task<Account?> ApproveCarer(int carerId, int status)
         {
-            var account = (await _unitOfWork.AccountRepository.FindAsync(e => e.CarerId == carerId)).First() ?? throw new Exception("account not found");
-            account.Status = status;
-            _unitOfWork.AccountRepository.Update(account);
+            var carer = await _unitOfWork.CarerRepository.GetByIdAsync(carerId) ?? throw new Exception("carer not found");
+            carer.Status = status;
+            var account = (await _unitOfWork.AccountRepository.FindAsync(e => e.CarerId == carerId)).FirstOrDefault();
+            if (status == (int)CarerStatus.Approved && account == null)
+            {
+                account = _mapper.Map<Account>(carer);
+                account.RoleId = (int)AccountRole.Carer;
+                account.Status = (int)AccountStatus.Active;
+                string randomString = Guid.NewGuid().ToString("N").Substring(0, 10);
+                account.Password = randomString;
+                await _unitOfWork.AccountRepository.AddAsync(account);
+            }
+            _unitOfWork.CarerRepository.Update(carer);
             await _unitOfWork.SaveChangeAsync();
+            return account;
         }
 
         public async Task DeleteCarer(int id)
