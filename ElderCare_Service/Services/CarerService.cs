@@ -37,6 +37,14 @@ namespace ElderCare_Service.Services
             return await _unitOfWork.CarerRepository.GetByIdAsync(id) != null;
         }
 
+        public async Task ChangeCarerAccountStatus(int carerId, int status)
+        {
+            var account = (await _unitOfWork.AccountRepository.FindAsync(e => e.CarerId == carerId)).First() ?? throw new Exception("account not found");
+            account.Status = status;
+            _unitOfWork.AccountRepository.Update(account);
+            await _unitOfWork.SaveChangeAsync();
+        }
+
         public async Task DeleteCarer(int id)
         {
             var carer = await _unitOfWork.CarerRepository.GetByIdAsync(id); 

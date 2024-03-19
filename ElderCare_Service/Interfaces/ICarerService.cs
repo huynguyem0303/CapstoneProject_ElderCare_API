@@ -23,5 +23,6 @@ namespace ElderCare_Service.Interfaces
        
         Task<List<CarerTransactionDto>> GetCarerTransactionHistoryAsyncByCarerId(int carerId);
         Task<List<CarerTransactionDto>> GetCarerTransactionHistoryAsyncByCustomerId(int customerId);
+        Task ChangeCarerAccountStatus(int carerId, int status);
     }
 }

@@ -25,7 +25,7 @@ namespace ElderCare_Service.Services
             carer = await _unitOfWork.CarerRepository.AddAsync(carer);
             account.CarerId = carer.CarerId;
             account.RoleId = (int)AccountRole.Carer;
-            account.Status = (int)CarerAccountStatus.InActive;
+            account.Status = (int)CarerStatus.Pending;
             string randomString = Guid.NewGuid().ToString("N").Substring(0, 10);
             account.Password = randomString;
             await _unitOfWork.AccountRepository.AddAsync(account);
