@@ -33,6 +33,7 @@ namespace ElderCare_Repository.Repos
             List<Carer> carershift = new List<Carer>();
             List<Carer> carercate = new List<Carer>();
             List<Carer> servicecarer = new List<Carer>();
+            List<Carer> duplicatecarer  = new List<Carer>();
             List<CarerService> services = await _context.Set<CarerService>().Include(e => e.Service).ToListAsync();
             List<CarerService> carerService = new List<CarerService>();
             List<CarerShilft> shift = await _context.Set<CarerShilft>().Include(e => e.Shilft).Include(e => e.Carer).ToListAsync();
@@ -134,25 +135,66 @@ namespace ElderCare_Repository.Repos
             }
 
 
-            if (!agelist.IsNullOrEmpty() && !genderlist.IsNullOrEmpty() /*&& !districtlist.IsNullOrEmpty()*/)
+            if (!agelist.IsNullOrEmpty() && !genderlist.IsNullOrEmpty() && !districtlist.IsNullOrEmpty())
+            {
                 for (int i = 0; i < servicecarer.Count; i++)
                 {
-                    if (agelist.Contains(servicecarer[i].Age) && genderlist.Contains(servicecarer[i].Gender))
+                    if (genderlist.Contains(servicecarer[i].Age) && districtlist.Contains(servicecarer[i].Address) && agelist.Contains(servicecarer[i].Gender))
                         carer.Add(servicecarer[i]);
                 }
-            if (agelist.IsNullOrEmpty() && !genderlist.IsNullOrEmpty())
+            }
+            if (!agelist.IsNullOrEmpty() && !genderlist.IsNullOrEmpty())
+            {
+                for (int i = 0; i < servicecarer.Count; i++)
+                {
+                    if (genderlist.Contains(servicecarer[i].Gender) && agelist.Contains(servicecarer[i].Age))
+                        carer.Add(servicecarer[i]);
+                }
+               
+            }
+            if (!genderlist.IsNullOrEmpty() && !districtlist.IsNullOrEmpty())
+            {
+                for (int i = 0; i < servicecarer.Count; i++)
+                {
+                    if (genderlist.Contains(servicecarer[i].Gender) && districtlist.Contains(servicecarer[i].Address))
+                        carer.Add(servicecarer[i]);
+                }
+            }
+            if (!agelist.IsNullOrEmpty() && !districtlist.IsNullOrEmpty())
+            {
+                for (int i = 0; i < servicecarer.Count; i++)
+                {
+                    if (districtlist.Contains(servicecarer[i].Address) && agelist.Contains(servicecarer[i].Age))
+                        carer.Add(servicecarer[i]);
+                }
+            }
+          
+           
+
+            if (!genderlist.IsNullOrEmpty()) {
                 for (int i = 0; i < servicecarer.Count; i++)
                 {
                     if (genderlist.Contains(servicecarer[i].Gender))
                         carer.Add(servicecarer[i]);
                 }
-            if (!agelist.IsNullOrEmpty() && genderlist.IsNullOrEmpty())
+
+            }
+            if (!districtlist.IsNullOrEmpty())
+            {
+                for (int i = 0; i < servicecarer.Count; i++)
+                {
+                    if (districtlist.Contains(servicecarer[i].Address))
+                        carer.Add(servicecarer[i]);
+                }
+            }
+            if (!agelist.IsNullOrEmpty())
+            {
                 for (int i = 0; i < servicecarer.Count; i++)
                 {
                     if (agelist.Contains(servicecarer[i].Age))
                         carer.Add(servicecarer[i]);
                 }
-
+            }
             var combine1 = carercate.Concat(carershift).ToList();
             if (!combine1.IsNullOrEmpty())
             {
