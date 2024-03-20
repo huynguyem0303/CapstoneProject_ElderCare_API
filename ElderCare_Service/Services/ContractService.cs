@@ -32,7 +32,7 @@ namespace ElderCare_Service.Services
             var entity = _mapper.Map<Contract>(dto);
             entity.ContractId = _unitOfWork.ContractRepository.GetAll().OrderByDescending(x => x.ContractId).FirstOrDefault().ContractId + 1;
             entity.Status = (int)ContractStatus.Pending;
-           
+            entity.CreatedDate = DateTime.Now;
             if (dto.Package.IsNullOrEmpty())
             {
                 _unitOfWork.ContractRepository.AddContractServiceAsync(dto.service, entity.ContractId);
@@ -40,9 +40,12 @@ namespace ElderCare_Service.Services
                 entity.PackageId = 0;
                 entity.ContractType = (int)ContractType.PackageContract;
             }
-            entity.PackageId = _unitOfWork.ContractRepository.GetPackageAsync(dto.Package).Result.PackageId;
-            entity.Packageprice = _unitOfWork.ContractRepository.GetPackagePrice().Result;
-            entity.ContractType = (int)ContractType.ServiceContract;
+            else
+            {
+                entity.PackageId = _unitOfWork.ContractRepository.GetPackageAsync(dto.Package).Result.PackageId;
+                entity.Packageprice = _unitOfWork.ContractRepository.GetPackagePrice().Result;
+                entity.ContractType = (int)ContractType.ServiceContract;
+            }
             _unitOfWork.ContractRepository.AddContractVersionAsync(dto.startDate,dto.endDate, entity.ContractId);
             await _unitOfWork.ContractRepository.AddAsync(entity);
             await _unitOfWork.SaveChangeAsync();

@@ -25,11 +25,15 @@ namespace API.Controllers
 
         [HttpGet("{carerid}",Name = "GetContractByCarerId")]
         [EnableQuery]
-        public async Task<SingleResult> GetContractByCarerId([FromRoute] int carerid)
+        public async Task<IActionResult> GetContractByCarerId([FromRoute] int carerid)
         {
             //var model = await _unitOfWork.ElderRepo.FindAsync(x => x.ElderlyId == elderId);
-            var elder = await _contractService.FindAsync(e => e.CarerId == carerid && e.Status==(int)ContractStatus.Pending); 
-            return SingleResult.Create(elder.AsQueryable());
+            var contract = await _contractService.FindAsync(e => e.CarerId == carerid && e.Status==(int)ContractStatus.Pending);
+            if (!contract.IsNullOrEmpty())
+            {
+                return Ok(contract);
+            }
+            return NotFound();
         }
         [HttpPost]
         [EnableQuery]
@@ -46,7 +50,7 @@ namespace API.Controllers
                 return BadRequest(e.Message);
             }
 
-            return CreatedAtAction("GetContractByCarerId",  contract.CarerId , contract);
+            return CreatedAtAction("GetContractByCarerId", new { id = contract.CarerId}, contract);
         }    /// <summary>
              /// This method approved or denied customer's contract
              /// </summary>

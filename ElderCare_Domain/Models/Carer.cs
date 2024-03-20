@@ -20,6 +20,7 @@ public partial class Carer
     public int? Status { get; set; }
 
     public string? Image { get; set; }
+    public string? Address { get; set; }
 
     //public int? CertificateId { get; set; }
 
