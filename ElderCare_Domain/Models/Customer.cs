@@ -19,7 +19,7 @@ public partial class Customer
 
     public int? BankinfoId { get; set; }
 
-    public virtual Bankinformation Bankinfo { get; set; }
+    public virtual Bankinformation? Bankinfo { get; set; }
 
     public virtual ICollection<CarersCustomer> CarersCustomers { get; set; } = new List<CarersCustomer>();
 

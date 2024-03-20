@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CorePush.Apple;
+using ElderCare_Domain.Enums;
 using ElderCare_Domain.Models;
 using ElderCare_Repository.DTO;
 using ElderCare_Service.Interfaces;
@@ -31,7 +32,7 @@ namespace ElderCare_Service.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<string> CreateTransaction(TrasactionDto dto, int accountId,int carerid,int cusid)
+        public async Task<string> CreateTransaction(TrasactionDto dto, int accountId,int carerid,int cusid,int contractid)
         {
             dto.DateTime = DateTime.Now;
             var id = _unitOfWork.TransactionRepo.GetAll().OrderByDescending(i => i.TransactionId).FirstOrDefault().TransactionId;
@@ -56,6 +57,10 @@ namespace ElderCare_Service.Services
             }
            
             obj.Status = "PENDING";
+            if (dto.Type.Equals(TransactionType.CusContract))
+            {
+                obj.ContractId = contractid;
+            }
             await _unitOfWork.TransactionRepo.AddAsync(obj);
             try
             {
@@ -177,9 +182,6 @@ namespace ElderCare_Service.Services
 
                 var trans = await _unitOfWork.TransactionRepo.GetTransaction(orderId);
 
-
-
-
                 if (checkSignature)
                 {
                     if (trans != null)
@@ -192,6 +194,12 @@ namespace ElderCare_Service.Services
                                 {
                                     // Thanh toán thành công
                                     trans.Status = "APPROVE";
+                                    if (trans.Type == 1)
+                                    {
+                                        var contract = _unitOfWork.ContractRepository.FindAsync(x => x.ContractId == trans.ContractId).Result.FirstOrDefault() ?? throw new Exception("contract not found");
+                                        contract.Status = (int)ContractStatus.Active;
+                                        _unitOfWork.ContractRepository.Update(contract);
+                                    }
                                     returnContent = "{\"RspCode\":\"00\",\"Message\":\"Confirm Success\"}";
 
                                 }
@@ -204,6 +212,7 @@ namespace ElderCare_Service.Services
 
                                 // Cập nhật thông tin đơn hàng vào CSDL
                                 await _unitOfWork.TransactionRepo.UpdateOrderInfoInDatabase(trans);
+                               
                             }
                             else
                             {

@@ -1,5 +1,6 @@
 ﻿using ElderCare_Domain.Models;
 using ElderCare_Repository.Interfaces;
+using ElderCare_Service.Interfaces;
 using Microsoft.AspNetCore.Http;
 
 namespace ElderCare_Service
@@ -8,6 +9,7 @@ namespace ElderCare_Service
     {
         private readonly ElderCareContext _context;
         private readonly IAccountRepository _accountRepository;
+        private readonly IContractRepository _contractRepository;
         private readonly ICustomerRepository _customerRepository;
         private readonly ICarerRepository _carerRepository;
         private readonly Interfaces.INotificationService _notificationService;
@@ -19,10 +21,11 @@ namespace ElderCare_Service
         private readonly IPsychomotorHealthRepo _psychomotorRepo;
         private readonly IHealthDetailRepo _healthDetailRepo;
 
-        public UnitOfWork(ElderCareContext context, IAccountRepository accountRepository, ICustomerRepository customerRepository, ICarerRepository carerRepository, Interfaces.INotificationService notificationService, ITransactionRepo transactionRepository, IHttpContextAccessor httpContextAccessor, IElderRepo elderRepo, Interfaces.IEmailService emailService, IHobbyRepo hobbyRepo, IPsychomotorHealthRepo psychomotorRepo, IHealthDetailRepo healthDetailRepo)
+        public UnitOfWork(ElderCareContext context, IAccountRepository accountRepository, IContractRepository contractRepository, ICustomerRepository customerRepository, ICarerRepository carerRepository, INotificationService notificationService, ITransactionRepo transactionRepository, IHttpContextAccessor httpContextAccessor, IElderRepo elderRepo, IEmailService emailService, IHobbyRepo hobbyRepo, IPsychomotorHealthRepo psychomotorRepo, IHealthDetailRepo healthDetailRepo)
         {
             _context = context;
             _accountRepository = accountRepository;
+            _contractRepository = contractRepository;
             _customerRepository = customerRepository;
             _carerRepository = carerRepository;
             _notificationService = notificationService;
@@ -52,6 +55,7 @@ namespace ElderCare_Service
         public IPsychomotorHealthRepo PsychomotorHealthRepo => _psychomotorRepo;
 
         public IHealthDetailRepo HealthDetailRepo => _healthDetailRepo;
+        public IContractRepository ContractRepository => _contractRepository;
 
         public async Task<int> SaveChangeAsync()
         {

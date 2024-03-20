@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.OData.Routing.Controllers;
 using Microsoft.EntityFrameworkCore;
 using ElderCare_Service.Interfaces;
 using ElderCare_Service.Services;
-
+using Microsoft.IdentityModel.Tokens;
 
 namespace API.Controllers
 {
@@ -50,7 +50,7 @@ namespace API.Controllers
         [HttpPost]
         [EnableQuery]
         [Authorize]
-        public async Task<IActionResult> CreateTransaction([FromBody] TrasactionDto dto,int carerid,int customerid)
+        public async Task<IActionResult> CreateTransaction([FromBody] TrasactionDto dto,int carerid,int customerid,int contractid)
         {
             
             var idClaim = _unitOfWork.AccountRepository.GetMemberIdFromToken(HttpContext.User);
@@ -97,7 +97,7 @@ namespace API.Controllers
 
 
                 //string paymentUrl = vnpay.CreateRequestUrl(vnp_Url, vnp_HashSecret);
-                string paymentUrl = await _transactionService.CreateTransaction(dto, (int)userid.AccountId,carerid, customerid);
+                string paymentUrl = await _transactionService.CreateTransaction(dto, (int)userid.AccountId,carerid, customerid,contractid);
                 url= paymentUrl;
                 return Ok(new ApiResponse
                 {
@@ -282,6 +282,10 @@ namespace API.Controllers
                 //    }
                 //}
                 var carerTransactions = await _carerService.GetCarerTransactionHistoryAsyncByCarerId(carerId);
+                if (carerTransactions.IsNullOrEmpty())
+                {
+                    return NotFound();
+                }
                 return Ok(carerTransactions);
             }
             catch (Exception ex)
@@ -306,6 +310,10 @@ namespace API.Controllers
                 //    }
                 //}
                 var carerTransactions = await _carerService.GetCarerTransactionHistoryAsyncByCustomerId(customerId);
+                if (carerTransactions.IsNullOrEmpty())
+                {
+                    return NotFound();
+                }
                 return Ok(carerTransactions);
             }
             catch (Exception ex)
