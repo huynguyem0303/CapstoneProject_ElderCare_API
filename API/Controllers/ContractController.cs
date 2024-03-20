@@ -28,10 +28,10 @@ namespace API.Controllers
         public async Task<IActionResult> GetContractByCarerId([FromRoute] int carerid)
         {
             //var model = await _unitOfWork.ElderRepo.FindAsync(x => x.ElderlyId == elderId);
-            var elder = await _contractService.FindAsync(e => e.CarerId == carerid && e.Status==(int)ContractStatus.Pending);
-            if (!elder.IsNullOrEmpty())
+            var contract = await _contractService.FindAsync(e => e.CarerId == carerid && e.Status==(int)ContractStatus.Pending);
+            if (!contract.IsNullOrEmpty())
             {
-                return Ok(elder);
+                return Ok(contract);
             }
             return NotFound();
         }
