@@ -127,9 +127,11 @@ namespace ElderCare_Service.Services
             return carerTransactions;
         }
 
-        public async Task<List<Carer>?> SearchCarer(SearchCarerDto dto)
+        public async Task<List<CarerViewDto>?> SearchCarer(SearchCarerDto dto)
         {
-            return await _unitOfWork.CarerRepository.searchCarer(dto);
+            var carer = await _unitOfWork.CarerRepository.searchCarer(dto);
+            var entity = _mapper.Map<List<CarerViewDto>>(carer);
+            return entity;
         }
 
         public async Task UpdateCarer(Carer carer)
