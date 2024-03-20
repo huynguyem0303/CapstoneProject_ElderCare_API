@@ -194,6 +194,12 @@ namespace ElderCare_Service.Services
                                 {
                                     // Thanh toán thành công
                                     trans.Status = "APPROVE";
+                                    if (trans.Type == 1)
+                                    {
+                                        var contract = _unitOfWork.ContractRepository.FindAsync(x => x.ContractId == trans.ContractId).Result.FirstOrDefault() ?? throw new Exception("contract not found");
+                                        contract.Status = (int)ContractStatus.Active;
+                                        _unitOfWork.ContractRepository.Update(contract);
+                                    }
                                     returnContent = "{\"RspCode\":\"00\",\"Message\":\"Confirm Success\"}";
 
                                 }
@@ -206,13 +212,7 @@ namespace ElderCare_Service.Services
 
                                 // Cập nhật thông tin đơn hàng vào CSDL
                                 await _unitOfWork.TransactionRepo.UpdateOrderInfoInDatabase(trans);
-                                if (trans.Type == 1 && trans.Status.Equals("APPROVE"))
-                                {
-                                    var contract = _unitOfWork.ContractRepository.FindAsync(x => x.ContractId == trans.ContractId).Result.FirstOrDefault() ?? throw new Exception("contract not found");
-                                    contract.Status = (int)ContractStatus.Active;
-                                    _unitOfWork.ContractRepository.Update(contract);
-                                    await _unitOfWork.SaveChangeAsync();
-                                }
+                               
                             }
                             else
                             {

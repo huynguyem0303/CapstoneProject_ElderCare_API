@@ -12,7 +12,7 @@ namespace ElderCare_Service.Interfaces
     public interface IContractService
     {
         
-        Task<Contract> AddContract(int cusid, int carerid, int elderlyid,DateTime startDate,DateTime endDate, string package, string[] service);
+        Task<Contract> AddContract(AddContractDto dto);
         Task<IEnumerable<Contract>> FindAsync(Expression<Func<Contract, bool>> expression, params Expression<Func<Contract, object>>[] includes);
         Task<List<Contract>> GetByCarerId(int id);
         Task<Contract?> ApproveContract(int contractid, int status);

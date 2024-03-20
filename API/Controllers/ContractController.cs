@@ -23,7 +23,7 @@ namespace API.Controllers
             _contractService = contractService;
         }
 
-        [HttpGet("{carerid}")]
+        [HttpGet("{carerid}",Name = "GetContractByCarerId")]
         [EnableQuery]
         public async Task<SingleResult> GetContractByCarerId([FromRoute] int carerid)
         {
@@ -33,13 +33,13 @@ namespace API.Controllers
         }
         [HttpPost]
         [EnableQuery]
-        public async Task<ActionResult<Contract>> PostContract(int cusid, int carerid, int elderlyid, DateTime startDate, DateTime endDate, string package, string[] service)
+        public async Task<ActionResult<Contract>> PostContract(AddContractDto dto)
         {
             Contract contract;
             try
             {
                 //await _unitOfWork.SaveChangeAsync();
-                contract = await _contractService.AddContract(cusid, carerid, elderlyid, startDate, endDate, package, service);
+                contract = await _contractService.AddContract(dto);
             }
             catch (DbUpdateException e)
             {

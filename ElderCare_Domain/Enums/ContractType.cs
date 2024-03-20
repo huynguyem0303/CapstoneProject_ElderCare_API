@@ -2,7 +2,7 @@
 {
     public enum ContractType
     {
-        ServiceContract = 1,
-        PackageContract = 2,
+        ServiceContract = 0,
+        PackageContract = 1,
     }
 }

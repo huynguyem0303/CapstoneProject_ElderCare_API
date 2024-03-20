@@ -3,6 +3,7 @@ using ElderCare_Domain.Enums;
 using ElderCare_Domain.Models;
 using ElderCare_Repository.DTO;
 using ElderCare_Service.Interfaces;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -92,6 +93,10 @@ namespace ElderCare_Service.Services
         public async Task<List<CarerTransactionDto>> GetCarerTransactionHistoryAsyncByCarerId(int carerId)
         {
             var transactionList = await _unitOfWork.CarerRepository.GetCarerTransaction(carerId);
+            if (transactionList.IsNullOrEmpty())
+            {
+                return null;
+            }
             var carerTransactions = _mapper.Map<List<CarerTransactionDto>>(transactionList);
             foreach (var transaction in carerTransactions)
             {
@@ -106,6 +111,10 @@ namespace ElderCare_Service.Services
         public async Task<List<CarerTransactionDto>> GetCarerTransactionHistoryAsyncByCustomerId(int customerId)
         {
             var transactionList = await _unitOfWork.CarerRepository.GetCustomerTransaction(customerId);
+            if (transactionList.IsNullOrEmpty())
+            {
+                return null;
+            }
             var carerTransactions = _mapper.Map<List<CarerTransactionDto>>(transactionList);
             foreach (var transaction in carerTransactions)
             {

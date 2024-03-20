@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ElderCare_Domain.Enums;
 using ElderCare_Domain.Models;
+using ElderCare_Repository.DTO;
 using ElderCare_Repository.Interfaces;
 using ElderCare_Service.Interfaces;
 using Microsoft.IdentityModel.Tokens;
@@ -26,24 +27,23 @@ namespace ElderCare_Service.Services
             _mapper = mapper;
         }
 
-        public async Task<Contract> AddContract(int cusid, int carerid, int elderlyid, DateTime startDate, DateTime endDate, string package, string[] service)
+        public async Task<Contract> AddContract(AddContractDto dto)
         {
-            var entity = new Contract();
+            var entity = _mapper.Map<Contract>(dto);
             entity.ContractId = _unitOfWork.ContractRepository.GetAll().OrderByDescending(x => x.ContractId).FirstOrDefault().ContractId + 1;
-            entity.CustomerId = cusid;
-            entity.CarerId = carerid;
-            entity.ElderlyId = elderlyid;
             entity.Status = (int)ContractStatus.Pending;
-            entity.ContractType = 0;
-            if (package.IsNullOrEmpty())
+           
+            if (dto.Package.IsNullOrEmpty())
             {
-                _unitOfWork.ContractRepository.AddContractServiceAsync(service, entity.ContractId);
+                _unitOfWork.ContractRepository.AddContractServiceAsync(dto.service, entity.ContractId);
                 entity.Packageprice = _unitOfWork.ContractRepository.GetPackagePrice().Result;
                 entity.PackageId = 0;
+                entity.ContractType = (int)ContractType.PackageContract;
             }
-            entity.PackageId = _unitOfWork.ContractRepository.GetPackageAsync(package).Result.PackageId;
+            entity.PackageId = _unitOfWork.ContractRepository.GetPackageAsync(dto.Package).Result.PackageId;
             entity.Packageprice = _unitOfWork.ContractRepository.GetPackagePrice().Result;
-            _unitOfWork.ContractRepository.AddContractVersionAsync(startDate, endDate, entity.ContractId);
+            entity.ContractType = (int)ContractType.ServiceContract;
+            _unitOfWork.ContractRepository.AddContractVersionAsync(dto.startDate,dto.endDate, entity.ContractId);
             await _unitOfWork.ContractRepository.AddAsync(entity);
             await _unitOfWork.SaveChangeAsync();
             return entity;

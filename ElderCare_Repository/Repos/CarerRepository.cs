@@ -47,6 +47,10 @@ namespace ElderCare_Repository.Repos
             string timelist = String.Join(separator, dto.TimeShift);
             string agelist = String.Join(separator, dto.Age);
             string catelist = String.Join(separator, dto.Cate);
+            if(service.IsNullOrEmpty() && genderlist.IsNullOrEmpty() && timelist.IsNullOrEmpty() && agelist.IsNullOrEmpty() && catelist.IsNullOrEmpty())
+            {
+                return list;
+            }
             if (!service.IsNullOrEmpty())
             {
                 for (int i = 0; i < services.Count; i++)

@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.OData.Routing.Controllers;
 using Microsoft.EntityFrameworkCore;
 using ElderCare_Service.Interfaces;
 using ElderCare_Service.Services;
-
+using Microsoft.IdentityModel.Tokens;
 
 namespace API.Controllers
 {
@@ -282,6 +282,10 @@ namespace API.Controllers
                 //    }
                 //}
                 var carerTransactions = await _carerService.GetCarerTransactionHistoryAsyncByCarerId(carerId);
+                if (carerTransactions.IsNullOrEmpty())
+                {
+                    return NotFound();
+                }
                 return Ok(carerTransactions);
             }
             catch (Exception ex)
@@ -306,6 +310,10 @@ namespace API.Controllers
                 //    }
                 //}
                 var carerTransactions = await _carerService.GetCarerTransactionHistoryAsyncByCustomerId(customerId);
+                if (carerTransactions.IsNullOrEmpty())
+                {
+                    return NotFound();
+                }
                 return Ok(carerTransactions);
             }
             catch (Exception ex)
