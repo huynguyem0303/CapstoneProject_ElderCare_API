@@ -47,7 +47,8 @@ namespace ElderCare_Repository.Repos
             string timelist = String.Join(separator, dto.TimeShift);
             string agelist = String.Join(separator, dto.Age);
             string catelist = String.Join(separator, dto.Cate);
-            if(genderlist.IsNullOrEmpty() && timelist.IsNullOrEmpty() && agelist.IsNullOrEmpty() && catelist.IsNullOrEmpty())
+            string districtlist = String.Join(separator, dto.District);
+            if (service.IsNullOrEmpty() && genderlist.IsNullOrEmpty() && timelist.IsNullOrEmpty() && agelist.IsNullOrEmpty() && catelist.IsNullOrEmpty())
             {
                 return list;
             }
@@ -67,6 +68,10 @@ namespace ElderCare_Repository.Repos
                         servicecarer.AddRange(checkcarer);
                     }
                 }
+            }
+            if (genderlist.IsNullOrEmpty() && timelist.IsNullOrEmpty() && agelist.IsNullOrEmpty() && catelist.IsNullOrEmpty())
+            {
+                return servicecarer;
             }
             if (!timelist.IsNullOrEmpty())
             {
@@ -113,7 +118,7 @@ namespace ElderCare_Repository.Repos
                             {
                                 duplicatescarercate.Add(cate[i]);
                             }
-                            duplicatescarercate.Insert(0,cate[i]);
+                            duplicatescarercate.Insert(0, cate[i]);
                         }
                     }
                 }
@@ -129,7 +134,7 @@ namespace ElderCare_Repository.Repos
             }
 
 
-            if (!agelist.IsNullOrEmpty() && !genderlist.IsNullOrEmpty())
+            if (!agelist.IsNullOrEmpty() && !genderlist.IsNullOrEmpty() /*&& !districtlist.IsNullOrEmpty()*/)
                 for (int i = 0; i < servicecarer.Count; i++)
                 {
                     if (agelist.Contains(servicecarer[i].Age) && genderlist.Contains(servicecarer[i].Gender))
@@ -154,17 +159,17 @@ namespace ElderCare_Repository.Repos
                 var duplicate = new List<Carer>();
                 for (int j = 1; j < combine1.Count; j++)
                 {
-                   
+
                     var duplicateExists = combine1.GroupBy(n => n.CarerId).Any(g => g.Count() == j);
                     if (duplicateExists)
                     {
-                      
+
                         duplicate.Insert(0, combine1[j]);
-                        
+
                     }
                 }
-                combine1= duplicate.Union(combine1).ToList();
-            
+                combine1 = duplicate.Union(combine1).ToList();
+
             }
             var combine2 = carercate.Concat(carer).ToList();
             if (!combine2.IsNullOrEmpty())
@@ -178,7 +183,7 @@ namespace ElderCare_Repository.Repos
                         duplicate.Insert(0, combine2[j]);
                     }
                 }
-                combine2= duplicate.Union(combine2).ToList();
+                combine2 = duplicate.Union(combine2).ToList();
             }
             var combine3 = carershift.Concat(carer).ToList();
             if (!combine3.IsNullOrEmpty())
@@ -193,10 +198,11 @@ namespace ElderCare_Repository.Repos
                         duplicate.Insert(0, combine3[j]);
                     }
                 }
-                combine3= duplicate.Union(combine3).ToList();
+                combine3 = duplicate.Union(combine3).ToList();
             }
             var result = combine1.Concat(combine2).Concat(combine3).ToList();
-            if (!result.IsNullOrEmpty()) {
+            if (!result.IsNullOrEmpty())
+            {
                 var duplicate = new List<Carer>();
                 for (int j = 1; j < result.Count; j++)
                 {
@@ -211,14 +217,14 @@ namespace ElderCare_Repository.Repos
                 return result;
             }
 
-            return null; 
+            return null;
         }
         public new async Task<Carer> AddAsync(Carer entity)
         {
             try
             {
                 //CheckIfNullException();
-                if(await _dbSet.AnyAsync(e => e.Email == entity.Email!.Trim()) || await _context.Accounts.AnyAsync(e => e.Email == entity.Email!.Trim()))
+                if (await _dbSet.AnyAsync(e => e.Email == entity.Email!.Trim()) || await _context.Accounts.AnyAsync(e => e.Email == entity.Email!.Trim()))
                 {
                     throw new DuplicateNameException("This email has already been registered");
                 }
