@@ -25,7 +25,6 @@ namespace ElderCare_Repository.Mappers
             CreateMap<AddElderDto.AddHobbyDto, Hobby>().ReverseMap();
             CreateMap<AddElderHobbyDto, Hobby>().ReverseMap();
             CreateMap<Elderly, ElderViewDto>().ReverseMap();
-            CreateMap<Contract, AddContractDto>().ReverseMap();
             CreateMap<Hobby, ElderViewDto.HobbyDto>().ReverseMap();
             CreateMap<UpdateHealthDetailDto, HealthDetail>().ReverseMap();
             CreateMap<UpdateHealthDetailDto, PsychomotorHealth>().ForMember(d => d.HealthDetailId, s => s.MapFrom(e => e.HealthDetailId));
@@ -78,6 +77,8 @@ namespace ElderCare_Repository.Mappers
                 .ForMember(d => d.Address, s => s.MapFrom(e => e.Address))
                 .ForMember(d => d.Password, s => s.MapFrom(e => e.Password))
                 .ForMember(d => d.PhoneNumber, s => s.MapFrom(e => e.PhoneNumber));
+            //contract
+            CreateMap<Contract, AddContractDto>().ReverseMap();
         }
     }
 }

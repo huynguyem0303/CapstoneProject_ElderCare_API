@@ -33,22 +33,22 @@ namespace ElderCare_Service.Services
             entity.ContractId = _unitOfWork.ContractRepository.GetAll().OrderByDescending(x => x.ContractId).FirstOrDefault().ContractId + 1;
             entity.Status = (int)ContractStatus.Pending;
             entity.CreatedDate = DateTime.Now;
-            if (dto.Package.IsNullOrEmpty())
+            if (dto.PackageName.IsNullOrEmpty())
             {
                 _unitOfWork.ContractRepository.AddContractServiceAsync(dto.service, entity.ContractId);
                 entity.Packageprice = _unitOfWork.ContractRepository.GetPackagePrice().Result;
                 entity.PackageId = 0;
                 entity.ContractType = (int)ContractType.PackageContract;
             }
-            else
+            else if (dto.service.IsNullOrEmpty())
             {
-                entity.PackageId = _unitOfWork.ContractRepository.GetPackageAsync(dto.Package).Result.PackageId;
+                entity.PackageId = _unitOfWork.ContractRepository.GetPackageAsync(dto.PackageName).Result.PackageId;
                 entity.Packageprice = _unitOfWork.ContractRepository.GetPackagePrice().Result;
                 entity.ContractType = (int)ContractType.ServiceContract;
             }
             _unitOfWork.ContractRepository.AddContractVersionAsync(dto.startDate,dto.endDate, entity.ContractId);
             await _unitOfWork.ContractRepository.AddAsync(entity);
-            await _unitOfWork.SaveChangeAsync();
+            //await _unitOfWork.SaveChangeAsync();
             return entity;
         }
 

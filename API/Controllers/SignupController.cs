@@ -30,6 +30,11 @@ namespace API.Controllers
         //    _mapper = mapper;
         //}
 
+        /// <summary>
+        /// Signup new carer
+        /// </summary>
+        /// <param name="carerDto"> field "cert_id": certificate type: 1 medical; etc</param>
+        /// <returns></returns>
         [HttpPost("signinCarer")]
         public async Task<IActionResult> SignInCarer(CarerSignInDto carerDto)
         {

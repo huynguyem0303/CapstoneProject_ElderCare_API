@@ -43,6 +43,21 @@ namespace API.Controllers
             return Ok(list);
         }
 
+        [HttpGet("Customer/{id}")]
+        [EnableQuery]
+        [Authorize]
+        public async Task<IActionResult> GetEldersByCusId(int id)
+        {
+            //var list = _unitOfWork.ElderRepo.GetAll();
+            var list = await _elderService.FindAsync(e=>e.CustomerId==id);
+            if (list.IsNullOrEmpty())
+            {
+                return NotFound();
+            }
+
+            return Ok(list.ToList());
+        }
+
         // GET: api/Accounts/5
         [HttpGet("{id}")]
         [EnableQuery]

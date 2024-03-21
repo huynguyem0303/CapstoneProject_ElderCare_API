@@ -30,8 +30,11 @@ namespace ElderCare_Repository.DTO
         //[JsonProperty("carer_id")]
         public int? CarerId { get; set; }
 
+        public string? CarerName { get; set; }
+
         //[JsonProperty("customer_id")]
         public int? CustomerId { get; set; }
+        public string? CustomerName { get; set; }
 
         [JsonProperty("status")]
         public string? Status { get; set; }

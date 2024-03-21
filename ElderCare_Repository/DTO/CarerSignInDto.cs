@@ -33,7 +33,7 @@ namespace ElderCare_Repository.DTO
         public string? Image { get; set; }
 
         //[JsonProperty("address")]
-        //public string? Address { get; set; }
+        public string? Address { get; set; }
         public class BankInfomation
         {
             //[JsonProperty("account_number")]
