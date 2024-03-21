@@ -11,9 +11,9 @@ namespace ElderCare_Repository.DTO
         public int CarerId { get; set; }
         public int CustomerId { get; set; }
         public int ElderlyId { get; set; }
-        public string[] service { get; set; }
+        public string?[] service { get; set; }
         public DateTime startDate { get; set; }
         public DateTime endDate { get; set; }
-        public string Package { get; set; }
+        public string? PackageName { get; set; }
     }
 }

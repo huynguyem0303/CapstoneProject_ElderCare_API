@@ -104,6 +104,8 @@ namespace ElderCare_Service.Services
                 if (carerCus != null)
                 {
                     (transaction.CarerId, transaction.CustomerId) = (carerCus.CarerId, carerCus.CustomerId);
+                    transaction.CarerName = (await _unitOfWork.CarerRepository.GetByIdAsync(carerCus.CarerId)).Name;
+                    transaction.CustomerName = (await _unitOfWork.CustomerRepository.GetByIdAsync(carerCus.CustomerId)).CustomerName;
                 }
             }
             return carerTransactions;
@@ -122,6 +124,8 @@ namespace ElderCare_Service.Services
                 if (carerCus != null)
                 {
                     (transaction.CarerId, transaction.CustomerId) = (carerCus.CarerId, carerCus.CustomerId);
+                    transaction.CarerName = (await _unitOfWork.CarerRepository.GetByIdAsync(carerCus.CarerId)).Name;
+                    transaction.CustomerName = (await _unitOfWork.CustomerRepository.GetByIdAsync(carerCus.CustomerId)).CustomerName;
                 }
             }
             return carerTransactions;
