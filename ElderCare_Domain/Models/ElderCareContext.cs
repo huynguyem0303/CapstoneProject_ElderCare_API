@@ -79,7 +79,7 @@ public partial class ElderCareContext : DbContext
 
     public virtual DbSet<Shilft> Shilfts { get; set; }
 
-    public virtual DbSet<SystemFormula> SystemFormulas { get; set; }
+    public virtual DbSet<SystemConfig> SystemConfigs { get; set; }
 
     public virtual DbSet<Timetable> Timetables { get; set; }
 
@@ -783,13 +783,19 @@ public partial class ElderCareContext : DbContext
             entity.Property(e => e.Name).HasMaxLength(100);
         });
 
-        modelBuilder.Entity<SystemFormula>(entity =>
+        modelBuilder.Entity<SystemConfig>(entity =>
         {
             entity
-                .HasNoKey()
                 .ToTable("SystemFormula");
+            entity.HasKey(e => e.SystemConfigId);
 
-            entity.Property(e => e.SystemformulaId).HasColumnName("systemformula_id");
+            entity.Property(e => e.SystemConfigId).HasColumnName("systemconfig_id");
+            entity.Property(e => e.DataName)
+            .HasMaxLength(50)
+            .HasColumnName("data_name");
+            entity.Property(e => e.DataValue)
+            .HasMaxLength(50)
+            .HasColumnName("data_value");
         });
 
         modelBuilder.Entity<Timetable>(entity =>
