@@ -15,7 +15,7 @@ namespace ElderCare_Service
         public IPsychomotorHealthRepo PsychomotorHealthRepo { get; }
         public IHealthDetailRepo HealthDetailRepo { get; }
         public IEmailService emailService { get; }
-
+        public IPsychomotorRepo PsychomotorRepo { get; }
 
         public INotificationService NotificationService { get; }
     }

@@ -35,6 +35,8 @@ namespace ElderCare_Service
             services.AddScoped<IHobbyRepo, HobbyRepo>();
             services.AddScoped<IPsychomotorHealthRepo, PsychomotorHealthRepo>();
             services.AddScoped<IHealthDetailRepo, HealthDetailRepo>();
+            services.AddScoped<IPsychomotorRepo, PsychomotorRepo>();
+            services.AddScoped<IPsychomotorService, PsychomotorService>();
             services.AddHttpContextAccessor();
             services.AddAutoMapper(typeof(MapperConfigurationProfile).Assembly);
             services.AddDbContext<ElderCareContext>(option => option.UseSqlServer(databaseConnection).EnableSensitiveDataLogging());
