@@ -16,22 +16,5 @@ namespace ElderCare_Repository.Repos
         public PsychomotorRepo(ElderCareContext context) : base(context)
         {
         }
-
-        public new async Task AddAsync(Psychomotor entity)
-        {
-            try
-            {
-                entity.PsychomotorHealthId = _dbSet.OrderBy(e => e.PsychomotorHealthId).Last().PsychomotorHealthId + 1;
-                await _dbSet.AddAsync(entity);
-            }
-            catch (DbUpdateException)
-            {
-                throw new Exception(message: "This has already been added");
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
     }
 }

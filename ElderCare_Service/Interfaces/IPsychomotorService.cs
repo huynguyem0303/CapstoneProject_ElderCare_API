@@ -14,8 +14,8 @@ namespace ElderCare_Service.Interfaces
         IEnumerable<Psychomotor> GetAll();
         Task<Psychomotor?> GetById(int id);
         Task<IEnumerable<Psychomotor>> FindAsync(Expression<Func<Psychomotor, bool>> expression, params Expression<Func<Psychomotor, object>>[] includes);
-        Task<Psychomotor> AddPsychomotorAsync(PsychomotorDto model);
-        Task UpdatePsychomotor(Psychomotor account);
+        Task<Psychomotor> AddPsychomotorAsync(AddPsychomotorDto model);
+        Task UpdatePsychomotor(UpdatePsychomotorDto model);
         Task DeletePsychomotor(int id);
         Task<bool> PsychomotorExists(int id);
     }

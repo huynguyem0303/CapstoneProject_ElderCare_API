@@ -3,6 +3,7 @@ using ElderCare_Domain.Enums;
 using ElderCare_Domain.Models;
 using ElderCare_Repository.DTO;
 using ElderCare_Service.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,20 +25,21 @@ namespace ElderCare_Service.Services
             _mapper = mapper;
         }
 
-        public async Task<Psychomotor> AddPsychomotorAsync(PsychomotorDto model)
+        public async Task<Psychomotor> AddPsychomotorAsync(AddPsychomotorDto model)
         {
-            var account = _mapper.Map<Psychomotor>(model);
-            await _unitOfWork.PsychomotorRepo.AddAsync(account);
+            var psychomotor = _mapper.Map<Psychomotor>(model);
+            psychomotor.PsychomotorHealthId = _unitOfWork.PsychomotorRepo.GetAll().OrderBy(e => e.PsychomotorHealthId).Last().PsychomotorHealthId + 1;
+            await _unitOfWork.PsychomotorRepo.AddAsync(psychomotor);
             await _unitOfWork.SaveChangeAsync();
-            return account;
+            return psychomotor;
         }
 
         public async Task DeletePsychomotor(int id)
         {
-            var account = await _unitOfWork.PsychomotorRepo.GetByIdAsync(id);
-            if (account != null)
+            var psychomotor = await _unitOfWork.PsychomotorRepo.GetByIdAsync(id);
+            if (psychomotor != null)
             {
-                _unitOfWork.PsychomotorRepo.Delete(account);
+                _unitOfWork.PsychomotorRepo.Delete(psychomotor);
             }
             await _unitOfWork.SaveChangeAsync();
         }
@@ -52,9 +54,9 @@ namespace ElderCare_Service.Services
             return await _unitOfWork.PsychomotorRepo.FindAsync(expression, includes);
         }
 
-        public async Task UpdatePsychomotor(Psychomotor account)
+        public async Task UpdatePsychomotor(UpdatePsychomotorDto model)
         {
-            _unitOfWork.PsychomotorRepo.Update(account);
+            _unitOfWork.PsychomotorRepo.Update(_mapper.Map<Psychomotor>(model));
             await _unitOfWork.SaveChangeAsync();
         }
 

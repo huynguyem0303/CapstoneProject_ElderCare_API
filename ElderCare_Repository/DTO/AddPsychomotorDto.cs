@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ElderCare_Repository.DTO
 {
-    public class PsychomotorDto
+    public class AddPsychomotorDto
     {
         public string? Name { get; set; }
 

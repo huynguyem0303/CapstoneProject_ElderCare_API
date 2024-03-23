@@ -48,7 +48,7 @@ namespace API.Controllers
         [HttpPut("{id}")]
         [EnableQuery]
         [Authorize(Roles = "Staff, Admin")]
-        public async Task<IActionResult> PutPsychomotor(int id, Psychomotor psychomotor)
+        public async Task<IActionResult> PutPsychomotor(int id, UpdatePsychomotorDto psychomotor)
         {
             if (id != psychomotor.PsychomotorHealthId)
             {
@@ -79,7 +79,7 @@ namespace API.Controllers
         [HttpPost]
         [EnableQuery]
         [Authorize(Roles = "Staff, Admin")]
-        public async Task<ActionResult<Psychomotor>> PostPsychomotor(PsychomotorDto model)
+        public async Task<ActionResult<Psychomotor>> PostPsychomotor(AddPsychomotorDto model)
         {
             Psychomotor psychomotor;
             try

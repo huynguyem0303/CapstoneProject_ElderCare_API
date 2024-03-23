@@ -35,7 +35,6 @@ namespace ElderCare_Repository.Mappers
             CreateMap<HealthDetailDto.AddPsychomotorHealthDto, PsychomotorHealth>().ReverseMap();
             CreateMap<HealthDetailDto, PsychomotorHealth>().ReverseMap();
             CreateMap<PsychomotorHealthDto, PsychomotorHealth>().ReverseMap();
-            CreateMap<PsychomotorDto, Psychomotor>().ReverseMap();
          
             CreateMap<Transaction, TrasactionDto>().ReverseMap().ForMember(des => des.Type,
                 opt => opt.MapFrom(src => EnumMapper<TransactionType>.MapType(src.Type)));
@@ -80,6 +79,10 @@ namespace ElderCare_Repository.Mappers
                 .ForMember(d => d.PhoneNumber, s => s.MapFrom(e => e.PhoneNumber));
             //contract
             CreateMap<Contract, AddContractDto>().ReverseMap();
+
+            //psychomotor
+            CreateMap<AddPsychomotorDto, Psychomotor>().ReverseMap();
+            CreateMap<UpdatePsychomotorDto, Psychomotor>().ReverseMap();
         }
     }
 }
