@@ -83,6 +83,11 @@ namespace ElderCare_Repository.Mappers
             //psychomotor
             CreateMap<AddPsychomotorDto, Psychomotor>().ReverseMap();
             CreateMap<UpdatePsychomotorDto, Psychomotor>().ReverseMap();
+
+            //service
+            CreateMap<Service, ServiceDto>().ReverseMap();
+            CreateMap<AddServiceDto, Service>().ReverseMap();
+            CreateMap<UpdateServiceDto, Service>().ReverseMap();
         }
     }
 }

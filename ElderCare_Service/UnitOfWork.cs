@@ -21,8 +21,9 @@ namespace ElderCare_Service
         private readonly IPsychomotorHealthRepo _psychomotorHealthRepo;
         private readonly IHealthDetailRepo _healthDetailRepo;
         private readonly IPsychomotorRepo _psychomotorRepo;
+        private readonly IServiceRepo _serviceRepo;
 
-        public UnitOfWork(ElderCareContext context, IAccountRepository accountRepository, IContractRepository contractRepository, ICustomerRepository customerRepository, ICarerRepository carerRepository, INotificationService notificationService, ITransactionRepo transactionRepository, IHttpContextAccessor httpContextAccessor, IElderRepo elderRepo, IEmailService emailService, IHobbyRepo hobbyRepo, IPsychomotorHealthRepo psychomotorHealthRepo, IHealthDetailRepo healthDetailRepo, IPsychomotorRepo psychomotorRepo)
+        public UnitOfWork(ElderCareContext context, IAccountRepository accountRepository, IContractRepository contractRepository, ICustomerRepository customerRepository, ICarerRepository carerRepository, INotificationService notificationService, ITransactionRepo transactionRepository, IHttpContextAccessor httpContextAccessor, IElderRepo elderRepo, IEmailService emailService, IHobbyRepo hobbyRepo, IPsychomotorHealthRepo psychomotorHealthRepo, IHealthDetailRepo healthDetailRepo, IPsychomotorRepo psychomotorRepo, IServiceRepo serviceRepo)
         {
             _context = context;
             _accountRepository = accountRepository;
@@ -38,6 +39,7 @@ namespace ElderCare_Service
             _psychomotorHealthRepo = psychomotorHealthRepo;
             _healthDetailRepo = healthDetailRepo;
             _psychomotorRepo = psychomotorRepo;
+            _serviceRepo = serviceRepo;
         }
 
         public IAccountRepository AccountRepository => _accountRepository;
@@ -60,6 +62,8 @@ namespace ElderCare_Service
         public IContractRepository ContractRepository => _contractRepository;
 
         public IPsychomotorRepo PsychomotorRepo => _psychomotorRepo;
+
+        public IServiceRepo ServiceRepo => _serviceRepo;
 
         public async Task<int> SaveChangeAsync()
         {
