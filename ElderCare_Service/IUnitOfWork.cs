@@ -16,8 +16,10 @@ namespace ElderCare_Service
         public IHealthDetailRepo HealthDetailRepo { get; }
         public IEmailService emailService { get; }
 
-
+       
         public INotificationService NotificationService { get; }
+        public IServiceRepo ServiceRepo { get; }
+        public IPackageRepo PackageRepo { get; }
     }
 }
 
