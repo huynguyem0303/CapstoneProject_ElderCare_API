@@ -15,7 +15,7 @@ namespace ElderCare_Repository.Repos
         {
             var list = _context.CarerServices.Where(e => e.CarerId == id);
             var result = from service in _dbSet
-                         join CarerService in list on service.ServiceId equals CarerService.ServiceId
+                         join carerService in list on service.ServiceId equals carerService.ServiceId
                          select service;
             return await result.ToListAsync();
         }
