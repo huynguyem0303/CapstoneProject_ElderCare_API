@@ -20,8 +20,10 @@ namespace ElderCare_Service
         private readonly IHobbyRepo _hobbyRepo;
         private readonly IPsychomotorHealthRepo _psychomotorRepo;
         private readonly IHealthDetailRepo _healthDetailRepo;
+        private readonly IServiceRepo _serviceRepo;
+        private readonly IPackageRepo _packageRepo;
 
-        public UnitOfWork(ElderCareContext context, IAccountRepository accountRepository, IContractRepository contractRepository, ICustomerRepository customerRepository, ICarerRepository carerRepository, INotificationService notificationService, ITransactionRepo transactionRepository, IHttpContextAccessor httpContextAccessor, IElderRepo elderRepo, IEmailService emailService, IHobbyRepo hobbyRepo, IPsychomotorHealthRepo psychomotorRepo, IHealthDetailRepo healthDetailRepo)
+        public UnitOfWork(ElderCareContext context, IAccountRepository accountRepository, IContractRepository contractRepository, ICustomerRepository customerRepository, ICarerRepository carerRepository, INotificationService notificationService, ITransactionRepo transactionRepository, IHttpContextAccessor httpContextAccessor, IElderRepo elderRepo, IEmailService emailService, IHobbyRepo hobbyRepo, IPsychomotorHealthRepo psychomotorRepo, IHealthDetailRepo healthDetailRepo, IServiceRepo serviceRepo, IPackageRepo packageRepo)
         {
             _context = context;
             _accountRepository = accountRepository;
@@ -36,6 +38,8 @@ namespace ElderCare_Service
             _hobbyRepo = hobbyRepo;
             _psychomotorRepo = psychomotorRepo;
             _healthDetailRepo = healthDetailRepo;
+            _serviceRepo = serviceRepo;
+            _packageRepo = packageRepo;
         }
 
         public IAccountRepository AccountRepository => _accountRepository;
@@ -56,6 +60,8 @@ namespace ElderCare_Service
 
         public IHealthDetailRepo HealthDetailRepo => _healthDetailRepo;
         public IContractRepository ContractRepository => _contractRepository;
+        public IServiceRepo ServiceRepo => _serviceRepo;
+        public IPackageRepo PackageRepo => _packageRepo;
 
         public async Task<int> SaveChangeAsync()
         {
