@@ -28,6 +28,8 @@ namespace ElderCare_Repository.DTO
         [JsonProperty("password")]
         public string Password { get; set; }
 
+
+
         public class CustomerBankInfomation
         {
             //[JsonProperty("account_number")]
