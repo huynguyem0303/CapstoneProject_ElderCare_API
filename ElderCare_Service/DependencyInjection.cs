@@ -27,6 +27,10 @@ namespace ElderCare_Service
             services.AddScoped<ISignupService, SignupService>();
             services.AddScoped<IElderService, ElderService>();
             services.AddScoped<IContractRepository, ContractRepo>();
+            services.AddScoped<IServiceRepo, ServiceRepo>();
+            services.AddScoped<IServiceService, ServiceService>();
+            services.AddScoped<IPackageService, PackagesService>();
+            services.AddScoped<IPackageRepo, PackageRepo>();
             services.AddScoped<IContractService, Services.ContractService>();
             services.AddScoped<ICarerService, Services.CarerService>();
             services.AddScoped<ITransactionService, TransactionService>();

@@ -1,4 +1,4 @@
-﻿using ElderCare_Domain.Models;
+using ElderCare_Domain.Models;
 using ElderCare_Repository.Interfaces;
 using ElderCare_Service.Interfaces;
 using Microsoft.AspNetCore.Http;
@@ -64,6 +64,8 @@ namespace ElderCare_Service
 
         public IHealthDetailRepo HealthDetailRepo => _healthDetailRepo;
         public IContractRepository ContractRepository => _contractRepository;
+        public IServiceRepo ServiceRepo => _serviceRepo;
+        public IPackageRepo PackageRepo => _packageRepo;
 
         public IPsychomotorRepo PsychomotorRepo => _psychomotorRepo;
 

@@ -129,7 +129,9 @@ public partial class ElderCareContext : DbContext
             entity.Property(e => e.Username)
                 .HasMaxLength(100)
                 .HasColumnName("username");
-
+            entity.Property(e => e.CreatedDate)
+               .HasColumnType("datetime")
+               .HasColumnName("created_date");
             entity.HasOne(d => d.Role).WithMany(p => p.Accounts)
                 .HasForeignKey(d => d.RoleId)
                 .OnDelete(DeleteBehavior.ClientSetNull)

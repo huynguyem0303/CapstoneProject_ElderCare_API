@@ -48,6 +48,7 @@ namespace ElderCare_Service.Services
                 account = _mapper.Map<Account>(carer);
                 account.RoleId = (int)AccountRole.Carer;
                 account.Status = (int)AccountStatus.Active;
+                account.CreatedDate = DateTime.Now;
                 string randomString = Guid.NewGuid().ToString("N").Substring(0, 10);
                 account.Password = randomString;
                 await _unitOfWork.AccountRepository.AddAsync(account);
