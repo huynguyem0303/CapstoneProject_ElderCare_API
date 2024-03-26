@@ -69,10 +69,6 @@ namespace ElderCare_Service
 
         public IPsychomotorRepo PsychomotorRepo => _psychomotorRepo;
 
-        public IServiceRepo ServiceRepo => _serviceRepo;
-
-        public IPackageRepo PackageRepo => _packageRepo;
-
         public ICertificationRepo CertificationRepo => _certificationRepo;
 
         public async Task<int> SaveChangeAsync()
