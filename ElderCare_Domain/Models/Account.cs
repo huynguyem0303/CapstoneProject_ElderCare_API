@@ -24,6 +24,7 @@ public partial class Account
     public int? CustomerId { get; set; }
 
     public int? CarerId { get; set; }
+    public DateTime? CreatedDate { get; set; }
 
     public virtual ICollection<Device> Devices { get; set; } = new List<Device>();
 

@@ -42,6 +42,7 @@ namespace ElderCare_Service.Services
             account.CustomerId = customer.CustomerId;
             account.RoleId = (int)AccountRole.Customer;
             account.Status = (int)AccountStatus.Active;
+            account.CreatedDate = DateTime.Now;
             await _unitOfWork.AccountRepository.AddAsync(account);
             await _unitOfWork.SaveChangeAsync();
             return account;
