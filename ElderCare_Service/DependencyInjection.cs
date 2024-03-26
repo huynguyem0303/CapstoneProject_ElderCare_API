@@ -6,10 +6,8 @@ using ElderCare_Repository.Mappers;
 using ElderCare_Repository.Repos;
 using ElderCare_Service.Interfaces;
 using ElderCare_Service.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace ElderCare_Service
 {
@@ -39,6 +37,8 @@ namespace ElderCare_Service
             services.AddScoped<IPsychomotorService, PsychomotorService>();
             services.AddScoped<IServiceRepo, ServiceRepo>();
             services.AddScoped<IServicesService, ServicesService>();
+            services.AddScoped<IPackageRepo, PackageRepo>();
+            services.AddScoped<IPackageService, Services.PackageService>();
             services.AddHttpContextAccessor();
             services.AddAutoMapper(typeof(MapperConfigurationProfile).Assembly);
             services.AddDbContext<ElderCareContext>(option => option.UseSqlServer(databaseConnection).EnableSensitiveDataLogging());

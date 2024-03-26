@@ -88,6 +88,15 @@ namespace ElderCare_Repository.Mappers
             CreateMap<Service, ServiceDto>().ReverseMap();
             CreateMap<AddServiceDto, Service>().ReverseMap();
             CreateMap<UpdateServiceDto, Service>().ReverseMap();
+
+            //package
+            CreateMap<AddPackageDto, Package>().ReverseMap();
+            CreateMap<UpdatePackageDto, Package>().ReverseMap();
+            CreateMap<PackageDto, Package>().ReverseMap();
+            CreateMap<ServiceDto, Package>().ReverseMap();
+            CreateMap<ServiceDto, PackageService>()
+                .ReverseMap()
+                .ForMember(d => d.ServiceId, s => s.MapFrom(e => e.ServiceId));
         }
     }
 }
