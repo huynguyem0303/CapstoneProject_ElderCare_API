@@ -97,6 +97,10 @@ namespace ElderCare_Repository.Mappers
             CreateMap<ServiceDto, PackageService>()
                 .ReverseMap()
                 .ForMember(d => d.ServiceId, s => s.MapFrom(e => e.ServiceId));
+
+            //certificate
+            CreateMap<AddCertificationTypeDto, Certification>().ReverseMap();
+            CreateMap<UpdateCertificationTypeDto, Certification>().ReverseMap();
         }
     }
 }

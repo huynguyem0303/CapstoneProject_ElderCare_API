@@ -23,8 +23,9 @@ namespace ElderCare_Service
         private readonly IPsychomotorRepo _psychomotorRepo;
         private readonly IServiceRepo _serviceRepo;
         private readonly IPackageRepo _packageRepo;
+        private readonly ICertificationRepo _certificationRepo;
 
-        public UnitOfWork(ElderCareContext context, IAccountRepository accountRepository, IContractRepository contractRepository, ICustomerRepository customerRepository, ICarerRepository carerRepository, INotificationService notificationService, ITransactionRepo transactionRepository, IHttpContextAccessor httpContextAccessor, IElderRepo elderRepo, IEmailService emailService, IHobbyRepo hobbyRepo, IPsychomotorHealthRepo psychomotorHealthRepo, IHealthDetailRepo healthDetailRepo, IPsychomotorRepo psychomotorRepo, IServiceRepo serviceRepo, IPackageRepo packageRepo)
+        public UnitOfWork(ElderCareContext context, IAccountRepository accountRepository, IContractRepository contractRepository, ICustomerRepository customerRepository, ICarerRepository carerRepository, INotificationService notificationService, ITransactionRepo transactionRepository, IHttpContextAccessor httpContextAccessor, IElderRepo elderRepo, IEmailService emailService, IHobbyRepo hobbyRepo, IPsychomotorHealthRepo psychomotorHealthRepo, IHealthDetailRepo healthDetailRepo, IPsychomotorRepo psychomotorRepo, IServiceRepo serviceRepo, IPackageRepo packageRepo, ICertificationRepo certificationRepo)
         {
             _context = context;
             _accountRepository = accountRepository;
@@ -42,6 +43,7 @@ namespace ElderCare_Service
             _psychomotorRepo = psychomotorRepo;
             _serviceRepo = serviceRepo;
             _packageRepo = packageRepo;
+            _certificationRepo = certificationRepo;
         }
 
         public IAccountRepository AccountRepository => _accountRepository;
@@ -68,6 +70,8 @@ namespace ElderCare_Service
         public IServiceRepo ServiceRepo => _serviceRepo;
 
         public IPackageRepo PackageRepo => _packageRepo;
+
+        public ICertificationRepo CertificationRepo => _certificationRepo;
 
         public async Task<int> SaveChangeAsync()
         {
