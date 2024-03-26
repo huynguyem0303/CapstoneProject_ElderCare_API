@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Expo.Server.SDK" Version="1.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ElderCare_Repository\ElderCare_Repository.csproj" />
   </ItemGroup>
 
