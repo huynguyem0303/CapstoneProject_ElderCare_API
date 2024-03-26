@@ -9,6 +9,8 @@ using AutoMapper;
 using Microsoft.IdentityModel.Tokens;
 using ElderCare_Domain.Enums;
 using ElderCare_Service.Interfaces;
+using Expo.Server.Client;
+using Expo.Server.Models;
 namespace ElderCare_Service.Services
 {
 
@@ -126,6 +128,20 @@ namespace ElderCare_Service.Services
             }
             
             return response;
+        }
+
+        public async Task<PushTicketResponse> SendExpoNotification(PushTicketRequest pushTicketReq)
+        {
+            var expoSDKClient = new PushApiClient();
+            var result = await expoSDKClient.PushSendAsync(pushTicketReq);
+            return result;
+        }
+
+        public async Task<PushResceiptResponse> GetExpoNotificationReceipt(PushReceiptRequest pushReceiptReq)
+        {
+            var expoSDKClient = new PushApiClient();
+            var result = await expoSDKClient.PushGetReceiptsAsync(pushReceiptReq);
+            return result;
         }
     }
 }
