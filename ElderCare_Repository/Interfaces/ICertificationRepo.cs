@@ -1,5 +1,4 @@
-using DataAccess.Interfaces;
-using DataAccess.Repositories;
+﻿using DataAccess.Interfaces;
 using ElderCare_Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -9,8 +8,7 @@ using System.Threading.Tasks;
 
 namespace ElderCare_Repository.Interfaces
 {
-    public interface IServiceRepo : IGenericRepo<Service>
+    public interface ICertificationRepo : IGenericRepo<Certification>
     {
-        Task<List<Service>> GetAllByCarerId(int id);
     }
 }

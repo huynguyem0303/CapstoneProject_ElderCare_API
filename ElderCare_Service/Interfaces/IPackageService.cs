@@ -1,4 +1,5 @@
 ﻿using ElderCare_Domain.Models;
+using ElderCare_Repository.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +11,12 @@ namespace ElderCare_Service.Interfaces
 {
     public interface IPackageService
     {
-        IEnumerable<Package> GetAll();
-        Task<Package?> GetById(int id);
+        Task<IEnumerable<PackageDto>> GetAllAsync();
+        Task<PackageDto?> GetById(int id);
         Task<IEnumerable<Package>> FindAsync(Expression<Func<Package, bool>> expression, params Expression<Func<Package, object>>[] includes);
+        Task<Package> AddPackageAsync(AddPackageDto model);
+        Task UpdatePackage(UpdatePackageDto model);
+        Task DeletePackage(int id);
+        Task<bool> PackageExists(int id);
     }
 }

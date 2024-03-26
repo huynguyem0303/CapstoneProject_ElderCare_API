@@ -144,5 +144,11 @@ namespace ElderCare_Service.Services
             _unitOfWork.CarerRepository.Update(carer);
             await _unitOfWork.SaveChangeAsync();
         }
+
+        public async Task<List<ServiceDto>> GetServicesByCarerId(int id)
+        {
+            var services = await _unitOfWork.ServiceRepo.GetAllByCarerId(id);
+            return _mapper.Map<List<ServiceDto>>(services);
+        }
     }
 }

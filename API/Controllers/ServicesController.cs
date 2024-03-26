@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ElderCare_Domain.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -13,59 +13,55 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PackagesController : ODataController
+    public class ServicesController : ODataController
     {
-        private readonly IPackageService _packageService;
+        private readonly IServicesService _psychomotorService;
 
-        public PackagesController(IPackageService packageService)
+        public ServicesController(IServicesService psychomotorService)
         {
-            _packageService = packageService;
+            _psychomotorService = psychomotorService;
         }
 
-        // GET: api/Packages
+        // GET: api/Services
         [HttpGet]
         [EnableQuery]
         [Authorize]
-        public async Task<IActionResult> GetPackagesAsync()
+        public IActionResult GetServices()
         {
-            var list = await _packageService.GetAllAsync();
+            var list = _psychomotorService.GetAll();
             
             return Ok(list);
         }
 
-        // GET: api/Packages/5
+        // GET: api/Services/5
         [HttpGet("{id}")]
         [EnableQuery]
-        //[Authorize]
-        public async Task<IActionResult> GetPackage(int id)
+        [Authorize]
+        public async Task<SingleResult<Service>> GetService(int id)
         {
-            var package = await _packageService.GetById(id);
-            if(package == null)
-            {
-                return NotFound();
-            }
-            return Ok(package);
+            var psychomotor = await _psychomotorService.FindAsync(x => x.ServiceId == id);
+            return SingleResult.Create(psychomotor.AsQueryable());
         }
 
-        // PUT: api/Packages/5
+        // PUT: api/Services/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         [EnableQuery]
         [Authorize(Roles = "Staff, Admin")]
-        public async Task<IActionResult> PutPackage(int id, UpdatePackageDto package)
+        public async Task<IActionResult> PutService(int id, UpdateServiceDto psychomotor)
         {
-            if (id != package.PackageId)
+            if (id != psychomotor.ServiceId)
             {
                 return BadRequest();
             }
 
             try
             {
-                await _packageService.UpdatePackage(package);
+                await _psychomotorService.UpdateService(psychomotor);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!await _packageService.PackageExists(id))
+                if (!await _psychomotorService.ServiceExists(id))
                 {
                     return NotFound();
                 }
@@ -78,17 +74,17 @@ namespace API.Controllers
             return NoContent();
         }
 
-        // POST: api/Packages
+        // POST: api/Services
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         [EnableQuery]
         [Authorize(Roles = "Staff, Admin")]
-        public async Task<ActionResult<Package>> PostPackage(AddPackageDto model)
+        public async Task<ActionResult<Service>> PostService(AddServiceDto model)
         {
-            Package package;
+            Service psychomotor;
             try
             {
-                package = await _packageService.AddPackageAsync(model);
+                psychomotor = await _psychomotorService.AddServiceAsync(model);
             }
             catch (DbUpdateException e)
             {
@@ -98,20 +94,20 @@ namespace API.Controllers
                 return Conflict(error: e.Message);
             }
 
-            return CreatedAtAction("GetPackage", new { id = package.PackageId }, package);
+            return CreatedAtAction("GetService", new { id = psychomotor.ServiceId }, psychomotor);
         }
 
-        // DELETE: api/Packages/5
+        // DELETE: api/Services/5
         [HttpDelete("{id}")]
         [EnableQuery]
         [Authorize(Roles = "Staff, Admin")]
-        public async Task<IActionResult> DeletePackage(int id)
+        public async Task<IActionResult> DeleteService(int id)
         {
-            if (await _packageService.PackageExists(id))
+            if (await _psychomotorService.ServiceExists(id))
             {
                 return NotFound();
             }
-            await _packageService.DeletePackage(id);
+            await _psychomotorService.DeleteService(id);
             return NoContent();
         }
     }

@@ -1,4 +1,4 @@
-﻿using ElderCare_Repository.Interfaces;
+using ElderCare_Repository.Interfaces;
 using ElderCare_Service.Interfaces;
 namespace ElderCare_Service
 {
@@ -15,11 +15,12 @@ namespace ElderCare_Service
         public IPsychomotorHealthRepo PsychomotorHealthRepo { get; }
         public IHealthDetailRepo HealthDetailRepo { get; }
         public IEmailService emailService { get; }
-
-       
-        public INotificationService NotificationService { get; }
+        public IPsychomotorRepo PsychomotorRepo { get; }
         public IServiceRepo ServiceRepo { get; }
         public IPackageRepo PackageRepo { get; }
+        public ICertificationRepo CertificationRepo { get; }
+      
+        public INotificationService NotificationService { get; }
     }
 }
 

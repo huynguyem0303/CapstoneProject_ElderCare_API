@@ -79,6 +79,28 @@ namespace ElderCare_Repository.Mappers
                 .ForMember(d => d.PhoneNumber, s => s.MapFrom(e => e.PhoneNumber));
             //contract
             CreateMap<Contract, AddContractDto>().ReverseMap();
+
+            //psychomotor
+            CreateMap<AddPsychomotorDto, Psychomotor>().ReverseMap();
+            CreateMap<UpdatePsychomotorDto, Psychomotor>().ReverseMap();
+
+            //service
+            CreateMap<Service, ServiceDto>().ReverseMap();
+            CreateMap<AddServiceDto, Service>().ReverseMap();
+            CreateMap<UpdateServiceDto, Service>().ReverseMap();
+
+            //package
+            CreateMap<AddPackageDto, Package>().ReverseMap();
+            CreateMap<UpdatePackageDto, Package>().ReverseMap();
+            CreateMap<PackageDto, Package>().ReverseMap();
+            CreateMap<ServiceDto, Package>().ReverseMap();
+            CreateMap<ServiceDto, PackageService>()
+                .ReverseMap()
+                .ForMember(d => d.ServiceId, s => s.MapFrom(e => e.ServiceId));
+
+            //certificate
+            CreateMap<AddCertificationTypeDto, Certification>().ReverseMap();
+            CreateMap<UpdateCertificationTypeDto, Certification>().ReverseMap();
         }
     }
 }

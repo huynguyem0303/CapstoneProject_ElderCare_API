@@ -44,6 +44,7 @@ namespace API.Controllers
             }
             return NotFound();
         }
+
         [HttpGet("{id}")]
         [EnableQuery]
         public async Task<SingleResult<Carer>> GetCarerById(int id)
@@ -52,6 +53,18 @@ namespace API.Controllers
             var carer = await _carerService.FindAsync(x => x.CarerId == id);
             return SingleResult.Create(carer.AsQueryable());
         }
+        [HttpGet("{id}/Services")]
+        [EnableQuery]
+        public async Task<IActionResult> GetServicesByCarerId(int id)
+        {
+            if (!await _carerService.CarerExists(id))
+            {
+                return NotFound();
+            }
+            var services = await _carerService.GetServicesByCarerId(id);
+            return Ok(services);
+        }
+
         [HttpGet("pending")]
         [EnableQuery]
         public async Task<IActionResult> GetPendingCarer()

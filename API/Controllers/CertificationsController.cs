@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ElderCare_Domain.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -13,59 +13,55 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PackagesController : ODataController
+    public class CertificationsController : ODataController
     {
-        private readonly IPackageService _packageService;
+        private readonly ICertificationService _certificationService;
 
-        public PackagesController(IPackageService packageService)
+        public CertificationsController(ICertificationService certificationService)
         {
-            _packageService = packageService;
+            _certificationService = certificationService;
         }
 
-        // GET: api/Packages
+        // GET: api/Certifications
         [HttpGet]
         [EnableQuery]
         [Authorize]
-        public async Task<IActionResult> GetPackagesAsync()
+        public IActionResult GetCertifications()
         {
-            var list = await _packageService.GetAllAsync();
+            var list = _certificationService.GetAll();
             
             return Ok(list);
         }
 
-        // GET: api/Packages/5
+        // GET: api/Certifications/5
         [HttpGet("{id}")]
         [EnableQuery]
-        //[Authorize]
-        public async Task<IActionResult> GetPackage(int id)
+        [Authorize]
+        public async Task<SingleResult<Certification>> GetCertification(int id)
         {
-            var package = await _packageService.GetById(id);
-            if(package == null)
-            {
-                return NotFound();
-            }
-            return Ok(package);
+            var certification = await _certificationService.FindAsync(x => x.CertId == id);
+            return SingleResult.Create(certification.AsQueryable());
         }
 
-        // PUT: api/Packages/5
+        // PUT: api/Certifications/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         [EnableQuery]
         [Authorize(Roles = "Staff, Admin")]
-        public async Task<IActionResult> PutPackage(int id, UpdatePackageDto package)
+        public async Task<IActionResult> PutCertification(int id, UpdateCertificationTypeDto certification)
         {
-            if (id != package.PackageId)
+            if (id != certification.CertId)
             {
                 return BadRequest();
             }
 
             try
             {
-                await _packageService.UpdatePackage(package);
+                await _certificationService.UpdateCertification(certification);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!await _packageService.PackageExists(id))
+                if (!await _certificationService.CertificationExists(id))
                 {
                     return NotFound();
                 }
@@ -78,17 +74,17 @@ namespace API.Controllers
             return NoContent();
         }
 
-        // POST: api/Packages
+        // POST: api/Certifications
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         [EnableQuery]
         [Authorize(Roles = "Staff, Admin")]
-        public async Task<ActionResult<Package>> PostPackage(AddPackageDto model)
+        public async Task<ActionResult<Certification>> PostCertification(AddCertificationTypeDto model)
         {
-            Package package;
+            Certification certification;
             try
             {
-                package = await _packageService.AddPackageAsync(model);
+                certification = await _certificationService.AddCertificationAsync(model);
             }
             catch (DbUpdateException e)
             {
@@ -98,20 +94,20 @@ namespace API.Controllers
                 return Conflict(error: e.Message);
             }
 
-            return CreatedAtAction("GetPackage", new { id = package.PackageId }, package);
+            return CreatedAtAction("GetCertification", new { id = certification.CertId }, certification);
         }
 
-        // DELETE: api/Packages/5
+        // DELETE: api/Certifications/5
         [HttpDelete("{id}")]
         [EnableQuery]
         [Authorize(Roles = "Staff, Admin")]
-        public async Task<IActionResult> DeletePackage(int id)
+        public async Task<IActionResult> DeleteCertification(int id)
         {
-            if (await _packageService.PackageExists(id))
+            if (await _certificationService.CertificationExists(id))
             {
                 return NotFound();
             }
-            await _packageService.DeletePackage(id);
+            await _certificationService.DeleteCertification(id);
             return NoContent();
         }
     }

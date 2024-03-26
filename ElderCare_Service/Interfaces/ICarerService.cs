@@ -24,5 +24,6 @@ namespace ElderCare_Service.Interfaces
         Task<List<CarerTransactionDto>> GetCarerTransactionHistoryAsyncByCarerId(int carerId);
         Task<List<CarerTransactionDto>> GetCarerTransactionHistoryAsyncByCustomerId(int customerId);
         Task<Account?> ApproveCarer(int carerId, int status);
+        Task<List<ServiceDto>> GetServicesByCarerId(int id);
     }
 }
