@@ -23,7 +23,11 @@ namespace API.Controllers
         //{
         //    _unitOfWork = unitOfWork;
         //}
-
+        /// <summary>
+        /// send noti using fcm services
+        /// </summary>
+        /// <param name="notificationModel"></param>
+        /// <returns></returns>
         [Route("send")]
         [HttpPost]
         public async Task<IActionResult> SendNotification(NotificationModel notificationModel)
@@ -33,6 +37,11 @@ namespace API.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// send noti using fcm services, please send fcm token when login to using this function
+        /// </summary>
+        /// <param name="accountNotiDto"></param>
+        /// <returns></returns>
         [Route("sendToAccount")]
         [HttpPost]
         public async Task<IActionResult> SendNotificationToAccount(AccountNotiDto accountNotiDto)
@@ -41,7 +50,11 @@ namespace API.Controllers
             var result = await _notificationService.SendNotificationToAccount(accountNotiDto);
             return Ok(result);
         }
-
+        /// <summary>
+        /// send noti using expo service
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [Route("ExpoNoti")]
         [HttpPost]
         public async Task<IActionResult> SendExpoNotification(PushTicketRequestDto request)
@@ -49,11 +62,17 @@ namespace API.Controllers
             var result = await _notificationService.SendExpoNotification(request);
             return Ok(result);
         }
+
+        /// <summary>
+        /// recieve noti reciept after sending noti
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
         [Route("ExpoNotiReceipt")]
         [HttpPost]
-        public async Task<IActionResult> GetExpoNotification(PushReceiptRequest request)
+        public async Task<IActionResult> GetExpoNotification(List<string> ids)
         {
-            var result = await _notificationService.GetExpoNotificationReceipt(request);
+            var result = await _notificationService.GetExpoNotificationReceipt(new PushReceiptRequest() { PushTicketIds = ids});
             return Ok(result);
         }
     }
