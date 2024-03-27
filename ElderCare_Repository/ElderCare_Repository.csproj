@@ -14,8 +14,8 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    <PackageReference Include="Community.Expo.Server.SDK" Version="1.2.1.1" />
     <PackageReference Include="CorePush" Version="3.1.1" />
-    <PackageReference Include="Expo.Server.SDK" Version="1.0.2" />
     <PackageReference Include="FirebaseAdmin" Version="2.4.0" />
     <PackageReference Include="MailKit" Version="4.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.15" />

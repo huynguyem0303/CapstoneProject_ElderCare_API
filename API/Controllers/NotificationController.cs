@@ -3,7 +3,6 @@ using ElderCare_Service.Interfaces;
 using ElderCare_Repository.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Org.BouncyCastle.Tsp;
-using Expo.Server.Models;
 
 namespace API.Controllers
 {
@@ -57,10 +56,18 @@ namespace API.Controllers
         /// <returns></returns>
         [Route("ExpoNoti")]
         [HttpPost]
-        public async Task<IActionResult> SendExpoNotification(PushTicketRequestDto request)
+        public async Task<IActionResult> SendExpoNotification(PushTicketRequestDto[] request)
         {
-            var result = await _notificationService.SendExpoNotification(request);
-            return Ok(result);
+            try
+            {
+
+                var result = await _notificationService.SendExpoNotification(request);
+                return Ok(result);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         /// <summary>
@@ -72,7 +79,7 @@ namespace API.Controllers
         [HttpPost]
         public async Task<IActionResult> GetExpoNotification(List<string> ids)
         {
-            var result = await _notificationService.GetExpoNotificationReceipt(new PushReceiptRequest() { PushTicketIds = ids});
+            var result = await _notificationService.GetExpoNotificationReceipt(new ExpoCommunityNotificationServer.Models.PushReceiptRequest() { PushTicketIds = ids});
             return Ok(result);
         }
     }
