@@ -130,10 +130,11 @@ namespace ElderCare_Service.Services
             return response;
         }
 
-        public async Task<PushTicketResponse> SendExpoNotification(PushTicketRequest pushTicketReq)
+        public async Task<PushTicketResponse> SendExpoNotification(PushTicketRequestDto pushTicketReq)
         {
             var expoSDKClient = new PushApiClient();
-            var result = await expoSDKClient.PushSendAsync(pushTicketReq);
+            var request = _mapper.Map<PushTicketRequest>(pushTicketReq);
+            var result = await expoSDKClient.PushSendAsync(request);
             return result;
         }
 

@@ -44,7 +44,7 @@ namespace API.Controllers
 
         [Route("ExpoNoti")]
         [HttpPost]
-        public async Task<IActionResult> SendExpoNotification(PushTicketRequest request)
+        public async Task<IActionResult> SendExpoNotification(PushTicketRequestDto request)
         {
             var result = await _notificationService.SendExpoNotification(request);
             return Ok(result);
