@@ -9,8 +9,9 @@ using AutoMapper;
 using Microsoft.IdentityModel.Tokens;
 using ElderCare_Domain.Enums;
 using ElderCare_Service.Interfaces;
-using Expo.Server.Client;
-using Expo.Server.Models;
+using ExpoCommunityNotificationServer.Client;
+using ExpoCommunityNotificationServer.Models;
+using ExpoCommunityNotificationServer.Exceptions;
 namespace ElderCare_Service.Services
 {
 
@@ -129,19 +130,39 @@ namespace ElderCare_Service.Services
             
             return response;
         }
-
-        public async Task<PushTicketResponse> SendExpoNotification(PushTicketRequestDto pushTicketReq)
+        public async Task<PushTicketResponse> SendExpoNotification(PushTicketRequestDto[] pushTicketReq)
         {
             var expoSDKClient = new PushApiClient();
-            var request = _mapper.Map<PushTicketRequest>(pushTicketReq);
-            var result = await expoSDKClient.PushSendAsync(request);
-            return result;
+            expoSDKClient.SetToken("tXTQFNs8eaixHiHzz9GPRcwDrr-8WdqrHDVPOodv");
+            PushTicketRequest[] request = _mapper.Map<PushTicketRequest[]>(pushTicketReq);
+            //foreach(var item in request)
+            //{
+            //    item.PushPriority ??= "default";
+            //    if (item.PushPriority != "default" && item.PushPriority != "normal" && item.PushPriority != "high")
+            //    {
+            //        throw new Exception("The delivery priority of the message. " +
+            //            "Specify 'default' or omit this field to use the default priority on each platform ('normal' on Android and 'high' on iOS))");
+            //    }
+            //    item.PushSound ??= "default";
+            //    if (item.PushSound != "default")
+            //    {
+            //        throw new Exception("Specify 'default' to play the device's default notification sound, or omit this field to play no sound");
+            //    }
+            //    item.PushChannelId ??= "default";
+            //    item.PushTTL = 0;
+            //}
+            if (expoSDKClient.IsTokenSet())
+            {
+                var result = await expoSDKClient.SendPushAsync(request);
+                return result;
+            }
+            return new PushTicketResponse();
         }
 
-        public async Task<PushResceiptResponse> GetExpoNotificationReceipt(PushReceiptRequest pushReceiptReq)
+        public async Task<PushReceiptResponse> GetExpoNotificationReceipt(PushReceiptRequest pushReceiptReq)
         {
             var expoSDKClient = new PushApiClient();
-            var result = await expoSDKClient.PushGetReceiptsAsync(pushReceiptReq);
+            var result = await expoSDKClient.GetReceiptsAsync(pushReceiptReq);
             return result;
         }
     }

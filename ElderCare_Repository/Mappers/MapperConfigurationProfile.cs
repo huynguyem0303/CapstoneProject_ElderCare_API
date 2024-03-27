@@ -3,7 +3,7 @@ using ElderCare_Domain.Commons;
 using ElderCare_Domain.Enums;
 using ElderCare_Domain.Models;
 using ElderCare_Repository.DTO;
-using Expo.Server.Models;
+using ExpoCommunityNotificationServer.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -106,16 +106,18 @@ namespace ElderCare_Repository.Mappers
             //expo noti
             CreateMap<PushTicketRequestDto, PushTicketRequest>()
                 .ForMember(d => d.PushTo, s => s.MapFrom(e => e.To))
-                .ForMember(d => d.PushData, s => s.MapFrom(e => e.Data))
+                //.ForMember(d => d.PushData, s => s.MapFrom(e => e.Data))
                 .ForMember(d => d.PushTitle, s => s.MapFrom(e => e.Title))
                 .ForMember(d => d.PushBody, s => s.MapFrom(e => e.body))
-                .ForMember(d => d.PushTTL, s => s.MapFrom(e => e.Ttl))
-                .ForMember(d => d.PushExpiration, s => s.MapFrom(e => e.Expiration))
+                //.ForMember(d => d.PushTTL, s => s.MapFrom(e => e.Ttl))
+                //.ForMember(d => d.PushExpiration, s => s.MapFrom(e => e.Expiration))
                 .ForMember(d => d.PushPriority, s => s.MapFrom(e => e.Priority))
                 .ForMember(d => d.PushSubTitle, s => s.MapFrom(e => e.SubTitle))
                 .ForMember(d => d.PushSound, s => s.MapFrom(e => e.Sound))
                 .ForMember(d => d.PushBadgeCount, s => s.MapFrom(e => e.Badge))
                 .ForMember(d => d.PushChannelId, s => s.MapFrom(e => e.ChannelId))
+                //.ForMember(d => d.PushCategoryId, s => s.MapFrom(e => e.CategoryId))
+                .ForMember(d => d.PushMutableContent, s => s.MapFrom(e => e.MutableContent))
                 .ReverseMap();
         }
     }
