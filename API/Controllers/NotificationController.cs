@@ -64,9 +64,9 @@ namespace API.Controllers
                 var result = await _notificationService.SendExpoNotification(request);
                 return Ok(result);
             }
-            catch
+            catch (Exception ex)
             {
-                throw;
+                return BadRequest(ex.Message);
             }
         }
 
