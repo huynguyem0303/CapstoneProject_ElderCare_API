@@ -132,6 +132,10 @@ namespace ElderCare_Repository.Mappers
                 .ForMember(d => d.PushChannelId, s => s.MapFrom(e => e.ChannelId))
                 //.ForMember(d => d.PushCategoryId, s => s.MapFrom(e => e.CategoryId))
                 .ForMember(d => d.PushMutableContent, s => s.MapFrom(e => e.MutableContent)).ReverseMap();
+
+            //report
+            CreateMap<AddReportDto, Report>();
+            CreateMap<UpdateReportDto, Report>();
         }
     }
 }
