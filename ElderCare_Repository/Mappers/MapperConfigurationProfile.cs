@@ -58,6 +58,7 @@ namespace ElderCare_Repository.Mappers
                 .ForMember(d => d.Email, s => s.MapFrom(e => e.Email))
                 .ForMember(d => d.Username, s => s.MapFrom(e => e.Name))
                 //.ForMember(d => d.Address, s => s.MapFrom(e => e.Address))
+                .ForMember(d => d.CreatedDate, s => s.MapFrom(e => DateTime.UtcNow))
                 .ForMember(d => d.PhoneNumber, s => s.MapFrom(e => e.PhoneNumber));
             CreateMap<CarerSignInDto.CarerCertification, CertificationCarer>();
             CreateMap<CarerSignInDto, CertificationCarer>();
@@ -77,6 +78,7 @@ namespace ElderCare_Repository.Mappers
                 .ForMember(d => d.Username, s => s.MapFrom(e => e.Name))
                 .ForMember(d => d.Address, s => s.MapFrom(e => e.Address))
                 .ForMember(d => d.Password, s => s.MapFrom(e => e.Password))
+                .ForMember(d => d.CreatedDate, s => s.MapFrom(e => DateTime.UtcNow))
                 .ForMember(d => d.PhoneNumber, s => s.MapFrom(e => e.PhoneNumber));
             //contract
             CreateMap<Contract, AddContractDto>().ReverseMap();
@@ -134,7 +136,7 @@ namespace ElderCare_Repository.Mappers
                 .ForMember(d => d.PushMutableContent, s => s.MapFrom(e => e.MutableContent)).ReverseMap();
 
             //report
-            CreateMap<AddReportDto, Report>();
+            CreateMap<AddReportDto, Report>().ForMember(d => d.CreatedDate, s => s.MapFrom(e => DateTime.Now));
             CreateMap<UpdateReportDto, Report>();
         }
     }
