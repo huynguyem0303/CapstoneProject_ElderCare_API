@@ -63,7 +63,7 @@ namespace API.Controllers
             //currentJWT = GenerateJWTString.GenerateJsonWebTokenForCarer(account, config["AppSettings:SecretKey"], DateTime.Now);
             try
             {
-                currentJWT = await _loginService.LoginCusAsync(loginDto.Email, loginDto.Password, loginDto.FCMToken);
+                currentJWT = await _loginService.LoginCusAsync(loginDto.Email, loginDto.Password, loginDto.DeviceToken);
             }catch (Exception ex)
             {
                 return BadRequest(ex.Message);
@@ -99,7 +99,7 @@ namespace API.Controllers
             // currentJWT= GenerateJWTString.GenerateJsonWebTokenForCarer(account, config["AppSettings:SecretKey"], DateTime.Now);
             try
             {
-                currentJWT = await _loginService.LoginCarerAsync(loginDto.Email, loginDto.Password, loginDto.FCMToken);
+                currentJWT = await _loginService.LoginCarerAsync(loginDto.Email, loginDto.Password, loginDto.DeviceToken);
             }
             catch (Exception ex)
             {
@@ -138,7 +138,7 @@ namespace API.Controllers
             // currentJWT = GenerateJWTString.GenerateJsonWebTokenForCarer(account, config["AppSettings:SecretKey"], DateTime.Now);
             try
             {
-                currentJWT = await _loginService.LoginStaffAsync(loginDto.Email, loginDto.Password, loginDto.FCMToken);
+                currentJWT = await _loginService.LoginStaffAsync(loginDto.Email, loginDto.Password, loginDto.DeviceToken);
             }
             catch (Exception ex)
             {
