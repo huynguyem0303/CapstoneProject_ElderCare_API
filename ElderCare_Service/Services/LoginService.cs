@@ -138,7 +138,7 @@ namespace ElderCare_Service.Services
                     ChannelId = "test"
                 }
             });
-            if (response?.Errors?.Count == 0)
+            if (response.Errors.IsNullOrEmpty())
             {
                 await _unitOfWork.AccountRepository.AddDeviceToken(accountId, token);
                 await _unitOfWork.SaveChangeAsync();

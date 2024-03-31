@@ -459,7 +459,9 @@ public partial class ElderCareContext : DbContext
             entity.ToTable("Device");
 
             entity.Property(e => e.DeviceId)
-                .ValueGeneratedNever()
+                .ValueGeneratedOnAdd()
+                .HasColumnType("uniqueidentifier")
+                .HasValueGenerator<GuidValueGenerator>()
                 .HasColumnName("device_id");
             entity.Property(e => e.AccountId).HasColumnName("account_id");
             entity.Property(e => e.DeviceToken)

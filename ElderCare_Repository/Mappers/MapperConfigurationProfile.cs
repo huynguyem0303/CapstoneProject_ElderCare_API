@@ -119,8 +119,6 @@ namespace ElderCare_Repository.Mappers
                 //.ForMember(d => d.PushCategoryId, s => s.MapFrom(e => e.CategoryId))
                 .ForMember(d => d.PushMutableContent, s => s.MapFrom(e => e.MutableContent))
                 .ReverseMap();
-            CreateMap<AccountExpoNotiDto, PushTicketRequest>()
-                .ForMember(d => d, s => s.MapFrom(e => e.Data)).ReverseMap();
             CreateMap<AccountExpoNotiDto.ExpoNotiDto, PushTicketRequest>()
                 //.ForMember(d => d.PushData, s => s.MapFrom(e => e.Data))
                 .ForMember(d => d.PushTitle, s => s.MapFrom(e => e.Title))
