@@ -13,55 +13,55 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ServicesController : ODataController
+    public class ReportsController : ODataController
     {
-        private readonly IServicesService _serviceService;
+        private readonly IReportService _reportService;
 
-        public ServicesController(IServicesService serviceService)
+        public ReportsController(IReportService reportService)
         {
-            _serviceService = serviceService;
+            _reportService = reportService;
         }
 
-        // GET: api/Services
+        // GET: api/Reports
         [HttpGet]
         [EnableQuery]
         [Authorize]
-        public IActionResult GetServices()
+        public IActionResult GetReports()
         {
-            var list = _serviceService.GetAll();
+            var list = _reportService.GetAll();
             
             return Ok(list);
         }
 
-        // GET: api/Services/5
+        // GET: api/Reports/5
         [HttpGet("{id}")]
         [EnableQuery]
         [Authorize]
-        public async Task<SingleResult<Service>> GetService(int id)
+        public async Task<SingleResult<Report>> GetReport(int id)
         {
-            var service = await _serviceService.FindAsync(x => x.ServiceId == id);
-            return SingleResult.Create(service.AsQueryable());
+            var report = await _reportService.FindAsync(x => x.ReportId == id);
+            return SingleResult.Create(report.AsQueryable());
         }
 
-        // PUT: api/Services/5
+        // PUT: api/Reports/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         [EnableQuery]
-        [Authorize(Roles = "Staff, Admin")]
-        public async Task<IActionResult> PutService(int id, UpdateServiceDto service)
+        [Authorize]
+        public async Task<IActionResult> PutReport(int id, UpdateReportDto report)
         {
-            if (id != service.ServiceId)
+            if (id != report.ReportId)
             {
                 return BadRequest();
             }
 
             try
             {
-                await _serviceService.UpdateService(service);
+                await _reportService.UpdateReport(report);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!await _serviceService.ServiceExists(id))
+                if (!await _reportService.ReportExists(id))
                 {
                     return NotFound();
                 }
@@ -74,17 +74,17 @@ namespace API.Controllers
             return NoContent();
         }
 
-        // POST: api/Services
+        // POST: api/Reports
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         [EnableQuery]
-        [Authorize(Roles = "Staff, Admin")]
-        public async Task<ActionResult<Service>> PostService(AddServiceDto model)
+        [Authorize]
+        public async Task<ActionResult<Report>> PostReport(AddReportDto model)
         {
-            Service service;
+            Report report;
             try
             {
-                service = await _serviceService.AddServiceAsync(model);
+                report = await _reportService.AddReportAsync(model);
             }
             catch (DbUpdateException e)
             {
@@ -94,20 +94,20 @@ namespace API.Controllers
                 return Conflict(error: e.Message);
             }
 
-            return CreatedAtAction("GetService", new { id = service.ServiceId }, service);
+            return CreatedAtAction("GetReport", new { id = report.ReportId }, report);
         }
 
-        // DELETE: api/Services/5
+        // DELETE: api/Reports/5
         [HttpDelete("{id}")]
         [EnableQuery]
         [Authorize(Roles = "Staff, Admin")]
-        public async Task<IActionResult> DeleteService(int id)
+        public async Task<IActionResult> DeleteReport(int id)
         {
-            if (!await _serviceService.ServiceExists(id))
+            if (!await _reportService.ReportExists(id))
             {
                 return NotFound();
             }
-            await _serviceService.DeleteService(id);
+            await _reportService.DeleteReport(id);
             return NoContent();
         }
     }

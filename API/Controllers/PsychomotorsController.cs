@@ -103,7 +103,7 @@ namespace API.Controllers
         [Authorize(Roles = "Staff, Admin")]
         public async Task<IActionResult> DeletePsychomotor(int id)
         {
-            if (await _psychomotorService.PsychomotorExists(id))
+            if (!await _psychomotorService.PsychomotorExists(id))
             {
                 return NotFound();
             }

@@ -36,7 +36,7 @@ namespace API.Controllers
         // GET: api/Packages/5
         [HttpGet("{id}")]
         [EnableQuery]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> GetPackage(int id)
         {
             var package = await _packageService.GetById(id);
