@@ -7,6 +7,7 @@ namespace ElderCare_Service.Interfaces
     {
         Task<ResponseModel> SendNotification(NotificationModel notificationModel);
         Task<ResponseModel> SendNotificationToAccount(AccountNotiDto accountNotiDt);
+        Task<PushTicketResponse> SendExpoNotificationToAccount(AccountExpoNotiDto accountNotiModel);
         Task<PushTicketResponse> SendExpoNotification(PushTicketRequestDto[] pushTicketReq);
         Task<PushReceiptResponse> GetExpoNotificationReceipt(PushReceiptRequest pushReceiptReq);
     }

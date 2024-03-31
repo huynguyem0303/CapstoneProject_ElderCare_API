@@ -8,15 +8,15 @@ namespace API.DTO
     public class LoginDto
     {
         [Required]
-        [JsonProperty("email")]
+        //[JsonProperty("email")]
         public string Email { get; set; }
         [Required]
-        [JsonProperty("password")]
+        //[JsonProperty("password")]
         public string Password { get; set; }
 
-        [JsonProperty("fcm_token")]
+        //[JsonProperty("fcm_token")]
         [DefaultValue("")]
         [AllowNull]
-        public string? FCMToken { get; set; }
+        public string? DeviceToken { get; set; }
     }
 }

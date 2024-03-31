@@ -119,6 +119,21 @@ namespace ElderCare_Repository.Mappers
                 //.ForMember(d => d.PushCategoryId, s => s.MapFrom(e => e.CategoryId))
                 .ForMember(d => d.PushMutableContent, s => s.MapFrom(e => e.MutableContent))
                 .ReverseMap();
+            CreateMap<AccountExpoNotiDto, PushTicketRequest>()
+                .ForMember(d => d, s => s.MapFrom(e => e.Data)).ReverseMap();
+            CreateMap<AccountExpoNotiDto.ExpoNotiDto, PushTicketRequest>()
+                //.ForMember(d => d.PushData, s => s.MapFrom(e => e.Data))
+                .ForMember(d => d.PushTitle, s => s.MapFrom(e => e.Title))
+                .ForMember(d => d.PushBody, s => s.MapFrom(e => e.body))
+                //.ForMember(d => d.PushTTL, s => s.MapFrom(e => e.Ttl))
+                //.ForMember(d => d.PushExpiration, s => s.MapFrom(e => e.Expiration))
+                .ForMember(d => d.PushPriority, s => s.MapFrom(e => e.Priority))
+                .ForMember(d => d.PushSubTitle, s => s.MapFrom(e => e.SubTitle))
+                .ForMember(d => d.PushSound, s => s.MapFrom(e => e.Sound))
+                .ForMember(d => d.PushBadgeCount, s => s.MapFrom(e => e.Badge))
+                .ForMember(d => d.PushChannelId, s => s.MapFrom(e => e.ChannelId))
+                //.ForMember(d => d.PushCategoryId, s => s.MapFrom(e => e.CategoryId))
+                .ForMember(d => d.PushMutableContent, s => s.MapFrom(e => e.MutableContent)).ReverseMap();
         }
     }
 }

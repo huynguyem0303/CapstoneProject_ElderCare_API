@@ -102,7 +102,7 @@ namespace ElderCare_Service.Services
                     response.Message = "This account is unavailable";
                     return response;
                 }
-                var fcmTokens = await _accountRepository.GetFCMTokensByAccountId(accountNotiModel.AccountId);
+                var fcmTokens = await _accountRepository.GetDevicesByAccountId(accountNotiModel.AccountId);
                 var resultList = new List<ResponseModel>();
                 string message = "";
                 if (fcmTokens.IsNullOrEmpty())
@@ -113,7 +113,7 @@ namespace ElderCare_Service.Services
                 }
                 for(var i=0; i < fcmTokens.Count(); i++)
                 {
-                    notificationModel.DeviceId = fcmTokens[i].DeviceFcmToken;
+                    notificationModel.DeviceId = fcmTokens[i].DeviceToken;
                     var result = await SendNotification(notificationModel);
                     resultList.Add(result);
                     message += $"device [{i+1}]: {result.Message}, ";
@@ -164,6 +164,36 @@ namespace ElderCare_Service.Services
             var expoSDKClient = new PushApiClient();
             var result = await expoSDKClient.GetReceiptsAsync(pushReceiptReq);
             return result;
+        }
+
+        public async Task<PushTicketResponse> SendExpoNotificationToAccount(AccountExpoNotiDto accountNotiModel)
+        {
+            var response = new PushTicketResponse
+            {
+                Errors = new()
+            };
+            var requestModel = _mapper.Map<PushTicketRequest>(accountNotiModel.Data); 
+            var expoSDKClient = new PushApiClient();
+            expoSDKClient.SetToken("tXTQFNs8eaixHiHzz9GPRcwDrr-8WdqrHDVPOodv");
+            if ((await _accountRepository.FindAsync(e => e.Status != (int)AccountStatus.InActive
+                                                            && e.AccountId == accountNotiModel.AccountId))
+                                                            .IsNullOrEmpty() )
+            {
+                response.Errors.Add(new Error() { ErrorMessage = "This account is unavailable" });
+                return response;
+            }
+            var devices = await _accountRepository.GetDevicesByAccountId(accountNotiModel.AccountId);
+            if (devices.IsNullOrEmpty())
+            {
+                response.Errors.Add(new Error() { ErrorMessage = "Can't find any device on this account" });
+                return response;
+            }
+            requestModel.PushTo = devices.Select(e => e.DeviceToken).ToList();
+            if (expoSDKClient.IsTokenSet())
+            {
+                response = await expoSDKClient.SendPushAsync(requestModel);
+            }
+            return response;
         }
     }
 }

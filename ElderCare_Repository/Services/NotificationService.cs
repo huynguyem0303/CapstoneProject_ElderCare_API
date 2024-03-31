@@ -98,7 +98,7 @@ namespace ElderCare_Repository.Services
                     response.Message = "This account is unavailable";
                     return response;
                 }
-                var fcmTokens = await _accountRepository.GetFCMTokensByAccountId(accountNotiModel.AccountId);
+                var fcmTokens = await _accountRepository.GetDevicesByAccountId(accountNotiModel.AccountId);
                 var resultList = new List<ResponseModel>();
                 string message = "";
                 if (fcmTokens.IsNullOrEmpty())
@@ -109,7 +109,7 @@ namespace ElderCare_Repository.Services
                 }
                 for(var i=0; i < fcmTokens.Count(); i++)
                 {
-                    notificationModel.DeviceId = fcmTokens[i].DeviceFcmToken;
+                    notificationModel.DeviceId = fcmTokens[i].DeviceToken;
                     var result = await SendNotification(notificationModel);
                     resultList.Add(result);
                     message += $"device [{i+1}]: {result.Message}, ";

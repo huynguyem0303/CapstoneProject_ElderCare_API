@@ -37,16 +37,17 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// send noti using fcm services, please send fcm token when login to using this function
+        /// send noti using expo services, please send expo token when login to use this function
         /// </summary>
         /// <param name="accountNotiDto"></param>
         /// <returns></returns>
         [Route("sendToAccount")]
         [HttpPost]
-        public async Task<IActionResult> SendNotificationToAccount(AccountNotiDto accountNotiDto)
+        public async Task<IActionResult> SendNotificationToAccount(AccountExpoNotiDto accountNotiDto)
         {
             //var result = await _unitOfWork.NotificationService.SendNotificationToAccount(accountNotiDto);
-            var result = await _notificationService.SendNotificationToAccount(accountNotiDto);
+            //var result = await _notificationService.SendNotificationToAccount(accountNotiDto);
+            var result = await _notificationService.SendExpoNotificationToAccount(accountNotiDto);
             return Ok(result);
         }
         /// <summary>

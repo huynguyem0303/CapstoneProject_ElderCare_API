@@ -462,9 +462,9 @@ public partial class ElderCareContext : DbContext
                 .ValueGeneratedNever()
                 .HasColumnName("device_id");
             entity.Property(e => e.AccountId).HasColumnName("account_id");
-            entity.Property(e => e.DeviceFcmToken)
+            entity.Property(e => e.DeviceToken)
                 .HasMaxLength(255)
-                .HasColumnName("device_fcm_token");
+                .HasColumnName("device_token");
 
             entity.HasOne(d => d.Account).WithMany(p => p.Devices)
                 .HasForeignKey(d => d.AccountId)

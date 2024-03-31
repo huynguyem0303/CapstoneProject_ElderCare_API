@@ -74,20 +74,20 @@ namespace ElderCare_Repository.Repos
                 throw new Exception(ex.Message);
             }
         }
-        public async Task<List<Device>?> GetFCMTokensByAccountId(int accountId)
+        public async Task<List<Device>?> GetDevicesByAccountId(int accountId)
         {
             return await _context.Devices.Where(e => e.AccountId.Equals(accountId)).ToListAsync();
         }
 
-        public async Task AddFCMToken(int accountId, string tokenValue)
+        public async Task AddDeviceToken(int accountId, string tokenValue)
         {
             var isDublicate = await _context.Devices.AnyAsync(e => e.AccountId.Equals(accountId)
                                                                    && e.Account.Status == (int)AccountStatus.Active
-                                                                   && e.DeviceFcmToken == tokenValue);
+                                                                   && e.DeviceToken == tokenValue);
 
             if (!isDublicate && !tokenValue.IsNullOrEmpty())
             {
-                await _context.Devices.AddAsync(new Device() { AccountId = accountId, DeviceFcmToken = tokenValue });
+                await _context.Devices.AddAsync(new Device() { AccountId = accountId, DeviceToken = tokenValue });
             }
 
         }

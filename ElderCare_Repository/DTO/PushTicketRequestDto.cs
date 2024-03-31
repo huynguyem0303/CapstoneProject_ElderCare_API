@@ -1,6 +1,8 @@
-﻿using Newtonsoft.Json;
+﻿using ElderCare_Domain.Validation;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,10 +23,12 @@ namespace ElderCare_Repository.DTO
 
         //public int? Expiration { get; set; }
 
+        [StringRange(AllowableValues = new [] { "default" , "normal" , "high" }, AllowNull = true)]
         public string? Priority { get; set; } //'default' | 'normal' | 'high'
 
         public string SubTitle { get; set; }
 
+        [StringRange(AllowableValues = new[] { "default" }, AllowNull = true)]
         public string? Sound { get; set; } //'default' | null
 
         public int? Badge { get; set; }
