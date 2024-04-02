@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ElderCare_Repository.DTO
 {
-    public class TrasactionDto
+    public class TransactionDto
     {
         public double? FigureMoney { get; set; }
         public string? RedirectUrl { get; set; }
