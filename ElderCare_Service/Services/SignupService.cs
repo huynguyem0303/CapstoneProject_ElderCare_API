@@ -18,7 +18,7 @@ namespace ElderCare_Service.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Carer> SignInCarer(CarerSignInDto carerDto)
+        public async Task<Carer> SignInCarer(CarerSignUpDto carerDto)
         {
             var carer = _mapper.Map<Carer>(carerDto);
             //var account = _mapper.Map<Account>(carerDto);
@@ -34,7 +34,7 @@ namespace ElderCare_Service.Services
             return carer;
         }
 
-        public async Task<Account> SignInCustomer(CustomerSignInDto customerDto)
+        public async Task<Account> SignInCustomer(CustomerSignUpDto customerDto)
         {
             var customer = _mapper.Map<Customer>(customerDto);
             var account = _mapper.Map<Account>(customerDto);

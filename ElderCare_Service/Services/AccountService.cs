@@ -4,6 +4,7 @@ using ElderCare_Domain.Models;
 using ElderCare_Repository.DTO;
 using ElderCare_Service.Interfaces;
 using System.Linq.Expressions;
+using System.Security.Claims;
 
 namespace ElderCare_Service.Services
 {
@@ -55,13 +56,18 @@ namespace ElderCare_Service.Services
             await _unitOfWork.SaveChangeAsync();
         }
 
-        public async Task<Account?> GetById(int id)
+        public async Task<Account?> GetByIdAsync(int? id)
         {
             return await _unitOfWork.AccountRepository.GetByIdAsync(id);
         }
         public async Task<bool> AccountExists(int id)
         {
             return await _unitOfWork.AccountRepository.GetByIdAsync(id) != null;
+        }
+
+        public int? GetMemberIdFromToken(ClaimsPrincipal userClaims)
+        {
+            return _unitOfWork.AccountRepository.GetMemberIdFromToken(userClaims);
         }
     }
 }

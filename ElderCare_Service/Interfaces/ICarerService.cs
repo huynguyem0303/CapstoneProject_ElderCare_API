@@ -21,8 +21,8 @@ namespace ElderCare_Service.Interfaces
         Task<bool> CarerExists(int id);
         Task<List<CarerViewDto>?> SearchCarer(SearchCarerDto dto);
        
-        Task<List<CarerTransactionDto>> GetCarerTransactionHistoryAsyncByCarerId(int carerId);
-        Task<List<CarerTransactionDto>> GetCarerTransactionHistoryAsyncByCustomerId(int customerId);
+        Task<List<CarerTransactionDto>> GetTransactionHistoryByCarerIdAsync(int carerId);
+        Task<List<CarerTransactionDto>> GetTransactionHistoryByCustomerIdAsync(int customerId);
         Task<Account?> ApproveCarer(int carerId, int status);
         Task<List<ServiceDto>> GetServicesByCarerId(int id);
     }
