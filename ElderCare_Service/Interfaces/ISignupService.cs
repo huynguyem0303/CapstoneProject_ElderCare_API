@@ -5,7 +5,7 @@ namespace ElderCare_Service.Interfaces
 {
     public interface ISignupService
     {
-        Task<Carer> SignInCarer(CarerSignInDto carerDto);
-        Task<Account> SignInCustomer(CustomerSignInDto customerDto);
+        Task<Carer> SignInCarer(CarerSignUpDto carerDto);
+        Task<Account> SignInCustomer(CustomerSignUpDto customerDto);
     }
 }

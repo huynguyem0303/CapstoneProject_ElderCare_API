@@ -19,21 +19,19 @@ namespace API.Controllers
     [ApiController]
     public class TransactionController : ODataController
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        //private readonly IUnitOfWork _unitOfWork;
+        //private readonly IMapper _mapper;
+        //private readonly IHttpContextAccessor _httpContextAccessor;
    
         private readonly ICarerService _carerService;
+        private readonly IAccountService _accountService;
 
 
         private readonly ITransactionService _transactionService;
         public static string? url;
 
-        public TransactionController(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor, ICarerService carerService, ITransactionService transactionService)
+        public TransactionController(ICarerService carerService, ITransactionService transactionService)
         {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-            _httpContextAccessor = httpContextAccessor;
             _carerService = carerService;
             _transactionService = transactionService;
         }
@@ -53,8 +51,8 @@ namespace API.Controllers
         public async Task<IActionResult> CreateTransaction([FromBody] TrasactionDto dto,int carerid,int customerid,int contractid)
         {
             
-            var idClaim = _unitOfWork.AccountRepository.GetMemberIdFromToken(HttpContext.User);
-            var userid = await _unitOfWork.AccountRepository.GetByIdAsync(idClaim);
+            var idClaim = _accountService.GetMemberIdFromToken(HttpContext.User);
+            var account = await _accountService.GetByIdAsync(idClaim);
             //dto.DateTime = DateTime.Now;
              
             //var id = _unitOfWork.TransactionRepo.GetAll().OrderByDescending(i=>i.TransactionId).FirstOrDefault().TransactionId;
@@ -97,7 +95,7 @@ namespace API.Controllers
 
 
                 //string paymentUrl = vnpay.CreateRequestUrl(vnp_Url, vnp_HashSecret);
-                string paymentUrl = await _transactionService.CreateTransaction(dto, (int)userid.AccountId,carerid, customerid,contractid);
+                string paymentUrl = await _transactionService.CreateTransaction(dto, (int)account.AccountId,carerid, customerid,contractid);
                 url= paymentUrl;
                 return Ok(new ApiResponse
                 {
@@ -118,8 +116,8 @@ namespace API.Controllers
         {
             try
             {
-                var idClaim = _unitOfWork.AccountRepository.GetMemberIdFromToken(HttpContext.User);
-                var userid = await _unitOfWork.AccountRepository.GetByIdAsync(idClaim);
+                var idClaim = _accountService.GetMemberIdFromToken(HttpContext.User);
+                var userid = await _accountService.GetByIdAsync(idClaim);
                 //var trans = _unitOfWork.TransactionRepo.GetLastestTransaction(userid.AccountId);
 
                 //string vnp_Returnurl = "https://elder-care-api.monoinfinity.net/process-payment"; //URL nhan ket qua tra ve 
@@ -267,7 +265,7 @@ namespace API.Controllers
         [HttpGet("getTransactionHistoryByCarerId")]
         [EnableQuery]
         
-        public async Task<IActionResult> GetCarerTransactionHistoryByCarer(int carerId)
+        public async Task<IActionResult> GetTransactionHistoryByCarerId(int carerId)
         {
             try
             {
@@ -281,7 +279,7 @@ namespace API.Controllers
                 //        (transaction.CarerId, transaction.CustomerId) = (carerCus.CarerId, carerCus.CustomerId);
                 //    }
                 //}
-                var carerTransactions = await _carerService.GetCarerTransactionHistoryAsyncByCarerId(carerId);
+                var carerTransactions = await _carerService.GetTransactionHistoryByCarerIdAsync(carerId);
                 if (carerTransactions.IsNullOrEmpty())
                 {
                     return NotFound();
@@ -295,7 +293,7 @@ namespace API.Controllers
         }
         [HttpGet("getTransactionHistoryByCustomerId")]
         [EnableQuery]
-        public async Task<IActionResult> GetCarerTransactionHistoryByCus(int customerId)
+        public async Task<IActionResult> GetTransactionHistoryByCusId(int customerId)
         {
             try
             {
@@ -309,7 +307,7 @@ namespace API.Controllers
                 //        (transaction.CarerId, transaction.CustomerId) = (carerCus.CarerId, carerCus.CustomerId);
                 //    }
                 //}
-                var carerTransactions = await _carerService.GetCarerTransactionHistoryAsyncByCustomerId(customerId);
+                var carerTransactions = await _carerService.GetTransactionHistoryByCustomerIdAsync(customerId);
                 if (carerTransactions.IsNullOrEmpty())
                 {
                     return NotFound();

@@ -91,7 +91,7 @@ namespace ElderCare_Service.Services
             return carerview;
         }
 
-        public async Task<List<CarerTransactionDto>> GetCarerTransactionHistoryAsyncByCarerId(int carerId)
+        public async Task<List<CarerTransactionDto>> GetTransactionHistoryByCarerIdAsync(int carerId)
         {
             var transactionList = await _unitOfWork.CarerRepository.GetCarerTransaction(carerId);
             if (transactionList.IsNullOrEmpty())
@@ -111,7 +111,7 @@ namespace ElderCare_Service.Services
             }
             return carerTransactions;
         }
-        public async Task<List<CarerTransactionDto>> GetCarerTransactionHistoryAsyncByCustomerId(int customerId)
+        public async Task<List<CarerTransactionDto>> GetTransactionHistoryByCustomerIdAsync(int customerId)
         {
             var transactionList = await _unitOfWork.CarerRepository.GetCustomerTransaction(customerId);
             if (transactionList.IsNullOrEmpty())

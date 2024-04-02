@@ -17,11 +17,11 @@ namespace API.Controllers
     {
         //private readonly IUnitOfWork _unitOfWork;
         //private readonly IMapper _mapper;
-        private readonly ISignupService _signinService;
+        private readonly ISignupService _signupService;
 
-        public SignupController(ISignupService signinService)
+        public SignupController(ISignupService signupService)
         {
-            _signinService = signinService;
+            _signupService = signupService;
         }
 
         //public SignInController(IUnitOfWork unitOfWork, IMapper mapper)
@@ -36,7 +36,7 @@ namespace API.Controllers
         /// <param name="carerDto"> field "cert_id": certificate type: 1 medical; etc</param>
         /// <returns></returns>
         [HttpPost("signinCarer")]
-        public async Task<IActionResult> SignInCarer(CarerSignInDto carerDto)
+        public async Task<IActionResult> SignUpCarer(CarerSignUpDto carerDto)
         {
             //var carer = _mapper.Map<Carer>(carerDto);
             //var account = _mapper.Map<Account>(carerDto);
@@ -52,7 +52,7 @@ namespace API.Controllers
             try
             {
                 //await _unitOfWork.SaveChangeAsync();
-                carer = await _signinService.SignInCarer(carerDto);
+                carer = await _signupService.SignInCarer(carerDto);
             }
             catch (DbUpdateException e)
             {
@@ -62,7 +62,7 @@ namespace API.Controllers
         }
 
         [HttpPost("signinCustomer")]
-        public async Task<IActionResult> SignInCustomer(CustomerSignInDto customerDto)
+        public async Task<IActionResult> SignUpCustomer(CustomerSignUpDto customerDto)
         {
             //var customer = _mapper.Map<Customer>(customerDto);
             //var account = _mapper.Map<Account>(customerDto);
@@ -75,7 +75,7 @@ namespace API.Controllers
             try
             {
                 //await _unitOfWork.SaveChangeAsync();
-                account = await _signinService.SignInCustomer(customerDto);
+                account = await _signupService.SignInCustomer(customerDto);
             }
             catch (DbUpdateException e)
             {

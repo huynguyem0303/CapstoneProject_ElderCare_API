@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ElderCare_Repository.DTO
 {
-    public class CustomerSignInDto
+    public class CustomerSignUpDto
     {
         [JsonProperty("name")]
         public string Name { get; set; }

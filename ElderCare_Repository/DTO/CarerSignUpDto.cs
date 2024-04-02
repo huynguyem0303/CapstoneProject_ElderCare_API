@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ElderCare_Repository.DTO
 {
-    public class CarerSignInDto
+    public class CarerSignUpDto
     {
         //[JsonProperty("name")]
         public string Name {  get; set; }
