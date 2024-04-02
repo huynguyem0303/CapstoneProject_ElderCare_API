@@ -48,7 +48,7 @@ namespace API.Controllers
         [HttpPost]
         [EnableQuery]
         [Authorize]
-        public async Task<IActionResult> CreateTransaction([FromBody] TrasactionDto dto,int carerid,int customerid,int contractid)
+        public async Task<IActionResult> CreateTransaction([FromBody] TransactionDto dto,int carerid,int customerid,int contractid)
         {
             
             var idClaim = _accountService.GetMemberIdFromToken(HttpContext.User);
@@ -307,12 +307,12 @@ namespace API.Controllers
                 //        (transaction.CarerId, transaction.CustomerId) = (carerCus.CarerId, carerCus.CustomerId);
                 //    }
                 //}
-                var carerTransactions = await _carerService.GetTransactionHistoryByCustomerIdAsync(customerId);
-                if (carerTransactions.IsNullOrEmpty())
+                var customerTransactions = await _carerService.GetTransactionHistoryByCustomerIdAsync(customerId);
+                if (customerTransactions.IsNullOrEmpty())
                 {
                     return NotFound();
                 }
-                return Ok(carerTransactions);
+                return Ok(customerTransactions);
             }
             catch (Exception ex)
             {

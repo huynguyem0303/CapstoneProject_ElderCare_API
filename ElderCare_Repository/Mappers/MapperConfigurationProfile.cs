@@ -37,15 +37,15 @@ namespace ElderCare_Repository.Mappers
             CreateMap<HealthDetailDto, PsychomotorHealth>().ReverseMap();
             CreateMap<PsychomotorHealthDto, PsychomotorHealth>().ReverseMap();
          
-            CreateMap<Transaction, TrasactionDto>().ReverseMap().ForMember(des => des.Type,
+            CreateMap<Transaction, TransactionDto>().ReverseMap().ForMember(des => des.Type,
                 opt => opt.MapFrom(src => EnumMapper<TransactionType>.MapType(src.Type)));
-            CreateMap<Transaction, CarerTransactionDto>().ReverseMap();
+            CreateMap<Transaction, TransactionHistoryDto>().ReverseMap();
             CreateMap<AccountNotiDto, NotificationModel>()
                 .ForMember(d => d.IsAndroidDevice, s => s.MapFrom(e => e.Data.IsAndroidDevice))
                 .ForMember(d => d.Title, s => s.MapFrom(e => e.Data.Title))
                 .ForMember(d => d.Body, s => s.MapFrom(e => e.Data.Body));
             //carer sign in
-            CreateMap<CarerSignUpDto, Carer>()
+            CreateMap<CarerSignInDto, Carer>()
                 .ForMember(d => d.Name, s => s.MapFrom(e => e.Name))
                 .ForMember(d => d.Email, s => s.MapFrom(e => e.Email))
                 .ForMember(d => d.Phone, s => s.MapFrom(e => e.PhoneNumber))
@@ -53,27 +53,27 @@ namespace ElderCare_Repository.Mappers
                 .ForMember(d => d.Bankinfo, s => s.MapFrom(e => e.BankInfo))
                 .ForMember(d => d.Gender, s => s.MapFrom(e => e.Gender))
                 .ForMember(d => d.Image, s => s.MapFrom(e => e.Image));
-            CreateMap<CarerSignUpDto.BankInfomation, Bankinformation>();
-            CreateMap<CarerSignUpDto, Account>()
+            CreateMap<CarerSignInDto.BankInfomation, Bankinformation>();
+            CreateMap<CarerSignInDto, Account>()
                 .ForMember(d => d.Email, s => s.MapFrom(e => e.Email))
                 .ForMember(d => d.Username, s => s.MapFrom(e => e.Name))
                 //.ForMember(d => d.Address, s => s.MapFrom(e => e.Address))
                 .ForMember(d => d.CreatedDate, s => s.MapFrom(e => DateTime.UtcNow))
                 .ForMember(d => d.PhoneNumber, s => s.MapFrom(e => e.PhoneNumber));
-            CreateMap<CarerSignUpDto.CarerCertification, CertificationCarer>();
-            CreateMap<CarerSignUpDto, CertificationCarer>();
+            CreateMap<CarerSignInDto.CarerCertification, CertificationCarer>();
+            CreateMap<CarerSignInDto, CertificationCarer>();
             CreateMap<Carer, Account>()
                 .ForMember(d => d.Username, s => s.MapFrom(e => e.Name))
                 .ForMember(d => d.PhoneNumber, s => s.MapFrom(e => e.Phone))
                 .ForMember(d => d.CarerId, s => s.MapFrom(e => e.CarerId));
             //customer sign in
-            CreateMap<CustomerSignUpDto, Customer>()
+            CreateMap<CustomerSignInDto, Customer>()
                 .ForMember(d => d.CustomerName, s => s.MapFrom(e => e.Name))
                 .ForMember(d => d.Email, s => s.MapFrom(e => e.Email))
                 .ForMember(d => d.Phone, s => s.MapFrom(e => e.PhoneNumber))
                 .ForMember(d => d.Bankinfo, s => s.MapFrom(e => e.BankInfo));
-            CreateMap<CustomerSignUpDto.CustomerBankInfomation, Bankinformation>();
-            CreateMap<CustomerSignUpDto, Account>()
+            CreateMap<CustomerSignInDto.CustomerBankInfomation, Bankinformation>();
+            CreateMap<CustomerSignInDto, Account>()
                 .ForMember(d => d.Email, s => s.MapFrom(e => e.Email))
                 .ForMember(d => d.Username, s => s.MapFrom(e => e.Name))
                 .ForMember(d => d.Address, s => s.MapFrom(e => e.Address))
