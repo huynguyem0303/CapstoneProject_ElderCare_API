@@ -103,7 +103,7 @@ namespace ElderCare_Service.Services
                     throw new Exception(message);
                 }
             }
-            currentJWT = GenerateJWTString.GenerateJsonWebTokenForCarer(account, config["AppSettings:SecretKey"], DateTime.Now);
+            currentJWT = GenerateJWTString.GenerateJsonWebTokenForStaff(account, config["AppSettings:SecretKey"], DateTime.Now);
             return currentJWT;
         }
         private async Task<ResponseModel> checkAccountFCMToken(int accountId, string token)
