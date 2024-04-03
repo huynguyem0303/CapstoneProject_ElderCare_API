@@ -105,7 +105,7 @@ namespace ElderCare_Service.Services
 
         public string LinkPayment(int accountId)
         {
-            var trans = _unitOfWork.TransactionRepo.GetLastestTransaction(accountId);
+            var trans = _unitOfWork.TransactionRepo.GetLatestTransaction(accountId);
 
             //string vnp_Returnurl = "https://elder-care-api.monoinfinity.net/process-payment"; //URL nhan ket qua tra ve 
             //string vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html"; //URL thanh toan cua VNPAY 

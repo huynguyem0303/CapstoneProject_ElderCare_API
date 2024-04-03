@@ -30,7 +30,7 @@ namespace ElderCare_Repository.Repos
 
         }
 
-        public async Task<Transaction> GetLastestTransaction(int id)
+        public async Task<Transaction> GetLatestTransaction(int id)
         {
             var result = await _context.Set<Transaction>().Where(t => t.AccountId == id)
      .OrderByDescending(t => t.TransactionId)
