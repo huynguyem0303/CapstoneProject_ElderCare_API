@@ -52,7 +52,7 @@ namespace API.Controllers
             try
             {
                 //await _unitOfWork.SaveChangeAsync();
-                carer = await _signupService.SignInCarer(carerDto);
+                carer = await _signupService.SignUpCarer(carerDto);
             }
             catch (DbUpdateException e)
             {
@@ -75,7 +75,7 @@ namespace API.Controllers
             try
             {
                 //await _unitOfWork.SaveChangeAsync();
-                account = await _signupService.SignInCustomer(customerDto);
+                account = await _signupService.SignUpCustomer(customerDto);
             }
             catch (DbUpdateException e)
             {

@@ -45,7 +45,7 @@ namespace ElderCare_Repository.Mappers
                 .ForMember(d => d.Title, s => s.MapFrom(e => e.Data.Title))
                 .ForMember(d => d.Body, s => s.MapFrom(e => e.Data.Body));
             //carer sign in
-            CreateMap<CarerSignInDto, Carer>()
+            CreateMap<CarerSignUpDto, Carer>()
                 .ForMember(d => d.Name, s => s.MapFrom(e => e.Name))
                 .ForMember(d => d.Email, s => s.MapFrom(e => e.Email))
                 .ForMember(d => d.Phone, s => s.MapFrom(e => e.PhoneNumber))
@@ -53,27 +53,27 @@ namespace ElderCare_Repository.Mappers
                 .ForMember(d => d.Bankinfo, s => s.MapFrom(e => e.BankInfo))
                 .ForMember(d => d.Gender, s => s.MapFrom(e => e.Gender))
                 .ForMember(d => d.Image, s => s.MapFrom(e => e.Image));
-            CreateMap<CarerSignInDto.BankInfomation, Bankinformation>();
-            CreateMap<CarerSignInDto, Account>()
+            CreateMap<CarerSignUpDto.BankInfomation, Bankinformation>();
+            CreateMap<CarerSignUpDto, Account>()
                 .ForMember(d => d.Email, s => s.MapFrom(e => e.Email))
                 .ForMember(d => d.Username, s => s.MapFrom(e => e.Name))
                 //.ForMember(d => d.Address, s => s.MapFrom(e => e.Address))
                 .ForMember(d => d.CreatedDate, s => s.MapFrom(e => DateTime.UtcNow))
                 .ForMember(d => d.PhoneNumber, s => s.MapFrom(e => e.PhoneNumber));
-            CreateMap<CarerSignInDto.CarerCertification, CertificationCarer>();
-            CreateMap<CarerSignInDto, CertificationCarer>();
+            CreateMap<CarerSignUpDto.CarerCertification, CertificationCarer>();
+            CreateMap<CarerSignUpDto, CertificationCarer>();
             CreateMap<Carer, Account>()
                 .ForMember(d => d.Username, s => s.MapFrom(e => e.Name))
                 .ForMember(d => d.PhoneNumber, s => s.MapFrom(e => e.Phone))
                 .ForMember(d => d.CarerId, s => s.MapFrom(e => e.CarerId));
             //customer sign in
-            CreateMap<CustomerSignInDto, Customer>()
+            CreateMap<CustomerSignUpDto, Customer>()
                 .ForMember(d => d.CustomerName, s => s.MapFrom(e => e.Name))
                 .ForMember(d => d.Email, s => s.MapFrom(e => e.Email))
                 .ForMember(d => d.Phone, s => s.MapFrom(e => e.PhoneNumber))
                 .ForMember(d => d.Bankinfo, s => s.MapFrom(e => e.BankInfo));
-            CreateMap<CustomerSignInDto.CustomerBankInfomation, Bankinformation>();
-            CreateMap<CustomerSignInDto, Account>()
+            CreateMap<CustomerSignUpDto.CustomerBankInfomation, Bankinformation>();
+            CreateMap<CustomerSignUpDto, Account>()
                 .ForMember(d => d.Email, s => s.MapFrom(e => e.Email))
                 .ForMember(d => d.Username, s => s.MapFrom(e => e.Name))
                 .ForMember(d => d.Address, s => s.MapFrom(e => e.Address))

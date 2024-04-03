@@ -767,7 +767,7 @@ public partial class ElderCareContext : DbContext
             entity.Property(e => e.ServiceId)
                 .ValueGeneratedNever()
                 .HasColumnName("service_id");
-            entity.Property(e => e.Desciption)
+            entity.Property(e => e.Description)
                 .HasMaxLength(300)
                 .HasColumnName("desciption");
             entity.Property(e => e.Name)
