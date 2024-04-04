@@ -10,5 +10,7 @@ namespace ElderCare_Repository.Interfaces
 {
     public interface IPackageRepo:IGenericRepo<Package>
     {
+        public Task<List<PackageService>> AddPackageService(int packageId, string[] serviceName);
+        Task RemovePackageService(int packageId, int serviceId);
     }
 }
