@@ -28,7 +28,43 @@ namespace API.Controllers
         public async Task<IActionResult> GetContractByCarerId([FromRoute] int carerid)
         {
             //var model = await _unitOfWork.ElderRepo.FindAsync(x => x.ElderlyId == elderId);
+            var contract = await _contractService.FindAsync(e => e.CarerId == carerid);
+            if (!contract.IsNullOrEmpty())
+            {
+                return Ok(contract);
+            }
+            return NotFound();
+        }
+        [HttpGet("{carerid}", Name = "GetContractByCusId")]
+        [EnableQuery]
+        public async Task<IActionResult> GetContractByCusId([FromRoute] int cusid)
+        {
+            //var model = await _unitOfWork.ElderRepo.FindAsync(x => x.ElderlyId == elderId);
+            var contract = await _contractService.FindAsync(e => e.CustomerId == cusid);
+            if (!contract.IsNullOrEmpty())
+            {
+                return Ok(contract);
+            }
+            return NotFound();
+        }
+        [HttpGet("{carerid}", Name = "GetPendingContractByCarerId")]
+        [EnableQuery]
+        public async Task<IActionResult> GetPendingContractByCarerId([FromRoute] int carerid)
+        {
+            //var model = await _unitOfWork.ElderRepo.FindAsync(x => x.ElderlyId == elderId);
             var contract = await _contractService.FindAsync(e => e.CarerId == carerid && e.Status == (int)ContractStatus.Pending);
+            if (!contract.IsNullOrEmpty())
+            {
+                return Ok(contract);
+            }
+            return NotFound();
+        }
+        [HttpGet("{carerid}", Name = "GetPendingContractByCusId")]
+        [EnableQuery]
+        public async Task<IActionResult> GetPendingContractByCusId([FromRoute] int cusid)
+        {
+            //var model = await _unitOfWork.ElderRepo.FindAsync(x => x.ElderlyId == elderId);
+            var contract = await _contractService.FindAsync(e => e.CustomerId == cusid && e.Status == (int)ContractStatus.Pending);
             if (!contract.IsNullOrEmpty())
             {
                 return Ok(contract);
