@@ -23,9 +23,9 @@ namespace API.Controllers
             _contractService = contractService;
         }
 
-        [HttpGet("{carerid}", Name = "GetContractByCarerId")]
+        [HttpGet("getContractByCarerId")]
         [EnableQuery]
-        public async Task<IActionResult> GetContractByCarerId([FromRoute] int carerid)
+        public async Task<IActionResult> GetContractByCarerId(int carerid)
         {
             //var model = await _unitOfWork.ElderRepo.FindAsync(x => x.ElderlyId == elderId);
             var contract = await _contractService.FindAsync(e => e.CarerId == carerid);
@@ -35,9 +35,9 @@ namespace API.Controllers
             }
             return NotFound();
         }
-        [HttpGet("{cusid}", Name = "GetContractByCusId")]
+        [HttpGet("getContractByCusId")]
         [EnableQuery]
-        public async Task<IActionResult> GetContractByCusId([FromRoute] int cusid)
+        public async Task<IActionResult> GetContractByCusId(int cusid)
         {
             //var model = await _unitOfWork.ElderRepo.FindAsync(x => x.ElderlyId == elderId);
             var contract = await _contractService.FindAsync(e => e.CustomerId == cusid);
@@ -47,9 +47,9 @@ namespace API.Controllers
             }
             return NotFound();
         }
-        [HttpGet("{carerid}", Name = "GetPendingContractByCarerId")]
+        [HttpGet("getPendingContractByCarerId")]
         [EnableQuery]
-        public async Task<IActionResult> GetPendingContractByCarerId([FromRoute] int carerid)
+        public async Task<IActionResult> GetPendingContractByCarerId( int carerid)
         {
             //var model = await _unitOfWork.ElderRepo.FindAsync(x => x.ElderlyId == elderId);
             var contract = await _contractService.FindAsync(e => e.CarerId == carerid && e.Status == (int)ContractStatus.Pending);
@@ -59,9 +59,9 @@ namespace API.Controllers
             }
             return NotFound();
         }
-        [HttpGet("{cusid}", Name = "GetPendingContractByCusId")]
+        [HttpGet("getPendingContractByCusId")]
         [EnableQuery]
-        public async Task<IActionResult> GetPendingContractByCusId([FromRoute] int cusid)
+        public async Task<IActionResult> GetPendingContractByCusId( int cusid)
         {
             //var model = await _unitOfWork.ElderRepo.FindAsync(x => x.ElderlyId == elderId);
             var contract = await _contractService.FindAsync(e => e.CustomerId == cusid && e.Status == (int)ContractStatus.Pending);
