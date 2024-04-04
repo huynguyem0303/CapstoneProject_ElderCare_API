@@ -36,7 +36,7 @@ namespace API.Controllers
         // GET: api/Packages/5
         [HttpGet("{id}")]
         [EnableQuery]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> GetPackage(int id)
         {
             var package = await _packageService.GetById(id);
@@ -112,6 +112,51 @@ namespace API.Controllers
                 return NotFound();
             }
             await _packageService.DeletePackage(id);
+            return NoContent();
+        }
+
+        [HttpPost("{packageId}/Services")]
+        [EnableQuery]
+        //[Authorize(Roles = "Staff, Admin")]
+        public async Task<ActionResult<Package>> PostPackageService(int packageId, string[] serviceName)
+        {
+            if (!await _packageService.PackageExists(packageId))
+            {
+                return NotFound();
+            }
+            List<PackageServiceDto> packageService;
+            try
+            {
+                packageService = await _packageService.AddPackageServiceAsync(packageId, serviceName);
+            }
+            catch (DbUpdateException e)
+            {
+                return BadRequest(error: e.Message);
+            }
+            catch (DuplicateNameException e)
+            {
+                return Conflict(error: e.Message);
+            }
+
+            return CreatedAtAction("GetPackage", new { id = packageId }, packageService); ;
+        }
+
+        [HttpDelete("{packageId}/Services/{serviceId}")]
+        [EnableQuery]
+        //[Authorize(Roles = "Staff, Admin")]
+        public async Task<IActionResult> RemoveService(int packageId, int serviceId)
+        {
+            if (!await _packageService.PackageExists(packageId))
+            {
+                return NotFound();
+            }
+            try
+            {
+                await _packageService.RemoveServiceFromPackage(packageId, serviceId);
+            }catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
             return NoContent();
         }
     }
