@@ -25,8 +25,9 @@ namespace ElderCare_Service
         private readonly IPackageRepo _packageRepo;
         private readonly ICertificationRepo _certificationRepo;
         private readonly IReportRepo _reportRepo;
+        private readonly ISystemConfigRepo _systemConfigRepo;
 
-        public UnitOfWork(ElderCareContext context, IAccountRepository accountRepository, IContractRepository contractRepository, ICustomerRepository customerRepository, ICarerRepository carerRepository, INotificationService notificationService, ITransactionRepo transactionRepository, IHttpContextAccessor httpContextAccessor, IElderRepo elderRepo, IEmailService emailService, IHobbyRepo hobbyRepo, IPsychomotorHealthRepo psychomotorHealthRepo, IHealthDetailRepo healthDetailRepo, IPsychomotorRepo psychomotorRepo, IServiceRepo serviceRepo, IPackageRepo packageRepo, ICertificationRepo certificationRepo, IReportRepo reportRepo)
+        public UnitOfWork(ElderCareContext context, IAccountRepository accountRepository, IContractRepository contractRepository, ICustomerRepository customerRepository, ICarerRepository carerRepository, INotificationService notificationService, ITransactionRepo transactionRepository, IHttpContextAccessor httpContextAccessor, IElderRepo elderRepo, IEmailService emailService, IHobbyRepo hobbyRepo, IPsychomotorHealthRepo psychomotorHealthRepo, IHealthDetailRepo healthDetailRepo, IPsychomotorRepo psychomotorRepo, IServiceRepo serviceRepo, IPackageRepo packageRepo, ICertificationRepo certificationRepo, IReportRepo reportRepo, ISystemConfigRepo systemConfigRepo)
         {
             _context = context;
             _accountRepository = accountRepository;
@@ -46,6 +47,7 @@ namespace ElderCare_Service
             _packageRepo = packageRepo;
             _certificationRepo = certificationRepo;
             _reportRepo = reportRepo;
+            _systemConfigRepo = systemConfigRepo;
         }
 
         public IAccountRepository AccountRepository => _accountRepository;
@@ -79,6 +81,8 @@ namespace ElderCare_Service
         public ICertificationRepo CertificationRepo => _certificationRepo;
 
         public IReportRepo ReportRepo => _reportRepo;
+
+        public ISystemConfigRepo SystemConfigRepo => _systemConfigRepo;
 
         public async Task<int> SaveChangeAsync()
         {

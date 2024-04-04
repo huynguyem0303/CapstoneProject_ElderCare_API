@@ -791,7 +791,7 @@ public partial class ElderCareContext : DbContext
         modelBuilder.Entity<SystemConfig>(entity =>
         {
             entity
-                .ToTable("SystemFormula");
+                .ToTable("SystemConfig");
             entity.HasKey(e => e.SystemConfigId);
 
             entity.Property(e => e.SystemConfigId).HasColumnName("systemconfig_id");
