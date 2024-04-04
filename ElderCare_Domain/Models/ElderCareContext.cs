@@ -298,6 +298,9 @@ public partial class ElderCareContext : DbContext
 
             entity.Property(e => e.CateId).ValueGeneratedNever();
             entity.Property(e => e.Description).HasMaxLength(100);
+            entity.Property(e => e.ServiceName)
+              .HasMaxLength(50)
+              .HasColumnName("service_name");
         });
 
         modelBuilder.Entity<Certification>(entity =>

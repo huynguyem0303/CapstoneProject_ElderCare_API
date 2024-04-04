@@ -29,6 +29,7 @@ namespace ElderCare_Service
             services.AddScoped<IContractRepository, ContractRepo>();
             services.AddScoped<IContractService, Services.ContractService>();
             services.AddScoped<ICarerService, Services.CarerService>();
+            services.AddScoped<ICategoryRepo, CategoryRepo>();
             services.AddScoped<ITransactionService, TransactionService>();
             services.AddScoped<IHobbyRepo, HobbyRepo>();
             services.AddScoped<IPsychomotorHealthRepo, PsychomotorHealthRepo>();

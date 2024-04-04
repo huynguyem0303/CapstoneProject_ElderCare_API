@@ -75,8 +75,9 @@ namespace ElderCare_Repository.Repos
 
         public async Task<List<ElderCare_Domain.Models.Contract>> GetByCarer(int id)
         {
-           return _context.Contracts.Where(x=>x.CarerId==id && x.Status==(int)ContractStatus.Pending).Include(x=>x.Elderly).Include(x => x.Carer).Include(x => x.Customer).Include(x => x.Package).ToList();
+           return _context.Contracts.Where(x=>x.CarerId==id).Include(x=>x.Elderly).Include(x => x.Carer).Include(x => x.Customer).Include(x => x.Package).ToList();
         }
+        
 
         public async Task<Package> GetPackageAsync(string name)
         {

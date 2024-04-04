@@ -10,6 +10,7 @@ namespace ElderCare_Service
         public ICarerRepository CarerRepository { get; }
         public ITransactionRepo TransactionRepo { get; }
         public IContractRepository ContractRepo { get; }
+        public ICategoryRepo CategoryRepo { get; }
         public IElderRepo ElderRepo { get; }
         public IHobbyRepo HobbyRepo { get; }
         public IPsychomotorHealthRepo PsychomotorHealthRepo { get; }

@@ -150,5 +150,10 @@ namespace ElderCare_Service.Services
             var services = await _unitOfWork.ServiceRepo.GetAllByCarerId(id);
             return _mapper.Map<List<ServiceDto>>(services);
         }
+
+        public async Task<IEnumerable<Category>> FindCateAsync(Expression<Func<Category, bool>> expression, params Expression<Func<Category, object>>[] includes)
+        {
+            return await _unitOfWork.CategoryRepo.FindAsync(expression, includes);
+        }
     }
 }

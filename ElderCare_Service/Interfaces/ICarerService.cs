@@ -14,6 +14,7 @@ namespace ElderCare_Service.Interfaces
         IEnumerable<Carer> GetAll();
         Task<Carer?> GetById(int id);
         Task<List<CarerViewDto>> GetByPending();
+        Task<IEnumerable<Category>> FindCateAsync(Expression<Func<Category, bool>> expression, params Expression<Func<Category, object>>[] includes);
         Task<IEnumerable<Carer>> FindAsync(Expression<Func<Carer, bool>> expression, params Expression<Func<Carer, object>>[] includes);
         //Task<Carer> AddCarerAsync(Carer model);
         Task UpdateCarer(Carer Carer);

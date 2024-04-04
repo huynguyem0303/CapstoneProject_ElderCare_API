@@ -24,14 +24,15 @@ namespace ElderCare_Service
         private readonly IServiceRepo _serviceRepo;
         private readonly IPackageRepo _packageRepo;
         private readonly ICertificationRepo _certificationRepo;
+        private readonly ICategoryRepo _categoryRepo;
         private readonly IReportRepo _reportRepo;
         private readonly ISystemConfigRepo _systemConfigRepo;
 
-        public UnitOfWork(ElderCareContext context, IAccountRepository accountRepository, IContractRepository contractRepository, ICustomerRepository customerRepository, ICarerRepository carerRepository, INotificationService notificationService, ITransactionRepo transactionRepository, IHttpContextAccessor httpContextAccessor, IElderRepo elderRepo, IEmailService emailService, IHobbyRepo hobbyRepo, IPsychomotorHealthRepo psychomotorHealthRepo, IHealthDetailRepo healthDetailRepo, IPsychomotorRepo psychomotorRepo, IServiceRepo serviceRepo, IPackageRepo packageRepo, ICertificationRepo certificationRepo, IReportRepo reportRepo, ISystemConfigRepo systemConfigRepo)
+        public UnitOfWork(ElderCareContext context, IAccountRepository accountRepository, IContractRepository contractRepo, ICustomerRepository customerRepository, ICarerRepository carerRepository, INotificationService notificationService, ITransactionRepo transactionRepository, IHttpContextAccessor httpContextAccessor, IElderRepo elderRepo, IEmailService emailService, IHobbyRepo hobbyRepo, IPsychomotorHealthRepo psychomotorHealthRepo, IHealthDetailRepo healthDetailRepo, IPsychomotorRepo psychomotorRepo, IServiceRepo serviceRepo, IPackageRepo packageRepo, ICertificationRepo certificationRepo, ICategoryRepo categoryRepo, IReportRepo reportRepo, ISystemConfigRepo systemConfigRepo)
         {
             _context = context;
             _accountRepository = accountRepository;
-            _contractRepo = contractRepository;
+            _contractRepo = contractRepo;
             _customerRepository = customerRepository;
             _carerRepository = carerRepository;
             _notificationService = notificationService;
@@ -46,6 +47,7 @@ namespace ElderCare_Service
             _serviceRepo = serviceRepo;
             _packageRepo = packageRepo;
             _certificationRepo = certificationRepo;
+            _categoryRepo = categoryRepo;
             _reportRepo = reportRepo;
             _systemConfigRepo = systemConfigRepo;
         }
@@ -71,6 +73,7 @@ namespace ElderCare_Service
         public IHealthDetailRepo HealthDetailRepo => _healthDetailRepo;
 
         public IContractRepository ContractRepo => _contractRepo;
+        public ICategoryRepo CategoryRepo => _categoryRepo;
 
         public IServiceRepo ServiceRepo => _serviceRepo;
 

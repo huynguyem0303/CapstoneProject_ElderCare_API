@@ -53,6 +53,14 @@ namespace API.Controllers
             var carer = await _carerService.FindAsync(x => x.CarerId == id);
             return SingleResult.Create(carer.AsQueryable());
         }
+        [HttpGet("categoryname")]
+        [EnableQuery]
+        public async Task<IActionResult> GetCategoryByServiceName(string name)
+        {
+            //var carer = await _unitOfWork.AccountRepository.FindAsync(x => x.AccountId == id);
+            var carer = await _carerService.FindCateAsync(x => x.ServiceName.Contains(name));
+            return Ok(carer);
+        }
         [HttpGet("{id}/Services")]
         [EnableQuery]
         public async Task<IActionResult> GetServicesByCarerId(int id)
