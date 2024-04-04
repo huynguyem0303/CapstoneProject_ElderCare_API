@@ -35,7 +35,7 @@ namespace API.Controllers
             }
             return NotFound();
         }
-        [HttpGet("{carerid}", Name = "GetContractByCusId")]
+        [HttpGet("{cusid}", Name = "GetContractByCusId")]
         [EnableQuery]
         public async Task<IActionResult> GetContractByCusId([FromRoute] int cusid)
         {
@@ -59,7 +59,7 @@ namespace API.Controllers
             }
             return NotFound();
         }
-        [HttpGet("{carerid}", Name = "GetPendingContractByCusId")]
+        [HttpGet("{cusid}", Name = "GetPendingContractByCusId")]
         [EnableQuery]
         public async Task<IActionResult> GetPendingContractByCusId([FromRoute] int cusid)
         {
