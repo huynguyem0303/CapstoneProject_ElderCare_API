@@ -20,6 +20,7 @@ namespace ElderCare_Service
         public IPackageRepo PackageRepo { get; }
         public ICertificationRepo CertificationRepo { get; }
         public IReportRepo ReportRepo { get; }
+        public ISystemConfigRepo SystemConfigRepo { get; }
       
         public INotificationService NotificationService { get; }
     }

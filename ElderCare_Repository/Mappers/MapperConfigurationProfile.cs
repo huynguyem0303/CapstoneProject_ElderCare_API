@@ -138,6 +138,9 @@ namespace ElderCare_Repository.Mappers
             //report
             CreateMap<AddReportDto, Report>().ForMember(d => d.CreatedDate, s => s.MapFrom(e => DateTime.Now));
             CreateMap<UpdateReportDto, Report>();
+
+            //system config
+            CreateMap<AddSystemConfigDto, SystemConfig>();
         }
     }
 }
