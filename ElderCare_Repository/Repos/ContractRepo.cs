@@ -34,7 +34,6 @@ namespace ElderCare_Repository.Repos
                     entity.Price = _context.Services.FirstOrDefault(x => x.Name.Equals(service[i])).Price;
                     entity.ContractId = contractid;
                     await _context.ContractServices.AddAsync(entity);
-                    price = price + entity.Price;
                 }
 
             }

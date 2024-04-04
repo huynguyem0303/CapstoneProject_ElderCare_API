@@ -196,9 +196,9 @@ namespace ElderCare_Service.Services
                                     trans.Status = "APPROVE";
                                     if (trans.Type == 1)
                                     {
-                                        var contract = _unitOfWork.ContractRepository.FindAsync(x => x.ContractId == trans.ContractId).Result.FirstOrDefault() ?? throw new Exception("contract not found");
+                                        var contract = _unitOfWork.ContractRepo.FindAsync(x => x.ContractId == trans.ContractId).Result.FirstOrDefault() ?? throw new Exception("contract not found");
                                         contract.Status = (int)ContractStatus.Active;
-                                        _unitOfWork.ContractRepository.Update(contract);
+                                        _unitOfWork.ContractRepo.Update(contract);
                                     }
                                     returnContent = "{\"RspCode\":\"00\",\"Message\":\"Confirm Success\"}";
 

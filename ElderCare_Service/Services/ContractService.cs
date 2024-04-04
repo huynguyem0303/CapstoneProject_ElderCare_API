@@ -29,51 +29,57 @@ namespace ElderCare_Service.Services
 
         public async Task<Contract> AddContract(AddContractDto dto)
         {
-            var entity = _mapper.Map<Contract>(dto);
-            entity.ContractId = _unitOfWork.ContractRepository.GetAll().OrderByDescending(x => x.ContractId).FirstOrDefault().ContractId + 1;
-            entity.Status = (int)ContractStatus.Pending;
-            entity.CreatedDate = DateTime.Now;
-            if (dto.PackageName.IsNullOrEmpty())
+            try
             {
-                _unitOfWork.ContractRepository.AddContractServiceAsync(dto.service, entity.ContractId);
-                entity.Packageprice = _unitOfWork.ContractRepository.GetPackagePrice().Result;
-                entity.PackageId = 0;
-                entity.ContractType = (int)ContractType.PackageContract;
-            }
-            else if (dto.service.IsNullOrEmpty())
-            {
-                entity.PackageId = _unitOfWork.ContractRepository.GetPackageAsync(dto.PackageName).Result.PackageId;
-                entity.Packageprice = _unitOfWork.ContractRepository.GetPackagePrice().Result;
-                entity.ContractType = (int)ContractType.ServiceContract;
-            }
-            _unitOfWork.ContractRepository.AddContractVersionAsync(dto.startDate,dto.endDate, entity.ContractId);
-            await _unitOfWork.ContractRepository.AddAsync(entity);
-            //await _unitOfWork.SaveChangeAsync();
-            return entity;
+                var entity = _mapper.Map<Contract>(dto);
+                entity.ContractId = _unitOfWork.ContractRepo.GetAll().OrderByDescending(x => x.ContractId).FirstOrDefault().ContractId + 1;
+                entity.Status = (int)ContractStatus.Pending;
+                entity.CreatedDate = DateTime.Now;
+                if (dto.PackageName.IsNullOrEmpty())
+                {
+                    _unitOfWork.ContractRepo.AddContractServiceAsync(dto.service, entity.ContractId);
+                    entity.Packageprice = _unitOfWork.ContractRepo.GetPackagePrice().Result;
+                    entity.Package = _unitOfWork.PackageRepo.GetByIdAsync(0).Result;
+                    entity.PackageId = _unitOfWork.PackageRepo.GetByIdAsync(0).Result.PackageId;
+                    entity.ContractType = (int)ContractType.PackageContract;
+                }
+                else if (dto.service.IsNullOrEmpty())
+                {
+                    entity.Package = _unitOfWork.ContractRepo.GetPackageAsync(dto.PackageName).Result;
+                    entity.PackageId = _unitOfWork.ContractRepo.GetPackageAsync(dto.PackageName).Result.PackageId;
+                    entity.Packageprice = _unitOfWork.ContractRepo.GetPackagePrice().Result;
+                    entity.ContractType = (int)ContractType.ServiceContract;
+                }
+                await _unitOfWork.ContractRepo.AddContractVersionAsync(dto.startDate, dto.endDate, entity.ContractId);
+                await _unitOfWork.ContractRepo.AddAsync(entity);
+                await _unitOfWork.SaveChangeAsync();
+                //await _unitOfWork.SaveChangeAsync();
+                return entity;
+            }catch(Exception ex) { throw new Exception(ex.Message); }
         }
 
         public async Task<List<Contract>> GetByCarerId(int id)
         {
-           return _unitOfWork.ContractRepository.GetByCarer(id).Result.ToList();
+           return _unitOfWork.ContractRepo.GetByCarer(id).Result.ToList();
         }
         public async Task<IEnumerable<Contract>> FindAsync(Expression<Func<Contract, bool>> expression, params Expression<Func<Contract, object>>[] includes)
         {
-            return await _unitOfWork.ContractRepository.FindAsync(expression, includes);
+            return await _unitOfWork.ContractRepo.FindAsync(expression, includes);
         }
 
 
         public async Task<Contract?> ApproveContract(int contractid, int status)
         {
-            var contract = await _unitOfWork.ContractRepository.GetByIdAsync(contractid) ?? throw new Exception("contract not found");
+            var contract = await _unitOfWork.ContractRepo.GetByIdAsync(contractid) ?? throw new Exception("contract not found");
             contract.Status = status;
-            _unitOfWork.ContractRepository.Update(contract);
+            _unitOfWork.ContractRepo.Update(contract);
             await _unitOfWork.SaveChangeAsync();
             return contract;
         }
 
         public async Task<bool> ContractExists(int id)
         {
-            return await _unitOfWork.ContractRepository.GetByIdAsync(id) != null;
+            return await _unitOfWork.ContractRepo.GetByIdAsync(id) != null;
         }
     }
 }

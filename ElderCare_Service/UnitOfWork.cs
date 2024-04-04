@@ -9,7 +9,7 @@ namespace ElderCare_Service
     {
         private readonly ElderCareContext _context;
         private readonly IAccountRepository _accountRepository;
-        private readonly IContractRepository _contractRepository;
+        private readonly IContractRepository _contractRepo;
         private readonly ICustomerRepository _customerRepository;
         private readonly ICarerRepository _carerRepository;
         private readonly Interfaces.INotificationService _notificationService;
@@ -31,7 +31,7 @@ namespace ElderCare_Service
         {
             _context = context;
             _accountRepository = accountRepository;
-            _contractRepository = contractRepository;
+            _contractRepo = contractRepository;
             _customerRepository = customerRepository;
             _carerRepository = carerRepository;
             _notificationService = notificationService;
@@ -70,7 +70,7 @@ namespace ElderCare_Service
 
         public IHealthDetailRepo HealthDetailRepo => _healthDetailRepo;
 
-        public IContractRepository ContractRepository => _contractRepository;
+        public IContractRepository ContractRepo => _contractRepo;
 
         public IServiceRepo ServiceRepo => _serviceRepo;
 
@@ -83,6 +83,7 @@ namespace ElderCare_Service
         public IReportRepo ReportRepo => _reportRepo;
 
         public ISystemConfigRepo SystemConfigRepo => _systemConfigRepo;
+
 
         public async Task<int> SaveChangeAsync()
         {
