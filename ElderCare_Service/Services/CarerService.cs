@@ -173,5 +173,17 @@ namespace ElderCare_Service.Services
             await _unitOfWork.CarerRepository.RemoveCarerService(carerId, serviceId);
             await _unitOfWork.SaveChangeAsync();
         }
+
+        public async Task<List<FeedbackDto>> GetFeedbacks(int carerId)
+        {
+            var feedbacks = await _unitOfWork.FeedbackRepo.FindAsync(e => e.CarerService.CarerId == carerId, e => e.CarerService);
+            return _mapper.Map<List<FeedbackDto>>(feedbacks);
+        }
+
+        public async Task<List<FeedbackDto>> GetFeedbacksByServiceId(int carerId, int serviceId)
+        {
+            var feedbacks = await _unitOfWork.FeedbackRepo.FindAsync(e => e.CarerService.CarerId == carerId && e.CarerService.ServiceId == serviceId, e => e.CarerService);
+            return _mapper.Map<List<FeedbackDto>>(feedbacks);
+        }
     }
 }

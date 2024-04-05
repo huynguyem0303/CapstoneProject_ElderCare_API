@@ -104,6 +104,12 @@ namespace API.Controllers
             return NoContent();
         }
         
+        /// <summary>
+        /// This method update elder detail
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPut("{id}")]
         [EnableQuery]
         [Authorize]
@@ -133,6 +139,13 @@ namespace API.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// This method update elder hobby
+        /// </summary>
+        /// <param name="elderId"></param>
+        /// <param name="id"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPut("{elderId}/Hobby/{id}")]
         [EnableQuery]
         [Authorize]
@@ -169,6 +182,13 @@ namespace API.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// This method update elder health detail
+        /// </summary>
+        /// <param name="elderId"></param>
+        /// <param name="id"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPut("{elderId}/HealthDetail/{id}")]
         [EnableQuery]
         [Authorize]
@@ -204,6 +224,13 @@ namespace API.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// This method update elder psychomotor health detail
+        /// </summary>
+        /// <param name="elderId"></param>
+        /// <param name="healthDetailId"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPut("{elderId}/HealthDetail/{healthDetailId}/PsychomotorHealth")]
         [EnableQuery]
         [Authorize]
@@ -235,6 +262,13 @@ namespace API.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// This method add elder psychomotor health detail
+        /// </summary>
+        /// <param name="elderId"></param>
+        /// <param name="healthDetailId"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost("{elderId}/HealthDetail/{healthDetailId}/PsychomotorHealth")]
         [EnableQuery]
         [Authorize]
@@ -264,6 +298,12 @@ namespace API.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// This method add elder health detail
+        /// </summary>
+        /// <param name="elderlyId"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost("{elderId}/HealthDetail")]
         [EnableQuery]
         [Authorize]
@@ -293,6 +333,12 @@ namespace API.Controllers
             return CreatedAtAction("GetElder", new { elderlyId }, healthDetail);
         }
 
+        /// <summary>
+        /// This method add elder hobby
+        /// </summary>
+        /// <param name="elderId"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost("{elderId}/Hobby")]
         [EnableQuery]
         [Authorize]
@@ -373,6 +419,13 @@ namespace API.Controllers
 
             return NoContent();
         }
+
+        /// <summary>
+        /// This method remove elder hobby
+        /// </summary>
+        /// <param name="elderId"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{elderId}/Hobby/{id}")]
         [EnableQuery]
         [Authorize]
@@ -391,6 +444,13 @@ namespace API.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// This method remove elder psychomotor health detail
+        /// </summary>
+        /// <param name="elderId"></param>
+        /// <param name="healthDetailId"></param>
+        /// <param name="psychomotorHealthId"></param>
+        /// <returns></returns>
         [HttpDelete("{elderId}/HealthDetail/{healthDetailId}/PsychomotorHealth/{psychomotorHealthId}")]
         [EnableQuery]
         [Authorize]

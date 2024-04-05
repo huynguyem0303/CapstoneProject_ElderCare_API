@@ -27,8 +27,9 @@ namespace ElderCare_Service
         private readonly ICategoryRepo _categoryRepo;
         private readonly IReportRepo _reportRepo;
         private readonly ISystemConfigRepo _systemConfigRepo;
+        private readonly IFeedbackRepo _feedbackRepo;
 
-        public UnitOfWork(ElderCareContext context, IAccountRepository accountRepository, IContractRepository contractRepo, ICustomerRepository customerRepository, ICarerRepository carerRepository, INotificationService notificationService, ITransactionRepo transactionRepository, IHttpContextAccessor httpContextAccessor, IElderRepo elderRepo, IEmailService emailService, IHobbyRepo hobbyRepo, IPsychomotorHealthRepo psychomotorHealthRepo, IHealthDetailRepo healthDetailRepo, IPsychomotorRepo psychomotorRepo, IServiceRepo serviceRepo, IPackageRepo packageRepo, ICertificationRepo certificationRepo, ICategoryRepo categoryRepo, IReportRepo reportRepo, ISystemConfigRepo systemConfigRepo)
+        public UnitOfWork(ElderCareContext context, IAccountRepository accountRepository, IContractRepository contractRepo, ICustomerRepository customerRepository, ICarerRepository carerRepository, INotificationService notificationService, ITransactionRepo transactionRepository, IHttpContextAccessor httpContextAccessor, IElderRepo elderRepo, IEmailService emailService, IHobbyRepo hobbyRepo, IPsychomotorHealthRepo psychomotorHealthRepo, IHealthDetailRepo healthDetailRepo, IPsychomotorRepo psychomotorRepo, IServiceRepo serviceRepo, IPackageRepo packageRepo, ICertificationRepo certificationRepo, ICategoryRepo categoryRepo, IReportRepo reportRepo, ISystemConfigRepo systemConfigRepo, IFeedbackRepo feedbackRepo)
         {
             _context = context;
             _accountRepository = accountRepository;
@@ -50,6 +51,7 @@ namespace ElderCare_Service
             _categoryRepo = categoryRepo;
             _reportRepo = reportRepo;
             _systemConfigRepo = systemConfigRepo;
+            _feedbackRepo = feedbackRepo;
         }
 
         public IAccountRepository AccountRepository => _accountRepository;
@@ -87,6 +89,7 @@ namespace ElderCare_Service
 
         public ISystemConfigRepo SystemConfigRepo => _systemConfigRepo;
 
+        public IFeedbackRepo FeedbackRepo => _feedbackRepo;
 
         public async Task<int> SaveChangeAsync()
         {

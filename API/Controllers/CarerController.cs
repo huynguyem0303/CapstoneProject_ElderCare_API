@@ -208,6 +208,32 @@ namespace API.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// This method return all feedbacks of carer
+        /// </summary>
+        /// <param name="carerId"></param>
+        /// <returns></returns>
+        [HttpGet("{carerId}/Feedbacks")]
+        [EnableQuery]
+        public async Task<IActionResult> GetFeedbacks(int carerId)
+        {
+            var list = await _carerService.GetFeedbacks(carerId);
+            return Ok(list);
+        }
+
+        /// <summary>
+        /// This method return all feedbacks of carer's service
+        /// </summary>
+        /// <param name="carerId"></param>
+        /// <returns></returns>
+        [HttpGet("{carerId}/Services/{serviceId}/Feedbacks")]
+        [EnableQuery]
+        public async Task<IActionResult> GetServiceFeedbacks(int carerId, int serviceId)
+        {
+            var list = await _carerService.GetFeedbacksByServiceId(carerId, serviceId);
+            return Ok(list);
+        }
+
         //[HttpGet("getTransactionHistory")]
         //[EnableQuery]
         //[Authorize(Roles = "Carer")]
