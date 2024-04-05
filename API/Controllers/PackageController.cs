@@ -36,7 +36,7 @@ namespace API.Controllers
         // GET: api/Packages/5
         [HttpGet("{id}")]
         [EnableQuery]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> GetPackage(int id)
         {
             var package = await _packageService.GetById(id);
@@ -115,9 +115,15 @@ namespace API.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// This method add services to package
+        /// </summary>
+        /// <param name="packageId"></param>
+        /// <param name="serviceName"></param>
+        /// <returns></returns>
         [HttpPost("{packageId}/Services")]
         [EnableQuery]
-        //[Authorize(Roles = "Staff, Admin")]
+        [Authorize(Roles = "Staff, Admin")]
         public async Task<ActionResult<Package>> PostPackageService(int packageId, string[] serviceName)
         {
             if (!await _packageService.PackageExists(packageId))
@@ -141,9 +147,15 @@ namespace API.Controllers
             return CreatedAtAction("GetPackage", new { id = packageId }, packageService); ;
         }
 
+        /// <summary>
+        /// this method remove service from package
+        /// </summary>
+        /// <param name="packageId"></param>
+        /// <param name="serviceId"></param>
+        /// <returns></returns>
         [HttpDelete("{packageId}/Services/{serviceId}")]
         [EnableQuery]
-        //[Authorize(Roles = "Staff, Admin")]
+        [Authorize(Roles = "Staff, Admin")]
         public async Task<IActionResult> RemoveService(int packageId, int serviceId)
         {
             if (!await _packageService.PackageExists(packageId))

@@ -366,5 +366,57 @@ namespace ElderCare_Repository.Repos
         {
             return await _context.Carers.Where(x => x.Status == 0).ToListAsync();
         }
+
+        public async Task<List<CarerService>> AddCarerService(int carerId, string[] serviceName)
+        {
+            var errors = new List<string>();
+            var list = new List<CarerService>();
+            for (var i = 0; i < serviceName.Length; i++)
+            {
+                var service = await _context.Services.FirstOrDefaultAsync(e => e.Name == serviceName[i]);
+                if (service == null)
+                {
+                    errors.Add($"serviceName[{i}]:'{serviceName[i]}' is incorrect");
+                }
+                else
+                {
+                    if (_context.CarerServices.Where(e => e.CarerId == carerId && e.ServiceId == service.ServiceId).Any())
+                    {
+                        errors.Add($"serviceName[{i}]:'{serviceName[i]}' existed in the carer");
+                    }
+                    else
+                    {
+                        list.Add(new CarerService()
+                        {
+                            CarerServiceId = _context.CarerServices.OrderBy(e => e.CarerServiceId).Last().CarerServiceId + 1,
+                            ServiceId = service.ServiceId,
+                            CarerId = carerId,
+                        });
+                    }
+                }
+            }
+            if (errors.Count > 0)
+            {
+                throw new DbUpdateException(message: String.Join(",\n", errors));
+            }
+            if (list.Count > 0)
+            {
+                await _context.CarerServices.AddRangeAsync(list);
+            }
+            return list;
+        }
+
+        public async Task RemoveCarerService(int carerId, int serviceId)
+        {
+            var carerService = await _context.CarerServices.FirstOrDefaultAsync(e => e.ServiceId == serviceId && e.CarerId == carerId);
+            if (carerService != null)
+            {
+                _context.CarerServices.Remove(carerService);
+            }
+            else
+            {
+                throw new KeyNotFoundException();
+            }
+        }
     }
 }

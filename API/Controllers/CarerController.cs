@@ -11,6 +11,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using ElderCare_Service.Interfaces;
 using ElderCare_Domain.Enums;
+using ElderCare_Service.Services;
+using System.Data;
 
 namespace API.Controllers
 {
@@ -61,6 +63,11 @@ namespace API.Controllers
             var carer = await _carerService.FindCateAsync(x => x.ServiceName.Contains(name));
             return Ok(carer);
         }
+        /// <summary>
+        /// This method get all services of a carer
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}/Services")]
         [EnableQuery]
         public async Task<IActionResult> GetServicesByCarerId(int id)
@@ -139,6 +146,64 @@ namespace API.Controllers
             if (account != null && account.Status == (int)AccountStatus.Active)
             {
                 return Ok(account);
+            }
+            return NoContent();
+        }
+
+        /// <summary>
+        /// This method add services to carer
+        /// </summary>
+        /// <param name="carerId"></param>
+        /// <param name="serviceName"></param>
+        /// <returns></returns>
+        [HttpPost("{carerId}/Services")]
+        [EnableQuery]
+        [Authorize]
+        public async Task<ActionResult<Package>> PostCarerService(int carerId, string[] serviceName)
+        {
+            if (!await _carerService.CarerExists(carerId))
+            {
+                return NotFound();
+            }
+            List<CarerServiceDto> carerServices;
+            try
+            {
+                carerServices = await _carerService.AddCarerServiceAsync(carerId, serviceName);
+            }
+            catch (DbUpdateException e)
+            {
+                return BadRequest(error: e.Message);
+            }
+            catch (DuplicateNameException e)
+            {
+                return Conflict(error: e.Message);
+            }
+
+            return CreatedAtAction("GetCarerById", new { id = carerId }, carerServices); ;
+        }
+
+        /// <summary>
+        /// This method remove service from carer
+        /// </summary>
+        /// <param name="carerId"></param>
+        /// <param name="serviceId"></param>
+        /// <returns></returns>
+        [HttpDelete("{carerId}/Services/{serviceId}")]
+        [EnableQuery]
+        [Authorize]
+        public async Task<IActionResult> RemoveService(int carerId, int serviceId)
+        {
+            if (!await _carerService.CarerExists(carerId))
+            {
+                return NotFound();
+            }
+            try
+            {
+                await _carerService.RemoveCarerService(carerId, serviceId);
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
             }
             return NoContent();
         }

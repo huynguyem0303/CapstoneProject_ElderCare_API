@@ -155,5 +155,23 @@ namespace ElderCare_Service.Services
         {
             return await _unitOfWork.CategoryRepo.FindAsync(expression, includes);
         }
+
+        public async Task<List<CarerServiceDto>> AddCarerServiceAsync(int carerId, string[] serviceName)
+        {
+            var result = await _unitOfWork.CarerRepository.AddCarerService(carerId, serviceName);
+            var list = _mapper.Map<List<CarerServiceDto>>(result);
+            foreach (var item in list)
+            {
+                item.ServiceName = (await _unitOfWork.ServiceRepo.GetByIdAsync(item.ServiceId!))!.Name;
+            }
+            await _unitOfWork.SaveChangeAsync();
+            return list;
+        }
+
+        public async Task RemoveCarerService(int carerId, int serviceId)
+        {
+            await _unitOfWork.CarerRepository.RemoveCarerService(carerId, serviceId);
+            await _unitOfWork.SaveChangeAsync();
+        }
     }
 }
