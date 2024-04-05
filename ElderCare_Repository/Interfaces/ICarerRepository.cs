@@ -22,5 +22,7 @@ namespace ElderCare_Repository.Interfaces
         Task<CarersCustomer?> GetCarerCustomerFromIdAsync(int? carercusId);
 
         Task<CarersCustomer?> GetLastest();
+        Task<List<CarerService>> AddCarerService(int carerId, string[] serviceName);
+        Task RemoveCarerService(int carerId, int serviceId);
     }
 }

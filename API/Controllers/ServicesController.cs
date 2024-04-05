@@ -25,7 +25,7 @@ namespace API.Controllers
         // GET: api/Services
         [HttpGet]
         [EnableQuery]
-        //[Authorize]
+        [Authorize]
         public IActionResult GetServices()
         {
             var list = _serviceService.GetAll();
