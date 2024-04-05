@@ -3,6 +3,7 @@ using ElderCare_Domain.Enums;
 using ElderCare_Domain.Models;
 using ElderCare_Repository.DTO;
 using ElderCare_Service.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -174,16 +175,30 @@ namespace ElderCare_Service.Services
             await _unitOfWork.SaveChangeAsync();
         }
 
-        public async Task<List<FeedbackDto>> GetFeedbacks(int carerId)
+        public async Task<List<FeedbackDto>> FindCarerFeedback(Expression<Func<Feedback, bool>> expression)
         {
-            var feedbacks = await _unitOfWork.FeedbackRepo.FindAsync(e => e.CarerService.CarerId == carerId, e => e.CarerService);
+            var feedbacks = await _unitOfWork.FeedbackRepo.FindAsync(expression, e => e.CarerService);
             return _mapper.Map<List<FeedbackDto>>(feedbacks);
         }
 
-        public async Task<List<FeedbackDto>> GetFeedbacksByServiceId(int carerId, int serviceId)
+        public async Task<FeedbackDto> AddServiceFeedback(AddFeedbackDto model)
         {
-            var feedbacks = await _unitOfWork.FeedbackRepo.FindAsync(e => e.CarerService.CarerId == carerId && e.CarerService.ServiceId == serviceId, e => e.CarerService);
-            return _mapper.Map<List<FeedbackDto>>(feedbacks);
+            if ( (await _unitOfWork.CustomerRepository.GetByIdAsync(model.CustomerId)) == null)
+            {
+                throw new DbUpdateException("Your customerId doesn't exist");
+            }
+            var feedback = _mapper.Map<Feedback>(model);
+            feedback.FeedbackId = _unitOfWork.FeedbackRepo.GetAll().OrderBy(e => e.FeedbackId).Last().FeedbackId + 1;
+            feedback.CarerServiceId = (await _unitOfWork.CarerRepository.GetCarerService(model.CarerId, model.ServiceId)
+                                       ?? throw new DbUpdateException("This carer doesn't have this service")
+                ).CarerServiceId;
+            feedback.CreatedDate = DateTime.Now;
+            await _unitOfWork.FeedbackRepo.AddAsync(feedback);
+            await _unitOfWork.SaveChangeAsync();
+            var result = _mapper.Map<FeedbackDto>(feedback);
+            result.CarerId = model.CarerId;
+            result.ServiceId = model.ServiceId;
+            return result;
         }
     }
 }

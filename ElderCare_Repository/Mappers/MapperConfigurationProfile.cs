@@ -148,6 +148,7 @@ namespace ElderCare_Repository.Mappers
                 .ForMember(d => d.CarerId, s => s.MapFrom(e => e.CarerService.CarerId))
                 .ForMember(d => d.ServiceId, s => s.MapFrom(e => e.CarerService.ServiceId));
             CreateMap<FeedbackDto, CarerService>().ReverseMap();
+            CreateMap<AddFeedbackDto, Feedback>().ReverseMap();
         }
     }
 }

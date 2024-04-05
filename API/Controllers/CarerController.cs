@@ -217,7 +217,7 @@ namespace API.Controllers
         [EnableQuery]
         public async Task<IActionResult> GetFeedbacks(int carerId)
         {
-            var list = await _carerService.GetFeedbacks(carerId);
+            var list = await _carerService.FindCarerFeedback(e => e.CarerService.CarerId == carerId);
             return Ok(list);
         }
 
@@ -225,15 +225,41 @@ namespace API.Controllers
         /// This method return all feedbacks of carer's service
         /// </summary>
         /// <param name="carerId"></param>
+        /// <param name="serviceId"></param>
         /// <returns></returns>
         [HttpGet("{carerId}/Services/{serviceId}/Feedbacks")]
         [EnableQuery]
         public async Task<IActionResult> GetServiceFeedbacks(int carerId, int serviceId)
         {
-            var list = await _carerService.GetFeedbacksByServiceId(carerId, serviceId);
-            return Ok(list);
+            var list = await _carerService.FindCarerFeedback(e => e.CarerService.CarerId == carerId && e.CarerService.ServiceId == serviceId);
+            return Ok(list.OrderByDescending(e => e.CreatedDate));
         }
 
+        [HttpPost("{carerId}/Services/{serviceId}/Feedbacks")]
+        [EnableQuery]
+        public async Task<IActionResult> PostServiceFeedbacks(int carerId, int serviceId, AddFeedbackDto model)
+        {
+            if(carerId != model.CarerId || serviceId != model.ServiceId)
+            {
+                return BadRequest();
+            }
+            FeedbackDto feedback;
+            try
+            {
+                feedback = await _carerService.AddServiceFeedback(model);
+            }
+            catch (DbUpdateException e)
+            {
+                return BadRequest(error: e.Message);
+            }
+            catch (DuplicateNameException e)
+            {
+                return Conflict(error: e.Message);
+            }
+
+            //return CreatedAtAction("GetServiceFeedbackDetail", new { carerId, serviceId, feedback.FeedbackId }, feedback);
+            return Ok(feedback);
+        }
         //[HttpGet("getTransactionHistory")]
         //[EnableQuery]
         //[Authorize(Roles = "Carer")]
