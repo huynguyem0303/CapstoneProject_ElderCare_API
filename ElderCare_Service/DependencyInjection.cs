@@ -46,6 +46,7 @@ namespace ElderCare_Service
             services.AddScoped<IReportService, ReportService>();
             services.AddScoped<ISystemConfigRepo, SystemConfigRepo>();
             services.AddScoped<ISystemConfigService, SystemConfigService>();
+            services.AddScoped<IFeedbackRepo, FeedbackRepo>();
             services.AddHttpContextAccessor();
             services.AddAutoMapper(typeof(MapperConfigurationProfile).Assembly);
             services.AddDbContext<ElderCareContext>(option => option.UseSqlServer(databaseConnection).EnableSensitiveDataLogging());

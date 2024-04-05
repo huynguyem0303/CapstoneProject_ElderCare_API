@@ -22,6 +22,7 @@ namespace ElderCare_Service
         public ICertificationRepo CertificationRepo { get; }
         public IReportRepo ReportRepo { get; }
         public ISystemConfigRepo SystemConfigRepo { get; }
+        public IFeedbackRepo FeedbackRepo { get; }
       
         public INotificationService NotificationService { get; }
     }
