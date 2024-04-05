@@ -251,6 +251,13 @@ namespace API.Controllers
             return SingleResult.Create(list.AsQueryable());
         }
 
+        /// <summary>
+        /// This method create feedback
+        /// </summary>
+        /// <param name="carerId"></param>
+        /// <param name="serviceId"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost("{carerId}/Services/{serviceId}/Feedbacks")]
         [EnableQuery]
         public async Task<IActionResult> PostServiceFeedbacks(int carerId, int serviceId, AddFeedbackDto model)
@@ -291,11 +298,41 @@ namespace API.Controllers
             {
                 return BadRequest();
             }
+            if (!await _carerService.FeedbackExist(carerId, serviceId, feedbackId))
+            {
+                return NotFound();
+            }
             try
             {
                 await _carerService.UpdateCarerServiceFeedback(model);
             }
             catch(DbUpdateException)
+            {
+                return NotFound();
+            }
+            return NoContent();
+        }
+
+        /// <summary>
+        /// This method remove feedback
+        /// </summary>
+        /// <param name="carerId"></param>
+        /// <param name="serviceId"></param>
+        /// <param name="feedbackId"></param>
+        /// <returns></returns>
+        [HttpDelete("{carerId}/Services/{serviceId}/Feedbacks/{feedbackId}")]
+        [EnableQuery]
+        public async Task<IActionResult> DeleteServiceFeedback(int carerId, int serviceId, int feedbackId)
+        {
+            if(! await _carerService.FeedbackExist(carerId, serviceId, feedbackId))
+            {
+                return NotFound();
+            }
+            try
+            {
+                await _carerService.RemoveCarerServiceFeedback(feedbackId);
+            }
+            catch (DbUpdateException)
             {
                 return NotFound();
             }

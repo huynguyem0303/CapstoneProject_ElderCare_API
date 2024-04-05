@@ -203,11 +203,23 @@ namespace ElderCare_Service.Services
 
         public async Task UpdateCarerServiceFeedback(UpdateFeedbackDto model)
         {
-            var feedback = (await _unitOfWork.FeedbackRepo.FindAsync(e => e.CarerService.CarerId == model.CarerId
-            && e.CarerService.ServiceId == model.ServiceId && e.FeedbackId == model.FeedbackId)).FirstOrDefault() ?? throw new DbUpdateException();
+            var feedback = await _unitOfWork.FeedbackRepo.GetByIdAsync(model.FeedbackId) ?? throw new DbUpdateException();
             _mapper.Map(model, feedback);
             _unitOfWork.FeedbackRepo.Update(feedback);
             await _unitOfWork.SaveChangeAsync();
+        }
+
+        public async Task RemoveCarerServiceFeedback(int feedbackId)
+        {
+            var feedback = await _unitOfWork.FeedbackRepo.GetByIdAsync(feedbackId) ?? throw new DbUpdateException();
+            _unitOfWork.FeedbackRepo.Delete(feedback);
+            await _unitOfWork.SaveChangeAsync();
+        }
+
+        public async Task<bool> FeedbackExist(int carerId, int serviceId, int feedbackId)
+        {
+            return !(await _unitOfWork.FeedbackRepo.FindAsync(e => e.CarerService.CarerId == carerId
+            && e.CarerService.ServiceId == serviceId && e.FeedbackId == feedbackId)).IsNullOrEmpty();
         }
     }
 }
