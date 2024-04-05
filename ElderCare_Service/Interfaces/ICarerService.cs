@@ -28,7 +28,10 @@ namespace ElderCare_Service.Interfaces
         Task<List<ServiceDto>> GetServicesByCarerId(int id);
         Task<List<CarerServiceDto>> AddCarerServiceAsync(int carerId, string[] serviceName);
         Task RemoveCarerService(int carerId, int serviceId);
-        Task<List<FeedbackDto>> GetFeedbacks(int carerId);
-        Task<List<FeedbackDto>> GetFeedbacksByServiceId(int carerId, int serviceId);
+        Task<List<FeedbackDto>> FindCarerFeedback(Expression<Func<Feedback, bool>> expression);
+        Task<FeedbackDto> AddServiceFeedback(AddFeedbackDto model);
+        Task UpdateCarerServiceFeedback(UpdateFeedbackDto model);
+        Task RemoveCarerServiceFeedback(int feedbackId);
+        Task<bool> FeedbackExist(int carerId, int serviceId, int feedbackId);
     }
 }

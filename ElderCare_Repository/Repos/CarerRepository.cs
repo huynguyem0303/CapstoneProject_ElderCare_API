@@ -418,5 +418,10 @@ namespace ElderCare_Repository.Repos
                 throw new KeyNotFoundException();
             }
         }
+
+        public async Task<CarerService?> GetCarerService(int carerId, int serviceId)
+        {
+            return await _context.CarerServices.FirstOrDefaultAsync(e => e.CarerId == carerId && e.ServiceId == serviceId);
+        }
     }
 }
