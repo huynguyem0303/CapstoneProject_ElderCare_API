@@ -200,5 +200,14 @@ namespace ElderCare_Service.Services
             result.ServiceId = model.ServiceId;
             return result;
         }
+
+        public async Task UpdateCarerServiceFeedback(UpdateFeedbackDto model)
+        {
+            var feedback = (await _unitOfWork.FeedbackRepo.FindAsync(e => e.CarerService.CarerId == model.CarerId
+            && e.CarerService.ServiceId == model.ServiceId && e.FeedbackId == model.FeedbackId)).FirstOrDefault() ?? throw new DbUpdateException();
+            _mapper.Map(model, feedback);
+            _unitOfWork.FeedbackRepo.Update(feedback);
+            await _unitOfWork.SaveChangeAsync();
+        }
     }
 }

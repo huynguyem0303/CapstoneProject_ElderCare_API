@@ -246,7 +246,8 @@ namespace API.Controllers
         [EnableQuery]
         public async Task<SingleResult> GetServiceFeedbackDetail(int carerId, int serviceId, int feedbackId)
         {
-            var list = await _carerService.FindCarerFeedback(e => e.CarerService.CarerId == carerId && e.CarerService.ServiceId == serviceId && e.FeedbackId == feedbackId);
+            var list = await _carerService.FindCarerFeedback(e => e.CarerService.CarerId == carerId 
+            && e.CarerService.ServiceId == serviceId && e.FeedbackId == feedbackId);
             return SingleResult.Create(list.AsQueryable());
         }
 
@@ -273,6 +274,32 @@ namespace API.Controllers
             }
 
             return CreatedAtAction("GetServiceFeedbackDetail", new { carerId, serviceId, feedback.FeedbackId }, feedback);
+        }
+
+         /// <summary>
+         /// This method update carer's service feedback detail
+         /// </summary>
+         /// <param name="carerId"></param>
+         /// <param name="serviceId"></param>
+         /// <param name="feedbackId"></param>
+         /// <returns></returns>
+        [HttpPut("{carerId}/Services/{serviceId}/Feedbacks/{feedbackId}")]
+        [EnableQuery]
+        public async Task<IActionResult> PutServiceFeedbackDetail(int carerId, int serviceId, int feedbackId, UpdateFeedbackDto model)
+        {
+            if (carerId != model.CarerId || serviceId != model.ServiceId || feedbackId != model.FeedbackId)
+            {
+                return BadRequest();
+            }
+            try
+            {
+                await _carerService.UpdateCarerServiceFeedback(model);
+            }
+            catch(DbUpdateException)
+            {
+                return NotFound();
+            }
+            return NoContent();
         }
         //[HttpGet("getTransactionHistory")]
         //[EnableQuery]

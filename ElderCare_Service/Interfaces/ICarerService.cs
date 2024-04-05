@@ -30,5 +30,6 @@ namespace ElderCare_Service.Interfaces
         Task RemoveCarerService(int carerId, int serviceId);
         Task<List<FeedbackDto>> FindCarerFeedback(Expression<Func<Feedback, bool>> expression);
         Task<FeedbackDto> AddServiceFeedback(AddFeedbackDto model);
+        Task UpdateCarerServiceFeedback(UpdateFeedbackDto model);
     }
 }
