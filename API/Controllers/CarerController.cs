@@ -235,6 +235,21 @@ namespace API.Controllers
             return Ok(list.OrderByDescending(e => e.CreatedDate));
         }
 
+        /// <summary>
+        /// This method return carer feedback detail
+        /// </summary>
+        /// <param name="carerId"></param>
+        /// <param name="serviceId"></param>
+        /// <param name="feedbackId"></param>
+        /// <returns></returns>
+        [HttpGet("{carerId}/Services/{serviceId}/Feedbacks/{feedbackId}")]
+        [EnableQuery]
+        public async Task<SingleResult> GetServiceFeedbackDetail(int carerId, int serviceId, int feedbackId)
+        {
+            var list = await _carerService.FindCarerFeedback(e => e.CarerService.CarerId == carerId && e.CarerService.ServiceId == serviceId && e.FeedbackId == feedbackId);
+            return SingleResult.Create(list.AsQueryable());
+        }
+
         [HttpPost("{carerId}/Services/{serviceId}/Feedbacks")]
         [EnableQuery]
         public async Task<IActionResult> PostServiceFeedbacks(int carerId, int serviceId, AddFeedbackDto model)
@@ -257,8 +272,7 @@ namespace API.Controllers
                 return Conflict(error: e.Message);
             }
 
-            //return CreatedAtAction("GetServiceFeedbackDetail", new { carerId, serviceId, feedback.FeedbackId }, feedback);
-            return Ok(feedback);
+            return CreatedAtAction("GetServiceFeedbackDetail", new { carerId, serviceId, feedback.FeedbackId }, feedback);
         }
         //[HttpGet("getTransactionHistory")]
         //[EnableQuery]
