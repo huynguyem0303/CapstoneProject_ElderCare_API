@@ -25,5 +25,6 @@ namespace ElderCare_Repository.Interfaces
         Task<List<CarerService>> AddCarerService(int carerId, string[] serviceName);
         Task RemoveCarerService(int carerId, int serviceId);
         Task<CarerService?> GetCarerService(int carerId, int serviceId);
+        IEnumerable<Carer> GetCarersByCustomerId(int customerId);
     }
 }

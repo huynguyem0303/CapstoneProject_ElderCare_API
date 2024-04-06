@@ -14,6 +14,7 @@ namespace ElderCare_Service.Interfaces
         Task<bool> CustomerExists(int id);
         Task<IEnumerable<Customer>> FindAsync(Expression<Func<Customer, bool>> expression, params Expression<Func<Customer, object>>[] includes);
         IEnumerable<Customer> GetAll();
+        IEnumerable<Carer> GetCarersByCustomerId(int customerId);
         Task UpdateCustomer(UpdateCustomerDto customer);
     }
 }

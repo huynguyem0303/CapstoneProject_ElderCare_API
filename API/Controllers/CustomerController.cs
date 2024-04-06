@@ -29,7 +29,7 @@ namespace API.Controllers
         public IActionResult GetCustomers()
         {
             var list = _customerService.GetAll();
-            
+
             return Ok(list);
         }
 
@@ -72,6 +72,22 @@ namespace API.Controllers
             }
 
             return NoContent();
+        }
+
+        /// <summary>
+        /// This method return carer by customer Id
+        /// </summary>
+        /// <param name="customerId"></param>
+        /// <returns></returns>
+        // GET: api/Customers
+        [HttpGet("{customerId}/Carers")]
+        [EnableQuery]
+        [Authorize]
+        public IActionResult GetCarersByCustomerId(int customerId)
+        {
+            var list = _customerService.GetCarersByCustomerId(customerId);
+
+            return Ok(list);
         }
     }
 }
