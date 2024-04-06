@@ -423,5 +423,14 @@ namespace ElderCare_Repository.Repos
         {
             return await _context.CarerServices.FirstOrDefaultAsync(e => e.CarerId == carerId && e.ServiceId == serviceId);
         }
+
+        public IEnumerable<Carer> GetCarersByCustomerId(int customerId)
+        {
+            var result = from carerCustomer in _context.CarersCustomers
+                         where carerCustomer.CustomerId == customerId
+                         join carer in _dbSet on carerCustomer.CarerId equals carer.CarerId
+                         select carer;
+            return result;
+        }
     }
 }

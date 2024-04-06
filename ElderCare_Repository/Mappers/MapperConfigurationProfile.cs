@@ -71,7 +71,8 @@ namespace ElderCare_Repository.Mappers
                 .ForMember(d => d.CustomerName, s => s.MapFrom(e => e.Name))
                 .ForMember(d => d.Email, s => s.MapFrom(e => e.Email))
                 .ForMember(d => d.Phone, s => s.MapFrom(e => e.PhoneNumber))
-                .ForMember(d => d.Bankinfo, s => s.MapFrom(e => e.BankInfo));
+                .ForMember(d => d.Bankinfo, s => s.MapFrom(e => e.BankInfo))
+                .ForMember(d => d.Address, s => s.MapFrom(e => e.Address));
             CreateMap<CustomerSignUpDto.CustomerBankInfomation, Bankinformation>();
             CreateMap<CustomerSignUpDto, Account>()
                 .ForMember(d => d.Email, s => s.MapFrom(e => e.Email))
@@ -153,6 +154,18 @@ namespace ElderCare_Repository.Mappers
 
             //customer
             CreateMap<UpdateCustomerDto, Customer>().ReverseMap();
+
+            //account
+            CreateMap<Account, Customer>()
+                .ForMember(d => d.Phone, s => s.MapFrom(e => e.PhoneNumber))
+                .ForMember(d => d.Address, s => s.MapFrom(e => e.Address))
+                .ForMember(d => d.Email, s => s.MapFrom(e => e.Email))
+                .ReverseMap();
+            CreateMap<Account, Carer>()
+                .ForMember(d => d.Phone, s => s.MapFrom(e => e.PhoneNumber))
+                .ForMember(d => d.Address, s => s.MapFrom(e => e.Address))
+                .ForMember(d => d.Email, s => s.MapFrom(e => e.Email))
+                .ReverseMap();
         }
     }
 }
