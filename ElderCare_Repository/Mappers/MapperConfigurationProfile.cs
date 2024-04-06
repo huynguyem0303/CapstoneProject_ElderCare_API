@@ -150,6 +150,9 @@ namespace ElderCare_Repository.Mappers
             CreateMap<FeedbackDto, CarerService>().ReverseMap();
             CreateMap<AddFeedbackDto, Feedback>().ReverseMap();
             CreateMap<UpdateFeedbackDto, Feedback>().ReverseMap();
+
+            //customer
+            CreateMap<UpdateCustomerDto, Customer>().ReverseMap();
         }
     }
 }
