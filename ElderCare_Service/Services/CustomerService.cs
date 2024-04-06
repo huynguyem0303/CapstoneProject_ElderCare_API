@@ -41,8 +41,11 @@ namespace ElderCare_Service.Services
         public async Task UpdateCustomer(UpdateCustomerDto model)
         {
             var customer = await _unitOfWork.CustomerRepository.GetByIdAsync(model.CustomerId) ?? throw new DbUpdateConcurrencyException();
+            var acc = (await _unitOfWork.AccountRepository.FindAsync(e => e.CustomerId == model.CustomerId)).SingleOrDefault() ?? throw new DbUpdateConcurrencyException();
             _mapper.Map(model, customer);
+            _mapper.Map(customer, acc);
             _unitOfWork.CustomerRepository.Update(customer);
+            _unitOfWork.AccountRepository.Update(acc);
             await _unitOfWork.SaveChangeAsync();
         }
     }
