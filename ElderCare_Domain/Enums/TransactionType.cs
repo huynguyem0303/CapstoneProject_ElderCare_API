@@ -8,6 +8,6 @@ namespace ElderCare_Domain.Enums
 {
     public  enum TransactionType
     {
-        CheckCusDetail,CusContract,CarerContract,Others
+        CheckCusDetail,CusContract,CarerContract,CarerSalary,Others
     }
 }
