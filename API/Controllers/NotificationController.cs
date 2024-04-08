@@ -3,12 +3,15 @@ using ElderCare_Service.Interfaces;
 using ElderCare_Repository.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Org.BouncyCastle.Tsp;
+using Microsoft.AspNetCore.OData.Routing.Controllers;
+using Microsoft.AspNetCore.OData.Query;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class NotificationController : ControllerBase
+    public class NotificationController : ODataController
     {
         //private readonly IUnitOfWork _unitOfWork;
         private readonly INotificationService _notificationService;
@@ -28,6 +31,7 @@ namespace API.Controllers
         /// <param name="notificationModel"></param>
         /// <returns></returns>
         [Route("send")]
+        [EnableQuery]
         [HttpPost]
         public async Task<IActionResult> SendNotification(NotificationModel notificationModel)
         {
@@ -42,6 +46,7 @@ namespace API.Controllers
         /// <param name="accountNotiDto"></param>
         /// <returns></returns>
         [Route("sendToAccount")]
+        [EnableQuery]
         [HttpPost]
         public async Task<IActionResult> SendNotificationToAccount(AccountExpoNotiDto accountNotiDto)
         {
@@ -56,6 +61,7 @@ namespace API.Controllers
         /// <param name="request"></param>
         /// <returns></returns>
         [Route("ExpoNoti")]
+        [EnableQuery]
         [HttpPost]
         public async Task<IActionResult> SendExpoNotification(PushTicketRequestDto[] request)
         {
@@ -77,10 +83,20 @@ namespace API.Controllers
         /// <param name="ids"></param>
         /// <returns></returns>
         [Route("ExpoNotiReceipt")]
+        [EnableQuery]
         [HttpPost]
-        public async Task<IActionResult> GetExpoNotification(List<string> ids)
+        public async Task<IActionResult> GetExpoNotificationReceipt(List<string> ids)
         {
             var result = await _notificationService.GetExpoNotificationReceipt(new ExpoCommunityNotificationServer.Models.PushReceiptRequest() { PushTicketIds = ids});
+            return Ok(result);
+        }
+
+        [EnableQuery]
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetNotifications()
+        {
+            var result = _notificationService.GetAll();
             return Ok(result);
         }
     }

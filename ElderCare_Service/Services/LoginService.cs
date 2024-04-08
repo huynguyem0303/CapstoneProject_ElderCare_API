@@ -11,19 +11,22 @@ namespace ElderCare_Service.Services
 {
     public class LoginService : ILoginService
     {
-        private readonly IConfiguration config;
+        private readonly IConfiguration _config;
 
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly INotificationService _notificationService;
         public static string? currentJWT;
-        public LoginService(IMapper mapper, IUnitOfWork unitOfWork)
+        public LoginService(IMapper mapper, IUnitOfWork unitOfWork, INotificationService notificationService, IConfiguration config)
         {
-            config = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
-            .Build();
+            //config = new ConfigurationBuilder()
+            //.SetBasePath(Directory.GetCurrentDirectory())
+            //.AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
+            //.Build();
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _notificationService = notificationService;
+            _config = config;
         }
 
         public async Task<string> LoginCusAsync(string email, string password, string DeviceToken)
@@ -46,7 +49,7 @@ namespace ElderCare_Service.Services
                     throw new Exception(message);
                 }
             }
-            currentJWT = GenerateJWTString.GenerateJsonWebToken(account, config["AppSettings:SecretKey"], DateTime.Now);
+            currentJWT = GenerateJWTString.GenerateJsonWebToken(account, _config["AppSettings:SecretKey"], DateTime.Now);
             return currentJWT;
         }
 
@@ -71,18 +74,18 @@ namespace ElderCare_Service.Services
                     throw new Exception(message);
                 }
             }
-            currentJWT = GenerateJWTString.GenerateJsonWebTokenForCarer(account, config["AppSettings:SecretKey"], DateTime.Now);
+            currentJWT = GenerateJWTString.GenerateJsonWebTokenForCarer(account, _config["AppSettings:SecretKey"], DateTime.Now);
             return currentJWT;
         }
 
         public async Task<string> LoginStaffAsync(string email, string password, string DeviceToken)
         {
-            string adminEmail = config["AdminAccount:Email"];
-            string adminPassword = config["AdminAccount:Password"];
-            string adminId = config["AdminAccount:Id"];
+            string adminEmail = _config["AdminAccount:Email"];
+            string adminPassword = _config["AdminAccount:Password"];
+            string adminId = _config["AdminAccount:Id"];
             if (email.ToLower().Equals(adminEmail.ToLower()) && password.Equals(adminPassword))
             {
-                return currentJWT = GenerateJWTString.GenerateJsonWebTokenForAdmin(adminEmail, config["AppSettings:SecretKey"], DateTime.Now, adminId);
+                return currentJWT = GenerateJWTString.GenerateJsonWebTokenForAdmin(adminEmail, _config["AppSettings:SecretKey"], DateTime.Now, adminId);
             }
             var account = await _unitOfWork.AccountRepository.LoginStaffAsync(email, password);
             if (account == null)
@@ -103,12 +106,12 @@ namespace ElderCare_Service.Services
                     throw new Exception(message);
                 }
             }
-            currentJWT = GenerateJWTString.GenerateJsonWebTokenForStaff(account, config["AppSettings:SecretKey"], DateTime.Now);
+            currentJWT = GenerateJWTString.GenerateJsonWebTokenForStaff(account, _config["AppSettings:SecretKey"], DateTime.Now);
             return currentJWT;
         }
         private async Task<ResponseModel> checkAccountFCMToken(int accountId, string token)
         {
-            var response = await _unitOfWork.NotificationService.SendNotification(new ElderCare_Domain.Commons.NotificationModel()
+            var response = await _notificationService.SendNotification(new ElderCare_Domain.Commons.NotificationModel()
             {
                 Title = "Login Notification",
                 IsAndroidDevice = true,
@@ -128,7 +131,7 @@ namespace ElderCare_Service.Services
         }
         private async Task<PushTicketResponse> checkAccountExpoToken(int accountId, string token)
         {
-            var response = await _unitOfWork.NotificationService.SendExpoNotification(new ElderCare_Repository.DTO.PushTicketRequestDto[]
+            var response = await _notificationService.SendExpoNotification(new ElderCare_Repository.DTO.PushTicketRequestDto[]
             {
                 new ElderCare_Repository.DTO.PushTicketRequestDto()
                 {
