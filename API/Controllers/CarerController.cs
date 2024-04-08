@@ -338,6 +338,21 @@ namespace API.Controllers
             }
             return NoContent();
         }
+
+        /// <summary>
+        /// This method return notifications based on carerId
+        /// </summary>
+        /// <param name="carerId"></param>
+        /// <returns></returns>
+        [HttpGet("{carerId}/Notifications")]
+        [EnableQuery]
+        [Authorize]
+        public IActionResult GetNotificationsByCarerId(int carerId)
+        {
+            var list = _carerService.GetNotificationsByCarerId(carerId);
+
+            return Ok(list);
+        }
         //[HttpGet("getTransactionHistory")]
         //[EnableQuery]
         //[Authorize(Roles = "Carer")]

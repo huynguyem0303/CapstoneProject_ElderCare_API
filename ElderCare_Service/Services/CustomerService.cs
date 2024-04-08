@@ -43,6 +43,11 @@ namespace ElderCare_Service.Services
             return _unitOfWork.CarerRepository.GetCarersByCustomerId(customerId);
         }
 
+        public IEnumerable<Notification> GetNotificationsByCustomerId(int customerId)
+        {
+            return _unitOfWork.NotificationRepo.GetAllByCustomerId(customerId);
+        }
+
         public async Task UpdateCustomer(UpdateCustomerDto model)
         {
             var customer = await _unitOfWork.CustomerRepository.GetByIdAsync(model.CustomerId) ?? throw new DbUpdateConcurrencyException();

@@ -1,6 +1,7 @@
 ﻿using ElderCare_Domain.Models;
 using ElderCare_Repository.DTO;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -15,6 +16,7 @@ namespace ElderCare_Service.Interfaces
         Task<IEnumerable<Customer>> FindAsync(Expression<Func<Customer, bool>> expression, params Expression<Func<Customer, object>>[] includes);
         IEnumerable<Customer> GetAll();
         IEnumerable<Carer> GetCarersByCustomerId(int customerId);
+        IEnumerable<Notification> GetNotificationsByCustomerId(int customerId);
         Task UpdateCustomer(UpdateCustomerDto customer);
     }
 }

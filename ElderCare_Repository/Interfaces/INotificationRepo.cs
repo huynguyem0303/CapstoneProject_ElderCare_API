@@ -10,5 +10,7 @@ namespace ElderCare_Repository.Interfaces
 {
     public interface INotificationRepo : IGenericRepo<Notification>
     {
+        IEnumerable<Notification> GetAllByCustomerId(int customerId);
+        IEnumerable<Notification> GetAllByCarerId(int carerId);
     }
 }

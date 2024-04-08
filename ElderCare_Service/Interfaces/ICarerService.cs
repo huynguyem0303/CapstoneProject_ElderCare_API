@@ -33,5 +33,6 @@ namespace ElderCare_Service.Interfaces
         Task UpdateCarerServiceFeedback(UpdateFeedbackDto model);
         Task RemoveCarerServiceFeedback(int feedbackId);
         Task<bool> FeedbackExist(int carerId, int serviceId, int feedbackId);
+        IEnumerable<Notification> GetNotificationsByCarerId(int carerId);
     }
 }

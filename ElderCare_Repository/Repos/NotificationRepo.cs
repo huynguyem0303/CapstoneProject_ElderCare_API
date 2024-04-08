@@ -14,5 +14,20 @@ namespace ElderCare_Repository.Repos
         public NotificationRepo(ElderCareContext context) : base(context)
         {
         }
+
+        public IEnumerable<Notification> GetAllByCustomerId(int customerId)
+        {
+            var list = from noti in _dbSet
+                       join acc in _context.Accounts.Where(e => e.CustomerId == customerId) on noti.AccountId equals acc.AccountId
+                       select noti;
+            return list;
+        }
+        public IEnumerable<Notification> GetAllByCarerId(int carerId)
+        {
+            var list = from noti in _dbSet
+                       join acc in _context.Accounts.Where(e => e.CarerId == carerId) on noti.AccountId equals acc.AccountId
+                       select noti;
+            return list;
+        }
     }
 }
