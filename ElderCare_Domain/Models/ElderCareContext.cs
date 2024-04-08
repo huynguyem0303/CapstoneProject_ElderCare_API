@@ -626,15 +626,30 @@ public partial class ElderCareContext : DbContext
             entity.ToTable("Notification");
 
             entity.Property(e => e.NotiId)
-                .ValueGeneratedNever()
+                .ValueGeneratedOnAdd()
+                .HasColumnType("uniqueidentifier")
+                .HasValueGenerator<GuidValueGenerator>()
                 .HasColumnName("noti_id");
             entity.Property(e => e.AccountId).HasColumnName("account_id");
-            entity.Property(e => e.Description)
+            entity.Property(e => e.Body)
                 .HasMaxLength(250)
-                .HasColumnName("description");
+                .HasColumnName("body");
             entity.Property(e => e.Title)
                 .HasMaxLength(50)
                 .HasColumnName("title");
+            entity.Property(e => e.SubTitle)
+                .HasMaxLength(50)
+                .HasColumnName("subtitle");
+            entity.Property(e => e.Sound)
+                .HasMaxLength(50)
+                .HasColumnName("sound");
+            entity.Property(e => e.Badge)
+                .HasColumnName("badge");
+            entity.Property(e => e.ChannelId)
+                .HasMaxLength(50)
+                .HasColumnName("channel_id");
+            entity.Property(e => e.MutableContent)
+                .HasColumnName("mutable_content");
 
             entity.HasOne(d => d.Account).WithMany(p => p.Notifications)
                 .HasForeignKey(d => d.AccountId)

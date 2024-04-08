@@ -1,4 +1,5 @@
 ﻿using ElderCare_Domain.Validation;
+using System.Management.Automation;
 
 namespace ElderCare_Repository.DTO
 {
@@ -13,7 +14,7 @@ namespace ElderCare_Repository.DTO
             public string body { get; set; }
 
             [StringRange(AllowableValues = new[] { "default", "normal", "high" }, AllowNull = true)]
-            public string? Priority { get; set; } //'default' | 'normal' | 'high'
+            public string? Priority { get; set; } = "default";//'default' | 'normal' | 'high'
 
             public string SubTitle { get; set; }
 
@@ -21,8 +22,8 @@ namespace ElderCare_Repository.DTO
             public string? Sound { get; set; } = "default";//'default' | null
 
             public int? Badge { get; set; }
-
-            public string ChannelId { get; set; } = "test";
+            [AllowNull]
+            public string? ChannelId { get; set; } = "test";
 
             public bool MutableContent { get; set; } = true;
         }

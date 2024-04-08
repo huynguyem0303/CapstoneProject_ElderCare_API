@@ -51,7 +51,7 @@ namespace ElderCare_Service
             services.AddHttpContextAccessor();
             services.AddAutoMapper(typeof(MapperConfigurationProfile).Assembly);
             services.AddDbContext<ElderCareContext>(option => option.UseSqlServer(databaseConnection).EnableSensitiveDataLogging());
-
+            services.AddScoped<INotificationRepo, NotificationRepo>();
             services.AddTransient<INotificationService, NotificationService>();
             services.AddHttpClient<FcmSender>();
             services.AddHttpClient<ApnSender>();

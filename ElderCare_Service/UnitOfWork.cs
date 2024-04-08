@@ -12,7 +12,6 @@ namespace ElderCare_Service
         private readonly IContractRepository _contractRepo;
         private readonly ICustomerRepository _customerRepository;
         private readonly ICarerRepository _carerRepository;
-        private readonly Interfaces.INotificationService _notificationService;
         private readonly ITransactionRepo _transactionRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IElderRepo _elderRepo;
@@ -28,15 +27,15 @@ namespace ElderCare_Service
         private readonly IReportRepo _reportRepo;
         private readonly ISystemConfigRepo _systemConfigRepo;
         private readonly IFeedbackRepo _feedbackRepo;
+        private readonly INotificationRepo _notificationRepo;
 
-        public UnitOfWork(ElderCareContext context, IAccountRepository accountRepository, IContractRepository contractRepo, ICustomerRepository customerRepository, ICarerRepository carerRepository, INotificationService notificationService, ITransactionRepo transactionRepository, IHttpContextAccessor httpContextAccessor, IElderRepo elderRepo, IEmailService emailService, IHobbyRepo hobbyRepo, IPsychomotorHealthRepo psychomotorHealthRepo, IHealthDetailRepo healthDetailRepo, IPsychomotorRepo psychomotorRepo, IServiceRepo serviceRepo, IPackageRepo packageRepo, ICertificationRepo certificationRepo, ICategoryRepo categoryRepo, IReportRepo reportRepo, ISystemConfigRepo systemConfigRepo, IFeedbackRepo feedbackRepo)
+        public UnitOfWork(ElderCareContext context, IAccountRepository accountRepository, IContractRepository contractRepo, ICustomerRepository customerRepository, ICarerRepository carerRepository, ITransactionRepo transactionRepository, IHttpContextAccessor httpContextAccessor, IElderRepo elderRepo, IEmailService emailService, IHobbyRepo hobbyRepo, IPsychomotorHealthRepo psychomotorHealthRepo, IHealthDetailRepo healthDetailRepo, IPsychomotorRepo psychomotorRepo, IServiceRepo serviceRepo, IPackageRepo packageRepo, ICertificationRepo certificationRepo, ICategoryRepo categoryRepo, IReportRepo reportRepo, ISystemConfigRepo systemConfigRepo, IFeedbackRepo feedbackRepo, INotificationRepo notificationRepo)
         {
             _context = context;
             _accountRepository = accountRepository;
             _contractRepo = contractRepo;
             _customerRepository = customerRepository;
             _carerRepository = carerRepository;
-            _notificationService = notificationService;
             _transactionRepository = transactionRepository;
             _httpContextAccessor = httpContextAccessor;
             _elderRepo = elderRepo;
@@ -52,6 +51,7 @@ namespace ElderCare_Service
             _reportRepo = reportRepo;
             _systemConfigRepo = systemConfigRepo;
             _feedbackRepo = feedbackRepo;
+            _notificationRepo = notificationRepo;
         }
 
         public IAccountRepository AccountRepository => _accountRepository;
@@ -61,8 +61,6 @@ namespace ElderCare_Service
         public ICarerRepository CarerRepository => _carerRepository;
 
         public ITransactionRepo TransactionRepo => _transactionRepository;
- 
-        public Interfaces.INotificationService NotificationService => _notificationService;
 
         public IElderRepo ElderRepo => _elderRepo;
 
@@ -90,6 +88,8 @@ namespace ElderCare_Service
         public ISystemConfigRepo SystemConfigRepo => _systemConfigRepo;
 
         public IFeedbackRepo FeedbackRepo => _feedbackRepo;
+
+        public INotificationRepo NotificationRepo => _notificationRepo;
 
         public async Task<int> SaveChangeAsync()
         {

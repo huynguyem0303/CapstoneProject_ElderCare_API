@@ -1,4 +1,5 @@
 ﻿using ElderCare_Domain.Commons;
+using ElderCare_Domain.Models;
 using ElderCare_Repository.DTO;
 using ExpoCommunityNotificationServer.Models;
 namespace ElderCare_Service.Interfaces
@@ -10,5 +11,6 @@ namespace ElderCare_Service.Interfaces
         Task<PushTicketResponse> SendExpoNotificationToAccount(AccountExpoNotiDto accountNotiModel);
         Task<PushTicketResponse> SendExpoNotification(PushTicketRequestDto[] pushTicketReq);
         Task<PushReceiptResponse> GetExpoNotificationReceipt(PushReceiptRequest pushReceiptReq);
+        IEnumerable<Notification> GetAll();
     }
 }
