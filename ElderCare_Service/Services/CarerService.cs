@@ -221,5 +221,10 @@ namespace ElderCare_Service.Services
             return !(await _unitOfWork.FeedbackRepo.FindAsync(e => e.CarerService.CarerId == carerId
             && e.CarerService.ServiceId == serviceId && e.FeedbackId == feedbackId)).IsNullOrEmpty();
         }
+
+        public IEnumerable<Notification> GetNotificationsByCarerId(int carerId)
+        {
+            return _unitOfWork.NotificationRepo.GetAllByCarerId(carerId);
+        }
     }
 }

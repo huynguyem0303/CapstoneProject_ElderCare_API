@@ -89,5 +89,20 @@ namespace API.Controllers
 
             return Ok(list);
         }
+
+        /// <summary>
+        /// This method return notifications based on customerId
+        /// </summary>
+        /// <param name="customerId"></param>
+        /// <returns></returns>
+        [HttpGet("{customerId}/Notifications")]
+        [EnableQuery]
+        [Authorize]
+        public IActionResult GetNotificationsByCustomerId(int customerId)
+        {
+            var list = _customerService.GetNotificationsByCustomerId(customerId);
+
+            return Ok(list);
+        }
     }
 }
