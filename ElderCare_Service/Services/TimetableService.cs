@@ -21,9 +21,13 @@ namespace ElderCare_Service.Services
             _mapper = mapper;
         }
 
-        public Task<Timetable> CreateTrackingTimetable(AddTimetableDto model)
+        public async Task<Timetable> CreateTrackingTimetable(AddTimetableDto model)
         {
-            throw new NotImplementedException();
+            var timetable = _mapper.Map<Timetable>(model);
+            timetable.TimetableId = _unitOfWork.TimetableRepo.GetAll().OrderBy(e => e.TimetableId).Last().TimetableId + 1;
+            await _unitOfWork.TimetableRepo.AddAsync(timetable);
+            await _unitOfWork.SaveChangeAsync();
+            return timetable;
         }
     }
 }

@@ -846,7 +846,9 @@ public partial class ElderCareContext : DbContext
             entity.ToTable("Tracking");
 
             entity.Property(e => e.TrackingId)
-                .ValueGeneratedNever()
+                .ValueGeneratedOnAdd()
+                .HasColumnType("uniqueidentifier")
+                .HasValueGenerator<GuidValueGenerator>()
                 .HasColumnName("tracking_id");
             entity.Property(e => e.ContractServicesId).HasColumnName("contract_services_id");
             entity.Property(e => e.CusApprove).HasColumnName("cus_approve");

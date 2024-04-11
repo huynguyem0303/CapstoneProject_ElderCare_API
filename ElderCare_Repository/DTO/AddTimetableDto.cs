@@ -23,6 +23,6 @@ namespace ElderCare_Repository.DTO
             [RequiredWhenOtherIsNull("PackageServicesId")]
             public int? ContractServicesId { get; set; }
         }
-        public List<AddTimetableTrackingDto> Trackings { get; set; }
+        public List<AddTimetableTrackingDto>? Trackings { get; set; }
     }
 }
