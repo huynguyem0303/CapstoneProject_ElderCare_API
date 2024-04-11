@@ -11,10 +11,13 @@ namespace ElderCare_Service.Interfaces
 {
     public interface ITimetableService
     {
+        Task<Tracking> AddTrackingToTimetable(AddTrackingDto model);
+        Task ApproveTracking(CustomerApproveTrackingDto model);
         Task<Timetable> CreateTrackingTimetable(AddTimetableDto model);
         Task DeleteTimetable(int id);
         Task<IEnumerable<Timetable>> FindTimetableAsync(Expression<Func<Timetable, bool>> expression, params Expression<Func<Timetable, object>>[] includes);
         Task<bool> TimetableExist(int id);
         Task UpdateTimetable(UpdateTimetableDto model);
+        Task UpdateTrackingByCarer(CarerUpdateTrackingDto model);
     }
 }

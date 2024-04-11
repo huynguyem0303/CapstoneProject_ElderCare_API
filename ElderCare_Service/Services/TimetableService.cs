@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ElderCare_Domain.Enums;
 using ElderCare_Domain.Models;
 using ElderCare_Repository.DTO;
 using ElderCare_Service.Interfaces;
@@ -53,6 +54,48 @@ namespace ElderCare_Service.Services
         {
             _unitOfWork.TimetableRepo.Update(_mapper.Map<Timetable>(model));
             await _unitOfWork.SaveChangeAsync();
+        }
+
+        public async Task UpdateTrackingByCarer(CarerUpdateTrackingDto model)
+        {
+            var tracking = await _unitOfWork.TrackingRepo.GetByIdAsync(model.TrackingId) ?? throw new DbUpdateException("Incorrect timetableId");
+            if (tracking.TimetableId != model.TimetableId)
+            {
+                throw new DbUpdateException("Incorrect timetableId");
+            }
+            if (tracking.Status != (int?)TrackingStatus.Approved)
+            {
+                tracking.Status = (int?)TrackingStatus.Reported;
+                tracking.ReportDate = DateTime.Now;
+            }
+            else
+            {
+                throw new DbUpdateException("This was already approved by the customer!");
+            }
+            _mapper.Map(model, tracking);
+            _unitOfWork.TrackingRepo.Update(tracking);
+            await _unitOfWork.SaveChangeAsync();
+        }
+
+        public async Task ApproveTracking(CustomerApproveTrackingDto model)
+        {
+            var tracking = await _unitOfWork.TrackingRepo.GetByIdAsync(model.TrackingId) ?? throw new DbUpdateException("Incorrect trackingId");
+            if (tracking.TimetableId != model.TimetableId)
+            {
+                throw new DbUpdateException("Incorrect timetableId");
+            }
+            tracking.CusApprove = model.Status == (int?)TrackingStatus.Approved;
+            _mapper.Map(model, tracking);
+            _unitOfWork.TrackingRepo.Update(tracking);
+            await _unitOfWork.SaveChangeAsync();
+        }
+
+        public async Task<Tracking> AddTrackingToTimetable(AddTrackingDto model)
+        {
+            var tracking = _mapper.Map<Tracking>(model);
+            await _unitOfWork.TrackingRepo.AddAsync(tracking);
+            await _unitOfWork.SaveChangeAsync();
+            return tracking;
         }
     }
 }

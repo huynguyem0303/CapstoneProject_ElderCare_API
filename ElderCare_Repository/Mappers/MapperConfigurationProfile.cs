@@ -171,6 +171,10 @@ namespace ElderCare_Repository.Mappers
             CreateMap<AddTimetableDto, Timetable>();
             CreateMap<AddTimetableDto.AddTimetableTrackingDto, Tracking>();
             CreateMap<UpdateTimetableDto, Timetable>();
+            //trackings
+            CreateMap<CarerUpdateTrackingDto, Tracking>();
+            CreateMap<CustomerApproveTrackingDto, Tracking>();
+            CreateMap<AddTrackingDto, Tracking>();
         }
     }
 }
