@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ElderCare_Domain.Enums;
+using System;
 using System.Collections.Generic;
 
 namespace ElderCare_Domain.Models;
@@ -25,7 +26,7 @@ public partial class Tracking
 
     public string? CusFeedback { get; set; }
 
-    public int? Status { get; set; }
+    public int? Status { get; set; } = 0;
 
     public virtual ContractService? ContractServices { get; set; }
 

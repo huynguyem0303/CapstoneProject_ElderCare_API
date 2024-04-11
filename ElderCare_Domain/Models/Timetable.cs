@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ElderCare_Domain.Enums;
+using System;
 using System.Collections.Generic;
 
 namespace ElderCare_Domain.Models;
@@ -11,9 +12,9 @@ public partial class Timetable
 
     public string? Timeframe { get; set; }
 
-    public DateTime? CreatedDate { get; set; }
+    public DateTime? CreatedDate { get; set; } = DateTime.Now;
 
-    public int? Status { get; set; }
+    public int? Status { get; set; } = 0;
 
     public int? CarerId { get; set; }
 

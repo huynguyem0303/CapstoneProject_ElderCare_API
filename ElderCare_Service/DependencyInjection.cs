@@ -53,6 +53,9 @@ namespace ElderCare_Service
             services.AddDbContext<ElderCareContext>(option => option.UseSqlServer(databaseConnection).EnableSensitiveDataLogging());
             services.AddScoped<INotificationRepo, NotificationRepo>();
             services.AddTransient<INotificationService, NotificationService>();
+            services.AddScoped<ITimetableRepo, TimetableRepo>();
+            services.AddScoped<ITrackingRepo, TrackingRepo>();
+            services.AddScoped<ITimetableService, TimetableService>();
             services.AddHttpClient<FcmSender>();
             services.AddHttpClient<ApnSender>();
             return services;
