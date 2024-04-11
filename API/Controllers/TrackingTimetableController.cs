@@ -99,19 +99,20 @@ namespace API.Controllers
         /// This method is for carer to report/update tracking in the timetable
         /// </summary>
         /// <param name="id">Timetable id</param>
+        /// <param name="trackingId"></param>
         /// <param name="model"></param>
         /// <returns></returns>
-        [HttpPatch("{id}/Trackings/CarerReport")]
+        [HttpPatch("{id}/Trackings/{trackingId}/CarerReport")]
         [EnableQuery]
         //[Authorize("Carer")]
-        public async Task<IActionResult> UpdateTrackingByCarer(int id, CarerUpdateTrackingDto model)
+        public async Task<IActionResult> UpdateTrackingByCarer(int id, string trackingId, CarerUpdateTrackingDto model)
         {
-            if (!await _timetableService.TimetableExist(id))
+            if (!await _timetableService.TimetableExist(id) || !await _timetableService.TrackingExisted(trackingId))
             {
                 return NotFound();
             }
 
-            if (id != model.TimetableId)
+            if (id != model.TimetableId || Guid.Parse(trackingId) != model.TrackingId)
             {
                 return BadRequest();
             }
@@ -137,19 +138,20 @@ namespace API.Controllers
         /// status: 2-Approved, 3-Unapproved
         /// </summary>
         /// <param name="id">Timetable id</param>
+        /// <param name="trackingId"></param>
         /// <param name="model"></param>
         /// <returns></returns>
-        [HttpPatch("{id}/Trackings/CustomerApprove")]
+        [HttpPatch("{id}/Trackings/{trackingId}/CustomerApprove")]
         [EnableQuery]
         //[Authorize("Customer")]
-        public async Task<IActionResult> ApproveTrackingByCustomer(int id, CustomerApproveTrackingDto model)
+        public async Task<IActionResult> ApproveTrackingByCustomer(int id, string trackingId, CustomerApproveTrackingDto model)
         {
-            if (!await _timetableService.TimetableExist(id))
+            if (!await _timetableService.TimetableExist(id) || !await _timetableService.TrackingExisted(trackingId))
             {
                 return NotFound();
             }
 
-            if (id != model.TimetableId)
+            if (id != model.TimetableId || Guid.Parse(trackingId) != model.TrackingId)
             {
                 return BadRequest();
             }
@@ -174,7 +176,7 @@ namespace API.Controllers
         /// <returns></returns>
         [HttpPost("{id}/Trackings")]
         [EnableQuery]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> AddTrackingToTimetable(int id, AddTrackingDto model)
         {
             if (!await _timetableService.TimetableExist(id))
@@ -199,7 +201,41 @@ namespace API.Controllers
             {
                 return Conflict(error: e.Message);
             }
-            return CreatedAtAction("GetTrackingTimetable", new { id = tracking.TimetableId }, tracking);
+            return CreatedAtAction("GetTracking", new { id = tracking.TimetableId, trackingId = tracking.TrackingId}, tracking);
+        }
+
+        /// <summary>
+        /// This method return tracking report by id
+        /// </summary>
+        /// <param name="id">Timetable Id</param>
+        /// <param name="trackingId"></param>
+        /// <returns></returns>
+        [HttpGet("{id}/Trackings/{trackingId}")]
+        [EnableQuery]
+        [Authorize]
+        public async Task<SingleResult> GetTracking(int id, string trackingId)
+        {
+            var tracking = await _timetableService.FindTrackingAsync(e => e.TimetableId == id && e.TrackingId == Guid.Parse(trackingId));
+            return SingleResult.Create(tracking.AsQueryable());
+        }
+
+        /// <summary>
+        /// This method remove tracking from timetable
+        /// </summary>
+        /// <param name="id">Timetable Id</param>
+        /// <param name="trackingId"></param>
+        /// <returns></returns>
+        [HttpDelete("{id}/Trackings/{trackingId}")]
+        [EnableQuery]
+        [Authorize]
+        public async Task<IActionResult> DeleteTracking(int id, string trackingId)
+        {
+            if (!await _timetableService.TimetableExist(id) || !await _timetableService.TrackingExisted(trackingId))
+            {
+                return NotFound();
+            }
+            await _timetableService.DeleteTracking(trackingId);
+            return NoContent();
         }
     }
 }

@@ -97,5 +97,22 @@ namespace ElderCare_Service.Services
             await _unitOfWork.SaveChangeAsync();
             return tracking;
         }
+
+        public async Task<IEnumerable<Tracking>> FindTrackingAsync(Expression<Func<Tracking, bool>> expression, params Expression<Func<Tracking, object>>[] includes)
+        {
+            return await _unitOfWork.TrackingRepo.FindAsync(expression, includes);
+        }
+
+        public async Task DeleteTracking(string trackingId)
+        {
+            var tracking = await _unitOfWork.TrackingRepo.GetByIdAsync(Guid.Parse(trackingId));
+            _unitOfWork.TrackingRepo.Delete(tracking!);
+            await _unitOfWork.SaveChangeAsync();
+        }
+
+        public async Task<bool> TrackingExisted(string trackingId)
+        {
+            return await _unitOfWork.TrackingRepo.GetByIdAsync(Guid.Parse(trackingId)) != null;
+        }
     }
 }
