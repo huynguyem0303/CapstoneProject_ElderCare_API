@@ -166,6 +166,10 @@ namespace ElderCare_Repository.Mappers
                 .ForMember(d => d.Address, s => s.MapFrom(e => e.Address))
                 .ForMember(d => d.Email, s => s.MapFrom(e => e.Email))
                 .ReverseMap();
+
+            //timetable
+            CreateMap<AddTimetableDto, Timetable>();
+            CreateMap<AddTimetableDto.AddTimetableTrackingDto, Tracking>();
         }
     }
 }
