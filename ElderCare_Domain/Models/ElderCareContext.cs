@@ -881,6 +881,7 @@ public partial class ElderCareContext : DbContext
 
             entity.HasOne(d => d.Timetable).WithMany(p => p.Trackings)
                 .HasForeignKey(d => d.TimetableId)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_Tracking_Timetable");
         });
 

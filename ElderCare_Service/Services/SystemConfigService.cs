@@ -56,7 +56,7 @@ namespace ElderCare_Service.Services
 
         public async Task UpdateSystemConfig(SystemConfig model)
         {
-            _unitOfWork.SystemConfigRepo.Update(_mapper.Map<SystemConfig>(model));
+            _unitOfWork.SystemConfigRepo.Update(model);
             await _unitOfWork.SaveChangeAsync();
         }
 
