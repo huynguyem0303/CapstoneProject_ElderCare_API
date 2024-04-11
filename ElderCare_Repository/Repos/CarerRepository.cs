@@ -33,7 +33,7 @@ namespace ElderCare_Repository.Repos
             List<Carer> carershift = new List<Carer>();
             List<Carer> carercate = new List<Carer>();
             List<Carer> servicecarer = new List<Carer>();
-            List<Carer> duplicatecarer  = new List<Carer>();
+            List<Carer> duplicatecarer = new List<Carer>();
             List<CarerService> services = await _context.Set<CarerService>().Include(e => e.Service).ToListAsync();
             List<CarerService> carerService = new List<CarerService>();
             List<CarerShilft> shift = await _context.Set<CarerShilft>().Include(e => e.Shilft).Include(e => e.Carer).ToListAsync();
@@ -150,7 +150,7 @@ namespace ElderCare_Repository.Repos
                     if (genderlist.Contains(servicecarer[i].Gender) && agelist.Contains(servicecarer[i].Age))
                         carer.Add(servicecarer[i]);
                 }
-               
+
             }
             if (!genderlist.IsNullOrEmpty() && !districtlist.IsNullOrEmpty())
             {
@@ -168,10 +168,11 @@ namespace ElderCare_Repository.Repos
                         carer.Add(servicecarer[i]);
                 }
             }
-          
-           
 
-            if (!genderlist.IsNullOrEmpty()) {
+
+
+            if (!genderlist.IsNullOrEmpty())
+            {
                 for (int i = 0; i < servicecarer.Count; i++)
                 {
                     if (genderlist.Contains(servicecarer[i].Gender))
@@ -318,6 +319,56 @@ namespace ElderCare_Repository.Repos
             }
             var transactionList = await _context.Transactions.Where(x => carerCusIdList.Contains((int)x.CarercusId!)).ToListAsync();
             return transactionList;
+        }
+        public async Task<List<Customer>> GetCarerCusByCarerId(int carerId)
+        {
+            var result = new List<Customer>();
+            var carerCusIdList = await _context.CarersCustomers.Where(x => x.CarerId == carerId).Select(x => x.CarercusId).ToListAsync();
+            if (carerCusIdList.IsNullOrEmpty())
+            {
+                throw new Exception("Empty list");
+            }
+            var transactionList = await _context.Transactions.Where(x => carerCusIdList.Contains((int)x.CarercusId!)).ToListAsync();
+            for (int i = 0; i < transactionList.Count; i++)
+            {
+                if (transactionList[i].Status.Equals("APPROVE"))
+                {
+                    var approvecarerCusIdList = await _context.CarersCustomers.Where(x => x.CarercusId == transactionList[i].CarercusId).Select(x => x.CustomerId).ToListAsync();
+                    var cuslist = await _context.Customers.Where(x => approvecarerCusIdList.Contains((int)x.CustomerId!)).FirstOrDefaultAsync();
+                    var anyDuplicate = result.Where(x => x.CustomerId == cuslist.CustomerId).FirstOrDefault();
+                    if (anyDuplicate == null)
+                    {
+                        result.Add(cuslist);
+                    }
+                }
+
+            }
+            return result;
+        }
+        public async Task<List<Carer>> GetCarerCusByCusId(int cusId)
+        {
+            var result = new List<Carer>();
+            var carerCusIdList = await _context.CarersCustomers.Where(x => x.CustomerId == cusId).Select(x => x.CarercusId).ToListAsync();
+            if (carerCusIdList.IsNullOrEmpty())
+            {
+                throw new Exception("Empty list");
+            }
+            var transactionList = await _context.Transactions.Where(x => carerCusIdList.Contains((int)x.CarercusId!)).ToListAsync();
+            for (int i = 0; i < transactionList.Count; i++)
+            {
+                if (transactionList[i].Status.Equals("APPROVE"))
+                {
+                    var approvecarerCusIdList = await _context.CarersCustomers.Where(x => x.CarercusId == transactionList[i].CarercusId).Select(x => x.CarerId).ToListAsync();
+                    var carerlist = await _context.Carers.Where(x => approvecarerCusIdList.Contains((int)x.CarerId!)).FirstOrDefaultAsync();
+                    var anyDuplicate = result.Where(x => x.CarerId == carerlist.CarerId).FirstOrDefault();
+                    if (anyDuplicate == null)
+                    {
+                        result.Add(carerlist);
+                    }
+                }
+
+            }
+            return result;
         }
         public async Task<List<Transaction>> GetCustomerTransaction(int customerId)
         {

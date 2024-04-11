@@ -226,5 +226,15 @@ namespace ElderCare_Service.Services
         {
             return _unitOfWork.NotificationRepo.GetAllByCarerId(carerId);
         }
+
+        public Task<List<Customer>> GetCarerCusByCarerId(int carerId)
+        {
+            return _unitOfWork.CarerRepository.GetCarerCusByCarerId(carerId);
+        }
+
+        public Task<List<Carer>> GetCarerCusByCusId(int cusId)
+        {
+            return _unitOfWork.CarerRepository.GetCarerCusByCusId(cusId);
+        }
     }
 }

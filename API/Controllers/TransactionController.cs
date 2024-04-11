@@ -319,6 +319,42 @@ namespace API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet("getApproveCarerCusByCustomerId")]
+        [EnableQuery]
+        public async Task<IActionResult> GetApproveCarerCusByCustomerId(int customerId)
+        {
+            try
+            {
+                var customerTransactions = await _carerService.GetCarerCusByCusId(customerId);
+                if (customerTransactions.IsNullOrEmpty())
+                {
+                    return NotFound();
+                }
+                return Ok(customerTransactions);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("getApproveCarerCusByCarerId")]
+        [EnableQuery]
+        public async Task<IActionResult> getApproveCarerCusByCarerId(int carerId)
+        {
+            try
+            {
+                var carerTransactions = await _carerService.GetCarerCusByCarerId(carerId);
+                if (carerTransactions.IsNullOrEmpty())
+                {
+                    return NotFound();
+                }
+                return Ok(carerTransactions);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 
 }
