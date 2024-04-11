@@ -12,11 +12,11 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TrackingController : ODataController
+    public class TrackingTimetableController : ODataController
     {
         private readonly ITimetableService _timetableService;
 
-        public TrackingController(ITimetableService timetableService)
+        public TrackingTimetableController(ITimetableService timetableService)
         {
             _timetableService = timetableService;
         }
