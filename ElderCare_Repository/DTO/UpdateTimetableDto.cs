@@ -10,6 +10,8 @@
 
         public int? Status { get; set; }
 
-        public int? CarerId { get; set; }
+        //public int? CarerId { get; set; }
+
+        public int ContractId { get; set; }
     }
 }

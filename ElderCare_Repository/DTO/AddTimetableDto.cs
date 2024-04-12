@@ -13,8 +13,10 @@ namespace ElderCare_Repository.DTO
 
         public string? Timeframe { get; set; }
 
-        public int? CarerId { get; set; }
-        
+        //public int? CarerId { get; set; }
+
+        public int ContractId { get; set; }
+
         public class AddTimetableTrackingDto
         {
             [RequiredWhenOtherIsNull("ContractServicesId")]
@@ -22,6 +24,8 @@ namespace ElderCare_Repository.DTO
 
             [RequiredWhenOtherIsNull("PackageServicesId")]
             public int? ContractServicesId { get; set; }
+
+            public string? Title { get; set; }
         }
         public List<AddTimetableTrackingDto>? Trackings { get; set; }
     }

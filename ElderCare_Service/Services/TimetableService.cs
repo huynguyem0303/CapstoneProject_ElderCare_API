@@ -26,6 +26,10 @@ namespace ElderCare_Service.Services
 
         public async Task<Timetable> CreateTrackingTimetable(AddTimetableDto model)
         {
+            if (await _unitOfWork.ContractRepo.IsContractExpired(model.ContractId))
+            {
+                throw new DbUpdateException("This contract all ready expired");
+            }
             var timetable = _mapper.Map<Timetable>(model);
             timetable.TimetableId = _unitOfWork.TimetableRepo.GetAll().OrderBy(e => e.TimetableId).Last().TimetableId + 1;
             await _unitOfWork.TimetableRepo.AddAsync(timetable);

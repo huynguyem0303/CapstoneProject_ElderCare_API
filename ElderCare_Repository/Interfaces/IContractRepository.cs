@@ -17,7 +17,6 @@ namespace ElderCare_Repository.Interfaces
         Task<Package> GetPackageAsync(string name);
         Task<Double?> GetPackagePrice();
         Task<List<Contract>> GetByCarer(int id);
-        
-
+        Task<bool> IsContractExpired(int contractId);
     }
 }
