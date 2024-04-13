@@ -30,9 +30,10 @@ namespace API.Controllers
         private readonly ITransactionService _transactionService;
         public static string? url;
 
-        public TransactionController(ICarerService carerService, ITransactionService transactionService)
+        public TransactionController(ICarerService carerService, IAccountService accountService, ITransactionService transactionService)
         {
             _carerService = carerService;
+            _accountService = accountService;
             _transactionService = transactionService;
         }
 
