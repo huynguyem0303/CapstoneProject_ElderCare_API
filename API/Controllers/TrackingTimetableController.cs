@@ -26,7 +26,7 @@ namespace API.Controllers
 
         [HttpPost]
         [EnableQuery]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> CreateTrackingTimetable(AddTimetableDto model)
         {
             Timetable timetable;
@@ -89,6 +89,7 @@ namespace API.Controllers
 
         [HttpDelete("{id}")]
         [EnableQuery]
+        //[Authorize]
         public async Task<IActionResult> RemoveTrackingTimetable(int id)
         {
             if (!await _timetableService.TimetableExist(id))
