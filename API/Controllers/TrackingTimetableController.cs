@@ -26,7 +26,7 @@ namespace API.Controllers
 
         [HttpPost]
         [EnableQuery]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> CreateTrackingTimetable(AddTimetableDto model)
         {
             Timetable timetable;
@@ -51,7 +51,7 @@ namespace API.Controllers
 
         [HttpGet("{id}")]
         [EnableQuery]
-        //[Authorize]
+        [Authorize]
         public async Task<SingleResult> GetTrackingTimetable(int id)
         {
             var timetable = await _timetableService.FindTimetableAsync(e => e.TimetableId == id, e => e.Trackings);
@@ -60,7 +60,7 @@ namespace API.Controllers
 
         [HttpPut("{id}")]
         [EnableQuery]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> PutTrackingTimetable(int id, UpdateTimetableDto model)
         {
             if (id != model.TimetableId)
