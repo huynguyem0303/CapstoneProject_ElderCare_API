@@ -13,8 +13,5 @@ namespace ElderCare_Repository.DTO
         public int? Status { get; set; }
 
         public int? CarerId { get; set; }
-
-        [Required]
-        public int? ContractId { get; set; }
     }
 }

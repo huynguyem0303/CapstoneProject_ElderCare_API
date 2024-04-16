@@ -57,12 +57,9 @@ namespace ElderCare_Service.Services
 
         public async Task UpdateTimetable(UpdateTimetableDto model)
         {
-            if (await _unitOfWork.ContractRepo.IsContractExpired((int)model.ContractId!))
-            {
-                throw new Exception("This contract has all ready expired");
-            }
-            model.CarerId ??= (await _unitOfWork.ContractRepo.GetByIdAsync(model.ContractId!) ?? throw new Exception("Incorrect contract Id")).CarerId;
-            _unitOfWork.TimetableRepo.Update(_mapper.Map<Timetable>(model));
+            var timetable = await _unitOfWork.TimetableRepo.GetByIdAsync(model.TimetableId);
+            _mapper.Map(model, timetable);
+            _unitOfWork.TimetableRepo.Update(timetable!);
             await _unitOfWork.SaveChangeAsync();
         }
 
