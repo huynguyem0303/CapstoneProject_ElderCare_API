@@ -4,6 +4,7 @@ using ElderCare_Domain.Models;
 using ElderCare_Repository.DTO;
 using ElderCare_Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,10 @@ namespace ElderCare_Service.Services
 
         public async Task<Timetable> CreateTrackingTimetable(AddTimetableDto model)
         {
+            if (await _unitOfWork.ContractRepo.IsContractExpired((int)model.ContractId!))
+            {
+                throw new Exception("This contract has all ready expired");
+            }
             var timetable = _mapper.Map<Timetable>(model);
             timetable.TimetableId = _unitOfWork.TimetableRepo.GetAll().OrderBy(e => e.TimetableId).Last().TimetableId + 1;
             await _unitOfWork.TimetableRepo.AddAsync(timetable);
@@ -52,6 +57,11 @@ namespace ElderCare_Service.Services
 
         public async Task UpdateTimetable(UpdateTimetableDto model)
         {
+            if (await _unitOfWork.ContractRepo.IsContractExpired((int)model.ContractId!))
+            {
+                throw new Exception("This contract has all ready expired");
+            }
+            model.CarerId ??= (await _unitOfWork.ContractRepo.GetByIdAsync(model.ContractId!) ?? throw new Exception("Incorrect contract Id")).CarerId;
             _unitOfWork.TimetableRepo.Update(_mapper.Map<Timetable>(model));
             await _unitOfWork.SaveChangeAsync();
         }

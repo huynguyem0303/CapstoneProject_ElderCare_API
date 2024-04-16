@@ -91,5 +91,11 @@ namespace ElderCare_Repository.Repos
         {
             return price;
         }
+
+        public async Task<bool> IsContractExpired(int contractId)
+        {
+            var contractLastVersion = await _context.ContractVersions.Where(e => e.ContractId == contractId).OrderBy(e => e.EndDate).LastAsync();
+            return contractLastVersion.EndDate > DateTime.Today;
+        }
     }
 }
