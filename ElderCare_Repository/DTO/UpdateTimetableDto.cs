@@ -1,4 +1,6 @@
-﻿namespace ElderCare_Repository.DTO
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ElderCare_Repository.DTO
 {
     public class UpdateTimetableDto
     {
@@ -10,8 +12,9 @@
 
         public int? Status { get; set; }
 
-        //public int? CarerId { get; set; }
+        public int? CarerId { get; set; }
 
-        public int ContractId { get; set; }
+        [Required]
+        public int? ContractId { get; set; }
     }
 }

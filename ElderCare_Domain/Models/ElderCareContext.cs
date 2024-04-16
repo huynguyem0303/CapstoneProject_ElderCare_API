@@ -829,6 +829,7 @@ public partial class ElderCareContext : DbContext
                 .ValueGeneratedNever()
                 .HasColumnName("timetable_id");
             entity.Property(e => e.CarerId).HasColumnName("carer_id");
+            entity.Property(e => e.ContractId).HasColumnName("contract_id");
             entity.Property(e => e.CreatedDate)
                 .HasColumnType("datetime")
                 .HasColumnName("created_date");

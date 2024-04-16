@@ -26,7 +26,7 @@ namespace API.Controllers
 
         [HttpPost]
         [EnableQuery]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> CreateTrackingTimetable(AddTimetableDto model)
         {
             Timetable timetable;
@@ -41,6 +41,10 @@ namespace API.Controllers
             catch (DuplicateNameException e)
             {
                 return Conflict(error: e.Message);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(error: e.Message);
             }
             return CreatedAtAction("GetTrackingTimetable", new { id = timetable.TimetableId }, timetable);
         }

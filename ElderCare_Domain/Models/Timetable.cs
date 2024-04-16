@@ -18,7 +18,7 @@ public partial class Timetable
 
     public int? CarerId { get; set; }
 
-    public int ContractId { get; set; }
+    public int? ContractId { get; set; }
 
     public virtual ICollection<Tracking> Trackings { get; set; } = new List<Tracking>();
 }

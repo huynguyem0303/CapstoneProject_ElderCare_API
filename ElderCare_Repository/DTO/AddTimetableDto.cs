@@ -1,6 +1,7 @@
 ﻿using ElderCare_Domain.Validation;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,9 +14,10 @@ namespace ElderCare_Repository.DTO
 
         public string? Timeframe { get; set; }
 
-        //public int? CarerId { get; set; }
+        public int? CarerId { get; set; }
 
-        public int ContractId { get; set; }
+        [Required]
+        public int? ContractId { get; set; }
 
         public class AddTimetableTrackingDto
         {
