@@ -18,5 +18,6 @@ namespace ElderCare_Service.Interfaces
         Task UpdateService(UpdateServiceDto model);
         Task DeleteService(int id);
         Task<bool> ServiceExists(int id);
+        IEnumerable<Carer> GetCarerByServiceId(int serviceId);
     }
 }

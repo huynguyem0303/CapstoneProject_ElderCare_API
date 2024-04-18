@@ -68,5 +68,10 @@ namespace ElderCare_Service.Services
         {
             return await _unitOfWork.ServiceRepo.GetByIdAsync(id) != null;
         }
+
+        public IEnumerable<Carer> GetCarerByServiceId(int serviceId)
+        {
+            return _unitOfWork.CarerRepository.GetCarerByServiceId(serviceId);
+        }
     }
 }

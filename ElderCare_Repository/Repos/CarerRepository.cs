@@ -1,4 +1,5 @@
 ﻿using DataAccess.Repositories;
+using DocumentFormat.OpenXml.Office2010.ExcelAc;
 using ElderCare_Domain.Enums;
 using ElderCare_Domain.Models;
 using ElderCare_Repository.DTO;
@@ -473,6 +474,16 @@ namespace ElderCare_Repository.Repos
         public async Task<CarerService?> GetCarerService(int carerId, int serviceId)
         {
             return await _context.CarerServices.FirstOrDefaultAsync(e => e.CarerId == carerId && e.ServiceId == serviceId);
+        }
+
+        public IEnumerable<Carer> GetCarerByServiceId(int serviceId)
+        {
+            var result = from carer in _dbSet
+                         join carerService in _context.CarerServices
+                         on carer.CarerId equals carerService.CarerId
+                         where carerService.ServiceId == serviceId
+                         select carer;
+            return result;
         }
 
         public IEnumerable<Carer> GetCarersByCustomerId(int customerId)

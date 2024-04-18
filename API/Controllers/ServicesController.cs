@@ -110,5 +110,14 @@ namespace API.Controllers
             await _serviceService.DeleteService(id);
             return NoContent();
         }
+
+        [HttpGet("{id}/Carers")]
+        [EnableQuery]
+        //[Authorize]
+        public async Task<IActionResult> GetCarerByServiceId(int id)
+        {
+            var list = _serviceService.GetCarerByServiceId(id);
+            return Ok(list);
+        }
     }
 }
