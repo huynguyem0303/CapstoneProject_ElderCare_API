@@ -41,14 +41,14 @@ namespace ElderCare_Service.Services
                     entity.Packageprice = _unitOfWork.ContractRepo.GetPackagePrice().Result;
                     entity.Package = _unitOfWork.PackageRepo.GetByIdAsync(0).Result;
                     entity.PackageId = _unitOfWork.PackageRepo.GetByIdAsync(0).Result.PackageId;
-                    entity.ContractType = (int)ContractType.PackageContract;
+                    entity.ContractType = (int)ContractType.ServiceContract;
                 }
                 else if (dto.service.IsNullOrEmpty())
                 {
                     entity.Package = _unitOfWork.ContractRepo.GetPackageAsync(dto.PackageName).Result;
                     entity.PackageId = _unitOfWork.ContractRepo.GetPackageAsync(dto.PackageName).Result.PackageId;
                     entity.Packageprice = _unitOfWork.ContractRepo.GetPackagePrice().Result;
-                    entity.ContractType = (int)ContractType.ServiceContract;
+                    entity.ContractType = (int)ContractType.PackageContract;
                 }
                 await _unitOfWork.ContractRepo.AddContractVersionAsync(dto.startDate, dto.endDate, entity.ContractId);
                 await _unitOfWork.ContractRepo.AddAsync(entity);
