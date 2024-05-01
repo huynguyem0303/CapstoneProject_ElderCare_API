@@ -28,7 +28,7 @@ namespace API.Controllers
         public async Task<IActionResult> GetContractByCarerId(int carerid)
         {
             //var model = await _unitOfWork.ElderRepo.FindAsync(x => x.ElderlyId == elderId);
-            var contract = await _contractService.FindAsync(e => e.CarerId == carerid);
+            var contract = await _contractService.FindAsync(e => e.CarerId == carerid, e => e.ContractServices);
             if (!contract.IsNullOrEmpty())
             {
                 return Ok(contract);
@@ -40,7 +40,7 @@ namespace API.Controllers
         public async Task<IActionResult> GetContractByCusId(int cusid)
         {
             //var model = await _unitOfWork.ElderRepo.FindAsync(x => x.ElderlyId == elderId);
-            var contract = await _contractService.FindAsync(e => e.CustomerId == cusid);
+            var contract = await _contractService.FindAsync(e => e.CustomerId == cusid, e => e.ContractServices);
             if (!contract.IsNullOrEmpty())
             {
                 return Ok(contract);
@@ -52,7 +52,7 @@ namespace API.Controllers
         public async Task<IActionResult> GetPendingContractByCarerId( int carerid)
         {
             //var model = await _unitOfWork.ElderRepo.FindAsync(x => x.ElderlyId == elderId);
-            var contract = await _contractService.FindAsync(e => e.CarerId == carerid && e.Status == (int)ContractStatus.Pending);
+            var contract = await _contractService.FindAsync(e => e.CarerId == carerid && e.Status == (int)ContractStatus.Pending, e => e.ContractServices);
             if (!contract.IsNullOrEmpty())
             {
                 return Ok(contract);
@@ -64,7 +64,7 @@ namespace API.Controllers
         public async Task<IActionResult> GetPendingContractByCusId( int cusid)
         {
             //var model = await _unitOfWork.ElderRepo.FindAsync(x => x.ElderlyId == elderId);
-            var contract = await _contractService.FindAsync(e => e.CustomerId == cusid && e.Status == (int)ContractStatus.Pending);
+            var contract = await _contractService.FindAsync(e => e.CustomerId == cusid && e.Status == (int)ContractStatus.Pending,e=>e.ContractServices);
             if (!contract.IsNullOrEmpty())
             {
                 return Ok(contract);
