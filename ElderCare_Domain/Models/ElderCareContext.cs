@@ -87,6 +87,8 @@ public partial class ElderCareContext : DbContext
     public virtual DbSet<Tracking> Trackings { get; set; }
 
     public virtual DbSet<Transaction> Transactions { get; set; }
+    
+    public virtual DbSet<TrackingOption> TrackingOptions { get; set; }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
 
@@ -917,6 +919,22 @@ public partial class ElderCareContext : DbContext
                 .HasConstraintName("FK_Transaction_Contract");
         });
 
+        modelBuilder.Entity<TrackingOption>(entity =>
+        {
+            entity.ToTable("TrackingOption");
+
+            entity.HasKey(e => e.TrackingOptionId);
+            entity.Property(e => e.TrackingOptionId)
+            .ValueGeneratedNever()
+            .HasColumnName("tracking_option_id");
+            entity.Property(e => e.ServiceId).HasColumnName("service_id");
+            entity.Property(e => e.Type)
+            .HasMaxLength(50)
+            .HasColumnName("type");
+            entity.Property(e => e.Description)
+            .HasMaxLength(200)
+            .HasColumnName("description");
+        });
         OnModelCreatingPartial(modelBuilder);
     }
 
