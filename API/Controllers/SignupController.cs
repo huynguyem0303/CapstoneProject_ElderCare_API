@@ -33,7 +33,8 @@ namespace API.Controllers
         /// <summary>
         /// Signup new carer
         /// </summary>
-        /// <param name="carerDto"> field "cert_id": certificate type: 1 medical; etc</param>
+        /// <param name="carerDto"> field "cert_type" (DO NOT LEAVE IT AT 0): 
+        /// certificate id in table Certification, get Certification: api/Certifications</param>
         /// <returns></returns>
         [HttpPost("signinCarer")]
         public async Task<IActionResult> SignUpCarer(CarerSignUpDto carerDto)

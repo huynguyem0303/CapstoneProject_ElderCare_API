@@ -60,7 +60,8 @@ namespace ElderCare_Repository.Mappers
                 //.ForMember(d => d.Address, s => s.MapFrom(e => e.Address))
                 .ForMember(d => d.CreatedDate, s => s.MapFrom(e => DateTime.UtcNow))
                 .ForMember(d => d.PhoneNumber, s => s.MapFrom(e => e.PhoneNumber));
-            CreateMap<CarerSignUpDto.CarerCertification, CertificationCarer>();
+            CreateMap<CarerSignUpDto.CarerCertification, CertificationCarer>()
+                .ForMember(d => d.CertId, s => s.MapFrom(e => e.CertificationType));
             CreateMap<CarerSignUpDto, CertificationCarer>();
             CreateMap<Carer, Account>()
                 .ForMember(d => d.Username, s => s.MapFrom(e => e.Name))
