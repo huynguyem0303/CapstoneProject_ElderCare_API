@@ -55,7 +55,7 @@ namespace ElderCare_Repository.DTO
 
         public class CarerCertification
         {
-            public int? CertId { get; set; }
+            public int? CertificationType { get; set; } // CertId of table Certification in db
 
             public string? Qualificationurl { get; set; }
         }
