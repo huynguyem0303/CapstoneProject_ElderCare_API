@@ -83,6 +83,7 @@ namespace ElderCare_Repository.Mappers
                 .ForMember(d => d.PhoneNumber, s => s.MapFrom(e => e.PhoneNumber));
             //contract
             CreateMap<Contract, AddContractDto>().ReverseMap();
+            CreateMap<Contract, AddContractWithTrackingsDto>().ReverseMap();
 
             //psychomotor
             CreateMap<AddPsychomotorDto, Psychomotor>().ReverseMap();
@@ -171,6 +172,11 @@ namespace ElderCare_Repository.Mappers
             CreateMap<AddTimetableDto, Timetable>();
             CreateMap<AddTimetableDto.AddTimetableTrackingDto, Tracking>();
             CreateMap<UpdateTimetableDto, Timetable>();
+            CreateMap<AddContractWithTrackingsDto, AddTimetableDto>()
+                .ForMember(d => d.CarerId, s => s.MapFrom(e => e.CarerId));
+            CreateMap<AddContractWithTrackingsDto.TimetableDto, AddTimetableDto>();
+            CreateMap<AddContractWithTrackingsDto.TimetableDto.TimetableTrackingDto, AddTimetableDto.AddTimetableTrackingDto>();
+
             //trackings
             CreateMap<CarerUpdateTrackingDto, Tracking>();
             CreateMap<CustomerApproveTrackingDto, Tracking>();

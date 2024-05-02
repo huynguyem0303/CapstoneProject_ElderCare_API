@@ -53,7 +53,6 @@ namespace ElderCare_Service.Services
                 await _unitOfWork.ContractRepo.AddContractVersionAsync(dto.startDate, dto.endDate, entity.ContractId);
                 await _unitOfWork.ContractRepo.AddAsync(entity);
                 await _unitOfWork.SaveChangeAsync();
-                //await _unitOfWork.SaveChangeAsync();
                 return entity;
             }catch(Exception ex) { throw new Exception(ex.Message); }
         }
@@ -80,6 +79,29 @@ namespace ElderCare_Service.Services
         public async Task<bool> ContractExists(int id)
         {
             return await _unitOfWork.ContractRepo.GetByIdAsync(id) != null;
+        }
+
+        public async Task<(Contract, List<Timetable>)> AddContract2(AddContractWithTrackingsDto dto)
+        {
+            var contract = await AddContract(dto);
+
+            var addTimetableDtos = _mapper.Map<List<AddTimetableDto>>(dto.TrackingTimetables);
+            var trackingTimeables = new List<Timetable>();
+            foreach (var item in addTimetableDtos)
+            {
+                item.ContractId = contract.ContractId;
+                item.CarerId = contract.CarerId;
+                if (await _unitOfWork.ContractRepo.IsContractExpired((int)item.ContractId!))
+                {
+                    throw new Exception("This contract has all ready expired");
+                }
+                var timetable = _mapper.Map<Timetable>(item);
+                timetable.TimetableId = _unitOfWork.TimetableRepo.GetAll().OrderBy(e => e.TimetableId).Last().TimetableId + 1;
+                await _unitOfWork.TimetableRepo.AddAsync(timetable);
+                trackingTimeables.Add(timetable);
+            }
+            await _unitOfWork.SaveChangeAsync();
+            return (contract, trackingTimeables);
         }
     }
 }

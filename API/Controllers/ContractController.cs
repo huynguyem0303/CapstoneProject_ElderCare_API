@@ -71,6 +71,7 @@ namespace API.Controllers
             }
             return NotFound();
         }
+
         [HttpPost]
         [EnableQuery]
         public async Task<ActionResult<Contract>> PostContract(AddContractDto dto)
@@ -90,20 +91,48 @@ namespace API.Controllers
                 return Ok(contract);
             }
             return NotFound();
-        }    /// <summary>
-             /// This method approved or denied customer's contract
-             /// </summary>
-             /// <param name="id">Contract id</param>
-             /// <param name="status">Contract status:
-             ///         0 - pending;
-             ///         1 - Signed (send noti to customer and then create new transaction);
-             ///         2 - Rejected(can be done by carer or customer when they dont want to make transaction)
-             ///         3 - Active 
-             ///         4 - Expired </param>
-             /// <returns></returns>
+        }
+
+        [HttpPost("CreateWithTimetable")]
+        [EnableQuery]
+        public async Task<ActionResult<Contract>> PostContract2(AddContractWithTrackingsDto dto)
+        {
+            Contract contract;
+            var trackingTimeables = new List<Timetable>();
+            try
+            {
+                //await _unitOfWork.SaveChangeAsync();
+                (contract, trackingTimeables) = await _contractService.AddContract2(dto);
+            }
+            catch (DbUpdateException e)
+            {
+                return BadRequest(e.Message);
+            }
+            if (contract != null && !trackingTimeables.IsNullOrEmpty())
+            {
+                return Ok(new
+                {
+                    contract,
+                    trackingTimeables
+                });
+            }
+            return NotFound();
+        }
+
+        /// <summary>
+        /// This method approved or denied customer's contract
+        /// </summary>
+        /// <param name="id">Contract id</param>
+        /// <param name="status">Contract status:
+        ///         0 - pending;
+        ///         1 - Signed (send noti to customer and then create new transaction);
+        ///         2 - Rejected(can be done by carer or customer when they dont want to make transaction)
+        ///         3 - Active 
+        ///         4 - Expired </param>
+        /// <returns></returns>
         [HttpPut("{id}/Contract")]
         [EnableQuery]
-        public async Task<IActionResult> ApproveCarer(int id, ContractStatus status)
+        public async Task<IActionResult> ApproveContract(int id, ContractStatus status)
         {
             if (!await _contractService.ContractExists(id))
             {
