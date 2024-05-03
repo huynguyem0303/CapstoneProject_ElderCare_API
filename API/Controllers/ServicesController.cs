@@ -123,6 +123,7 @@ namespace API.Controllers
 
         [HttpPost("{serviceId}/TrackingOption")]
         [EnableQuery]
+        [Authorize]
         public async Task<IActionResult> AddTrackingOption(int serviceId, AddTrackingOptionDto model)
         {
             TrackingOption trackingOption; 
