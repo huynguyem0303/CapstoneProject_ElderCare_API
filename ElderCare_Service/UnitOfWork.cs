@@ -30,8 +30,9 @@ namespace ElderCare_Service
         private readonly INotificationRepo _notificationRepo;
         private readonly ITimetableRepo _timetableRepo;
         private readonly ITrackingRepo _trackingRepo;
+        private readonly ITrackingOptionRepo _trackingOptionRepo;
 
-        public UnitOfWork(ElderCareContext context, IAccountRepository accountRepository, IContractRepository contractRepo, ICustomerRepository customerRepository, ICarerRepository carerRepository, ITransactionRepo transactionRepository, IHttpContextAccessor httpContextAccessor, IElderRepo elderRepo, IEmailService emailService, IHobbyRepo hobbyRepo, IPsychomotorHealthRepo psychomotorHealthRepo, IHealthDetailRepo healthDetailRepo, IPsychomotorRepo psychomotorRepo, IServiceRepo serviceRepo, IPackageRepo packageRepo, ICertificationRepo certificationRepo, ICategoryRepo categoryRepo, IReportRepo reportRepo, ISystemConfigRepo systemConfigRepo, IFeedbackRepo feedbackRepo, INotificationRepo notificationRepo, ITimetableRepo timetableRepo, ITrackingRepo trackingRepo)
+        public UnitOfWork(ElderCareContext context, IAccountRepository accountRepository, IContractRepository contractRepo, ICustomerRepository customerRepository, ICarerRepository carerRepository, ITransactionRepo transactionRepository, IHttpContextAccessor httpContextAccessor, IElderRepo elderRepo, IEmailService emailService, IHobbyRepo hobbyRepo, IPsychomotorHealthRepo psychomotorHealthRepo, IHealthDetailRepo healthDetailRepo, IPsychomotorRepo psychomotorRepo, IServiceRepo serviceRepo, IPackageRepo packageRepo, ICertificationRepo certificationRepo, ICategoryRepo categoryRepo, IReportRepo reportRepo, ISystemConfigRepo systemConfigRepo, IFeedbackRepo feedbackRepo, INotificationRepo notificationRepo, ITimetableRepo timetableRepo, ITrackingRepo trackingRepo, ITrackingOptionRepo trackingOptionRepo)
         {
             _context = context;
             _accountRepository = accountRepository;
@@ -56,6 +57,7 @@ namespace ElderCare_Service
             _notificationRepo = notificationRepo;
             _timetableRepo = timetableRepo;
             _trackingRepo = trackingRepo;
+            _trackingOptionRepo = trackingOptionRepo;
         }
 
         public IAccountRepository AccountRepository => _accountRepository;
@@ -98,6 +100,8 @@ namespace ElderCare_Service
         public ITimetableRepo TimetableRepo => _timetableRepo;
 
         public ITrackingRepo TrackingRepo => _trackingRepo;
+
+        public ITrackingOptionRepo TrackingOptionRepo => _trackingOptionRepo;
 
         public async Task<int> SaveChangeAsync()
         {

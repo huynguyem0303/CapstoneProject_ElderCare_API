@@ -73,5 +73,38 @@ namespace ElderCare_Service.Services
         {
             return _unitOfWork.CarerRepository.GetCarerByServiceId(serviceId);
         }
+
+        public async Task<TrackingOption> AddTrackingOption(AddTrackingOptionDto model)
+        {
+            var trackingOption = _mapper.Map<TrackingOption>(model);
+            trackingOption.TrackingOptionId = (_unitOfWork.TrackingOptionRepo.GetAll()
+                .OrderBy(e => e.TrackingOptionId)
+                .LastOrDefault() ?? new TrackingOption())
+                .TrackingOptionId + 1;
+            await _unitOfWork.TrackingOptionRepo.AddAsync(trackingOption);
+            await _unitOfWork.SaveChangeAsync();
+            return trackingOption;
+        }
+
+        public async Task UpdateTrackingOption(UpdateTrackingOptionDto model)
+        {
+            _unitOfWork.TrackingOptionRepo.Update(_mapper.Map<TrackingOption>(model));
+            await _unitOfWork.SaveChangeAsync();
+        }
+
+        public async Task DeleteTrackingOption(int id)
+        {
+            var trackingOption = await _unitOfWork.TrackingOptionRepo.GetByIdAsync(id);
+            if (trackingOption != null)
+            {
+                _unitOfWork.TrackingOptionRepo.Delete(trackingOption);
+            }
+            await _unitOfWork.SaveChangeAsync();
+        }
+
+        public async Task<bool> TrackingOptionExists(int id)
+        {
+            return await _unitOfWork.TrackingOptionRepo.GetByIdAsync(id) != null;
+        }
     }
 }

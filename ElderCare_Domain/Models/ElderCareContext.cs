@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ValueGeneration;
 using Microsoft.EntityFrameworkCore.ValueGeneration.Internal;
@@ -925,15 +926,20 @@ public partial class ElderCareContext : DbContext
 
             entity.HasKey(e => e.TrackingOptionId);
             entity.Property(e => e.TrackingOptionId)
-            .ValueGeneratedNever()
-            .HasColumnName("tracking_option_id");
+                  .ValueGeneratedNever()
+                  .HasColumnName("tracking_option_id");
             entity.Property(e => e.ServiceId).HasColumnName("service_id");
             entity.Property(e => e.Type)
-            .HasMaxLength(50)
-            .HasColumnName("type");
+                  .HasMaxLength(50)
+                  .HasColumnName("type");
             entity.Property(e => e.Description)
-            .HasMaxLength(200)
-            .HasColumnName("description");
+                  .HasMaxLength(200)
+                  .HasColumnName("description");
+
+            entity.HasOne(d => d.Service)
+                  .WithMany(p => p.TrackingOptions)
+                  .HasForeignKey(d => d.ServiceId)
+                  .HasConstraintName("FK_TrackingOption_Service");
         });
         OnModelCreatingPartial(modelBuilder);
     }

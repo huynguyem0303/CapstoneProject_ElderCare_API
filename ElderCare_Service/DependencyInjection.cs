@@ -56,6 +56,7 @@ namespace ElderCare_Service
             services.AddScoped<ITimetableRepo, TimetableRepo>();
             services.AddScoped<ITrackingRepo, TrackingRepo>();
             services.AddScoped<ITimetableService, TimetableService>();
+            services.AddScoped<ITrackingOptionRepo, TrackingOptionRepo>();
             services.AddHttpClient<FcmSender>();
             services.AddHttpClient<ApnSender>();
             return services;

@@ -33,7 +33,7 @@ namespace API.Controllers
         /// <summary>
         /// Signup new carer
         /// </summary>
-        /// <param name="carerDto"> field "cert_type" (DO NOT LEAVE IT AT 0): 
+        /// <param name="carerDto"> field "certificationType" (DO NOT LEAVE IT AT 0): 
         /// certificate id in table Certification, get Certification: api/Certifications</param>
         /// <returns></returns>
         [HttpPost("signinCarer")]

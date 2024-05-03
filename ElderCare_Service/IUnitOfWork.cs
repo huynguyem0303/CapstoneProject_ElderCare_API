@@ -26,6 +26,7 @@ namespace ElderCare_Service
         public INotificationRepo NotificationRepo { get; }
         public ITimetableRepo TimetableRepo { get; }
         public ITrackingRepo TrackingRepo {  get; }
+        public ITrackingOptionRepo TrackingOptionRepo {  get; }
     }
 }
 

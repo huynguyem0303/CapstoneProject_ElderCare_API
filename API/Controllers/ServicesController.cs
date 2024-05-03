@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.OData.Routing.Controllers;
 using ElderCare_Repository.DTO;
 using System.Data;
 using ElderCare_Service.Interfaces;
+using DocumentFormat.OpenXml.Office2010.Excel;
 
 namespace API.Controllers
 {
@@ -39,7 +40,7 @@ namespace API.Controllers
         [Authorize]
         public async Task<SingleResult<Service>> GetService(int id)
         {
-            var service = await _serviceService.FindAsync(x => x.ServiceId == id);
+            var service = await _serviceService.FindAsync(x => x.ServiceId == id, x => x.TrackingOptions);
             return SingleResult.Create(service.AsQueryable());
         }
 
@@ -118,6 +119,76 @@ namespace API.Controllers
         {
             var list = _serviceService.GetCarerByServiceId(id);
             return Ok(list);
+        }
+
+        [HttpPost("{serviceId}/TrackingOption")]
+        [EnableQuery]
+        public async Task<IActionResult> AddTrackingOption(int serviceId, AddTrackingOptionDto model)
+        {
+            TrackingOption trackingOption; 
+            if (serviceId != model.ServiceId)
+            {
+                return BadRequest();
+            }
+            if (!await _serviceService.ServiceExists(serviceId))
+            {
+                return NotFound();
+            }
+            try
+            {
+                trackingOption = await _serviceService.AddTrackingOption(model);
+            }
+            catch (DbUpdateException e)
+            {
+                return BadRequest(error: e.Message);
+            }
+            catch (DuplicateNameException e)
+            {
+                return Conflict(error: e.Message);
+            }
+
+            return CreatedAtAction("GetService", new { id = model.ServiceId }, trackingOption);
+        }
+
+        [HttpPut("{serviceId}/TrackingOption/{trackingOptionId}")]
+        [EnableQuery]
+        [Authorize]
+        public async Task<IActionResult> UpdateTrackingOption(int serviceId, int trackingOptionId, UpdateTrackingOptionDto model)
+        {
+            if (serviceId != model.ServiceId || trackingOptionId != model.TrackingOptionId)
+            {
+                return BadRequest();
+            }
+
+            try
+            {
+                await _serviceService.UpdateTrackingOption(model);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!await _serviceService.ServiceExists(serviceId) || !await _serviceService.TrackingOptionExists(trackingOptionId))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+        [HttpDelete("{serviceId}/TrackingOption/{trackingOptionId}")]
+        [EnableQuery]
+        [Authorize]
+        public async Task<IActionResult> DeleteTrackingOption(int serviceId, int trackingOptionId)
+        {
+            if (!await _serviceService.ServiceExists(serviceId) || !await _serviceService.TrackingOptionExists(trackingOptionId))
+            {
+                return NotFound();
+            }
+            await _serviceService.DeleteTrackingOption(trackingOptionId);
+            return NoContent();
         }
     }
 }

@@ -19,5 +19,9 @@ namespace ElderCare_Service.Interfaces
         Task DeleteService(int id);
         Task<bool> ServiceExists(int id);
         IEnumerable<Carer> GetCarerByServiceId(int serviceId);
+        Task<TrackingOption> AddTrackingOption(AddTrackingOptionDto model);
+        Task UpdateTrackingOption(UpdateTrackingOptionDto model);
+        Task DeleteTrackingOption(int id);
+        Task<bool> TrackingOptionExists(int id);
     }
 }
