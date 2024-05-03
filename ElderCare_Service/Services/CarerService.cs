@@ -236,5 +236,10 @@ namespace ElderCare_Service.Services
         {
             return _unitOfWork.CarerRepository.GetCarerCusByCusId(cusId);
         }
+
+        public async Task<IEnumerable<Timetable>> GetTrackingTimetablesByCarerId(int carerId)
+        {
+            return await _unitOfWork.TimetableRepo.FindAsync(e => e.CarerId == carerId, e => e.Trackings);
+        }
     }
 }

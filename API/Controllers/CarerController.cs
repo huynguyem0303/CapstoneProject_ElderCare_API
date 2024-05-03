@@ -354,6 +354,15 @@ namespace API.Controllers
             return Ok(list);
         }
 
+        [HttpGet("{carerId}/TrackingTimetables")]
+        [EnableQuery]
+        [Authorize]
+        public async Task<IActionResult> GetTrackingTimetablesByCarerId(int carerId)
+        {
+            var list = await _carerService.GetTrackingTimetablesByCarerId(carerId);
+
+            return Ok(list);
+        }
         //[HttpGet("getTransactionHistory")]
         //[EnableQuery]
         //[Authorize(Roles = "Carer")]
