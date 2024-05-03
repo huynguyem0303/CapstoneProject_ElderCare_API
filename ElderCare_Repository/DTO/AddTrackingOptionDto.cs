@@ -1,18 +1,17 @@
-﻿using System;
+﻿using ElderCare_Domain.Validation;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ElderCare_Domain.Models
+namespace ElderCare_Repository.DTO
 {
-    public class TrackingOption
+    public class AddTrackingOptionDto
     {
-        public int TrackingOptionId { get; set; }
         public int ServiceId { get; set; }
+        [StringRange(AllowableValues = new[] {"text", "audio", "image"}, AllowNull = false)]
         public string Type { get; set; }
         public string Description { get; set; }
-        public virtual Service Service { get; set; }
     }
 }

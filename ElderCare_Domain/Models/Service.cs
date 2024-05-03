@@ -18,4 +18,6 @@ public partial class Service
     public virtual ICollection<CarerService> CarerServices { get; set; } = new List<CarerService>();
 
     public virtual ICollection<ContractService> ContractServices { get; set; } = new List<ContractService>();
+
+    public virtual ICollection<TrackingOption> TrackingOptions { get; set; }
 }

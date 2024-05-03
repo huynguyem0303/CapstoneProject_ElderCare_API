@@ -182,6 +182,10 @@ namespace ElderCare_Repository.Mappers
             CreateMap<CarerUpdateTrackingDto, Tracking>();
             CreateMap<CustomerApproveTrackingDto, Tracking>();
             CreateMap<AddTrackingDto, Tracking>();
+
+            //trackingOption
+            CreateMap<AddTrackingOptionDto, TrackingOption>();
+            CreateMap<UpdateTrackingOptionDto, TrackingOption>();
         }
     }
 }
