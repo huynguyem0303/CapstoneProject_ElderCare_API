@@ -35,7 +35,18 @@ namespace API.Controllers
         //    _mapper = mapper;
         //}
 
+        [HttpGet]
+        [EnableQuery]
+        [Authorize(Roles = "Staff, Admin")]
+        public IActionResult GettCarers()
+        {
+            //var list = _unitOfWork.AccountRepository.GetAll();
+            var list = _carerService.GetAll();
+
+            return Ok(list);
+        }
         [HttpPost("search")]
+        [Authorize]
         public async Task<IActionResult> GetCarer(SearchCarerDto dto)
         {
             //var carer = await _unitOfWork.CarerRepository.SearchCarer(dto);
