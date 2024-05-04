@@ -80,6 +80,7 @@ namespace ElderCare_Service.Services
         {
             return await _unitOfWork.ContractRepo.GetByIdAsync(id) != null;
         }
+      
 
         public async Task<(Contract, List<Timetable>)> AddContract2(AddContractWithTrackingsDto dto)
         {

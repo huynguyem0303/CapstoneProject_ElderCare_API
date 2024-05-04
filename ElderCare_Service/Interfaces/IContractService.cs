@@ -17,6 +17,7 @@ namespace ElderCare_Service.Interfaces
         Task<List<Contract>> GetByCarerId(int id);
         Task<Contract?> ApproveContract(int contractid, int status);
         Task<bool> ContractExists(int id);
+       
         Task<(Contract, List<Timetable>)> AddContract2(AddContractWithTrackingsDto dto);
     }
 }

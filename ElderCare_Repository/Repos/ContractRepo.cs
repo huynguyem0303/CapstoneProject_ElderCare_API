@@ -77,7 +77,11 @@ namespace ElderCare_Repository.Repos
         {
            return _context.Contracts.Where(x=>x.CarerId==id).Include(x=>x.Elderly).Include(x => x.Carer).Include(x => x.Customer).Include(x => x.Package).ToList();
         }
-        
+
+        public async Task<List<ElderCare_Domain.Models.Contract>> GetByPackageIdAsync(int id)
+        {
+            return _context.Contracts.Where(x => x.Packageprice == id).ToList();
+        }
 
         public async Task<Package> GetPackageAsync(string name)
         {
