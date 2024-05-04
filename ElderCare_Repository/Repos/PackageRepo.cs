@@ -21,6 +21,7 @@ namespace ElderCare_Repository.Repos
         {
             var errors = new List<string>();
             var list = new List<PackageService>();
+            int lastId = (_context.PackageServices.OrderBy(e => e.PackageServicesId).Last() ?? new PackageService()).PackageServicesId;
             for (var i = 0; i < serviceName.Length; i++)
             {
                 var service = await _context.Services.FirstOrDefaultAsync(e => e.Name == serviceName[i]);
@@ -38,7 +39,7 @@ namespace ElderCare_Repository.Repos
                     {
                         list.Add(new PackageService()
                         {
-                            PackageServicesId = _context.PackageServices.OrderBy(e => e.PackageServicesId).Last().PackageServicesId + 1,
+                            PackageServicesId = ++lastId,
                             ServiceId = service.ServiceId,
                             PackageId = packageId,
                         });
@@ -49,6 +50,7 @@ namespace ElderCare_Repository.Repos
             {
                 throw new DbUpdateException(message: String.Join(",\n", errors));
             }
+            list = list.DistinctBy(e => e.ServiceId).ToList();
             if(list.Count > 0)
             {
                 await _context.PackageServices.AddRangeAsync(list);
