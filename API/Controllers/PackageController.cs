@@ -129,7 +129,7 @@ namespace API.Controllers
         /// <returns></returns>
         [HttpPost("{packageId}/Services")]
         [EnableQuery]
-        [Authorize(Roles = "Staff, Admin")]
+        //[Authorize(Roles = "Staff, Admin")]
         public async Task<ActionResult<Package>> PostPackageService(int packageId, string[] serviceName)
         {
             if (!await _packageService.PackageExists(packageId))
