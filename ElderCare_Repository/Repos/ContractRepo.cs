@@ -1,14 +1,17 @@
 ﻿using DataAccess.Repositories;
 using ElderCare_Domain.Enums;
 using ElderCare_Domain.Models;
+using ElderCare_Repository.DTO;
 using ElderCare_Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace ElderCare_Repository.Repos
 {
@@ -73,6 +76,22 @@ namespace ElderCare_Repository.Repos
 
         }
 
+        public async Task ExpriedContract()
+        {
+            var contract = _context.Contracts.ToList();
+            for (int i=0;i<contract.Count;i++)
+            {
+
+                if (IsContractExpired(contract[i].ContractId).Result == true)
+                {
+                    contract[i].Status = ((int)ContractStatus.WaitingTransaction) ;
+                    _dbSet.Update(contract[i]);
+   
+                }
+
+            }
+        }
+
         public async Task<List<ElderCare_Domain.Models.Contract>> GetByCarer(int id)
         {
            return _context.Contracts.Where(x=>x.CarerId==id).Include(x=>x.Elderly).Include(x => x.Carer).Include(x => x.Customer).Include(x => x.Package).ToList();
@@ -99,7 +118,63 @@ namespace ElderCare_Repository.Repos
         public async Task<bool> IsContractExpired(int contractId)
         {
             var contractLastVersion = await _context.ContractVersions.Where(e => e.ContractId == contractId).OrderBy(e => e.EndDate).LastAsync();
-            return contractLastVersion.EndDate > DateTime.Today;
+            return contractLastVersion.EndDate < DateTime.Today;
+        }
+
+        public async Task TransactionContract()
+        {
+
+            var contract = _context.Contracts.ToList();
+            for (int i = 0; i < contract.Count; i++)
+            {
+
+                if (contract[i].Status == ((int)ContractStatus.WaitingTransaction))
+                {
+                    contract[i].Status = ((int)ContractStatus.Expired);
+                    _dbSet.Update(contract[i]);
+
+                }
+
+            }
+        }
+
+        public async Task<List<ContractPriceDto>> TransactionContractPrice()
+        {
+            List<ContractPriceDto> costlist = new List<ContractPriceDto>() ;
+            var contract = _context.Contracts.ToList();
+            for (int i = 0; i < contract.Count; i++)
+            {
+                if (contract[i].Status == ((int)ContractStatus.WaitingTransaction))
+                {
+                    if (contract[i].ContractType== ((int)ContractType.PackageContract))
+                    {
+                        ContractPriceDto cost = new ContractPriceDto();
+                        cost.price = contract[i].Packageprice;
+                        cost.contractId = contract[i].ContractId;
+                        costlist.Add(cost);
+                    }
+                    else
+                    {
+                        ContractPriceDto cost = new ContractPriceDto();
+                        double? price=0;
+                        var contractservice = await _context.ContractServices.Where(e => e.ContractId == contract[i].ContractId).ToListAsync();
+                        for (int j = 0; j < contractservice.Count; j++)
+                        {
+                            price = price+contractservice[j].Price;
+                        }
+                        cost.price = price;
+                        cost.contractId = contract[i].ContractId;
+                        costlist.Add(cost);
+
+
+                    }
+                    
+                }
+              
+            }
+            return costlist;
+
+
         }
     }
 }

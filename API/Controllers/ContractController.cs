@@ -128,7 +128,8 @@ namespace API.Controllers
         ///         1 - Signed (send noti to customer and then create new transaction);
         ///         2 - Rejected(can be done by carer or customer when they dont want to make transaction)
         ///         3 - Active 
-        ///         4 - Expired </param>
+        ///         4 - Waiting for transaction
+        ///         5 - Expired </param>
         /// <returns></returns>
         [HttpPut("{id}/Contract")]
         [EnableQuery]
@@ -146,6 +147,13 @@ namespace API.Controllers
                 return Ok(contract);
             }
             return NoContent();
+        }
+        [HttpPut("ExpiredContract")]
+        [EnableQuery]
+        public async Task<IActionResult> ExpiredContract()
+        {
+            await _contractService.ExpriedContract();
+            return Ok();
         }
     }
 }

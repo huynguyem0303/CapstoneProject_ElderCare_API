@@ -15,5 +15,6 @@ namespace ElderCare_Service.Interfaces
         Task<string> CreateTransaction(TransactionDto dto, int accountId,int carerid,int cusid,int contractid);
         string LinkPayment(int accountId);
         Task<string> ProcessPayment();
+        Task<List<Transaction>> TransactionContract();
     }
 }

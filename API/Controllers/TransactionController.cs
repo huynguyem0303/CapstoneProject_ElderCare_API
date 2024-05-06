@@ -356,6 +356,13 @@ namespace API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpPut("CarerSalary")]
+        [EnableQuery]
+        public IActionResult CarerSalary()
+        {
+            var list = _transactionService.TransactionContract();
+            return Ok(list);
+        }
     }
 
 }

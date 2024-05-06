@@ -38,11 +38,10 @@ namespace API.Controllers
         [HttpGet]
         [EnableQuery]
         [Authorize(Roles = "Staff, Admin")]
-        public IActionResult GettCarers()
+        public IActionResult GetCarers()
         {
             //var list = _unitOfWork.AccountRepository.GetAll();
             var list = _carerService.GetAll();
-
             return Ok(list);
         }
         [HttpPost("search")]
@@ -60,6 +59,7 @@ namespace API.Controllers
 
         [HttpGet("{id}")]
         [EnableQuery]
+        [Authorize]
         public async Task<SingleResult<Carer>> GetCarerById(int id)
         {
             //var carer = await _unitOfWork.AccountRepository.FindAsync(x => x.AccountId == id);
@@ -68,6 +68,7 @@ namespace API.Controllers
         }
         [HttpGet("categoryname")]
         [EnableQuery]
+        [Authorize]
         public async Task<IActionResult> GetCategoryByServiceName(string name)
         {
             //var carer = await _unitOfWork.AccountRepository.FindAsync(x => x.AccountId == id);
@@ -81,6 +82,7 @@ namespace API.Controllers
         /// <returns></returns>
         [HttpGet("{id}/Services")]
         [EnableQuery]
+        [Authorize]
         public async Task<IActionResult> GetServicesByCarerId(int id)
         {
             if (!await _carerService.CarerExists(id))
@@ -93,6 +95,7 @@ namespace API.Controllers
 
         [HttpGet("pending")]
         [EnableQuery]
+        [Authorize]
         public async Task<IActionResult> GetPendingCarer()
         {
             var carer = await _carerService.GetByPending();
@@ -145,6 +148,7 @@ namespace API.Controllers
         /// <returns></returns>
         [HttpPut("{id}/Account")]
         [EnableQuery]
+        [Authorize]
         public async Task<IActionResult> ApproveCarer(int id, CarerStatus status)
         {
             if(!await _carerService.CarerExists(id))
@@ -226,6 +230,7 @@ namespace API.Controllers
         /// <returns></returns>
         [HttpGet("{carerId}/Feedbacks")]
         [EnableQuery]
+        [Authorize]
         public async Task<IActionResult> GetFeedbacks(int carerId)
         {
             var list = await _carerService.FindCarerFeedback(e => e.CarerService.CarerId == carerId);
@@ -240,6 +245,7 @@ namespace API.Controllers
         /// <returns></returns>
         [HttpGet("{carerId}/Services/{serviceId}/Feedbacks")]
         [EnableQuery]
+        [Authorize]
         public async Task<IActionResult> GetServiceFeedbacks(int carerId, int serviceId)
         {
             var list = await _carerService.FindCarerFeedback(e => e.CarerService.CarerId == carerId && e.CarerService.ServiceId == serviceId);
@@ -255,6 +261,7 @@ namespace API.Controllers
         /// <returns></returns>
         [HttpGet("{carerId}/Services/{serviceId}/Feedbacks/{feedbackId}")]
         [EnableQuery]
+        [Authorize]
         public async Task<SingleResult> GetServiceFeedbackDetail(int carerId, int serviceId, int feedbackId)
         {
             var list = await _carerService.FindCarerFeedback(e => e.CarerService.CarerId == carerId 
@@ -271,6 +278,7 @@ namespace API.Controllers
         /// <returns></returns>
         [HttpPost("{carerId}/Services/{serviceId}/Feedbacks")]
         [EnableQuery]
+        [Authorize]
         public async Task<IActionResult> PostServiceFeedbacks(int carerId, int serviceId, AddFeedbackDto model)
         {
             if(carerId != model.CarerId || serviceId != model.ServiceId)
@@ -303,6 +311,7 @@ namespace API.Controllers
          /// <returns></returns>
         [HttpPut("{carerId}/Services/{serviceId}/Feedbacks/{feedbackId}")]
         [EnableQuery]
+
         public async Task<IActionResult> PutServiceFeedbackDetail(int carerId, int serviceId, int feedbackId, UpdateFeedbackDto model)
         {
             if (carerId != model.CarerId || serviceId != model.ServiceId || feedbackId != model.FeedbackId)

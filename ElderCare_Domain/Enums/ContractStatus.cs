@@ -12,6 +12,8 @@ namespace ElderCare_Domain.Enums
         Signed = 1,
         Rejected = 2,
         Active = 3,
-        Expired = 4,
+        WaitingTransaction= 4,
+        Expired = 5,
     }
 }
+
