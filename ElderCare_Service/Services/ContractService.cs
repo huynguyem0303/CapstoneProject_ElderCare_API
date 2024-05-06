@@ -109,9 +109,12 @@ namespace ElderCare_Service.Services
         public async Task ExpriedContract()
         {
             await _unitOfWork.ContractRepo.ExpriedContract();
+
             await _unitOfWork.SaveChangeAsync();
+
+
         }
 
-       
+
     }
 }

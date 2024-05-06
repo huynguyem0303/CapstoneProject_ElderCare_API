@@ -78,7 +78,7 @@ namespace ElderCare_Repository.Repos
 
         public async Task ExpriedContract()
         {
-            var contract = _context.Contracts.ToList();
+            var contract = _context.Contracts.Where(x=>x.Status==((int)ContractStatus.Active)).ToList();
             for (int i=0;i<contract.Count;i++)
             {
 
@@ -86,10 +86,11 @@ namespace ElderCare_Repository.Repos
                 {
                     contract[i].Status = ((int)ContractStatus.WaitingTransaction) ;
                     _dbSet.Update(contract[i]);
-   
+                    
                 }
-
+              
             }
+          
         }
 
         public async Task<List<ElderCare_Domain.Models.Contract>> GetByCarer(int id)

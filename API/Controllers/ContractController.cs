@@ -1,4 +1,5 @@
-﻿using ElderCare_Domain.Enums;
+﻿using API.DTO;
+using ElderCare_Domain.Enums;
 using ElderCare_Domain.Models;
 using ElderCare_Repository.DTO;
 using ElderCare_Service.Interfaces;
@@ -137,7 +138,7 @@ namespace API.Controllers
         {
             if (!await _contractService.ContractExists(id))
             {
-                return NotFound();
+                return BadRequest(error:"K co contract can tra luong cho carer!!");
             }
 
             var contract = await _contractService.ApproveContract(id, (int)status);
@@ -152,8 +153,13 @@ namespace API.Controllers
         [EnableQuery]
         public async Task<IActionResult> ExpiredContract()
         {
-            await _contractService.ExpriedContract();
-            return Ok();
+          await _contractService.ExpriedContract();
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Message = "Checking xong"
+
+            }); ;
         }
     }
 }
