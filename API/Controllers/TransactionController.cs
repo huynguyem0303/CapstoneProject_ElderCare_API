@@ -358,9 +358,14 @@ namespace API.Controllers
         }
         [HttpPut("CarerSalary")]
         [EnableQuery]
-        public IActionResult CarerSalary()
+        public async Task<IActionResult> CarerSalary()
         {
-            var list = _transactionService.TransactionContract();
+          
+            var list =await _transactionService.TransactionContract();
+            if (list.IsNullOrEmpty())
+            {
+                return NotFound();
+            }
             return Ok(list);
         }
     }
