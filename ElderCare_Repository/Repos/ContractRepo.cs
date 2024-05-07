@@ -93,6 +93,45 @@ namespace ElderCare_Repository.Repos
           
         }
 
+        public async Task<List<ElderCare_Domain.Models.Contract>> ExpriedContractInNext5Day()
+        {
+            List<ElderCare_Domain.Models.Contract> list = new List<ElderCare_Domain.Models.Contract>();
+            var contract = _context.Contracts.Where(x => x.Status == ((int)ContractStatus.Active)).ToList();
+            for (int i = 0; i < contract.Count; i++)
+            {
+                var contractLastVersion = await _context.ContractVersions.Where(e => e.ContractId == contract[i].ContractId).OrderBy(e => e.EndDate).LastAsync();
+                var check = contractLastVersion.EndDate < DateTime.Today.AddDays(5);
+
+                if (check == true)
+                {
+                    list.Add(contract[i]);
+
+                }
+
+            }
+            return list;
+        }
+
+        public async Task<List<ElderCare_Domain.Models.Contract>> ExpriedContractToday()
+        {
+            List<ElderCare_Domain.Models.Contract> list = new List<ElderCare_Domain.Models.Contract>();
+            var contract = _context.Contracts.Where(x => x.Status == ((int)ContractStatus.Active)).ToList();
+            for (int i = 0; i < contract.Count; i++)
+            {
+                var contractLastVersion = await _context.ContractVersions.Where(e => e.ContractId == contract[i].ContractId).OrderBy(e => e.EndDate).LastAsync();
+                var check =contractLastVersion.EndDate < DateTime.Today;
+
+                if (check == true)
+                {
+                    list.Add(contract[i]);
+
+                }
+
+            }
+            return list;
+           
+        }
+
         public async Task<List<ElderCare_Domain.Models.Contract>> GetByCarer(int id)
         {
            return _context.Contracts.Where(x=>x.CarerId==id).Include(x=>x.Elderly).Include(x => x.Carer).Include(x => x.Customer).Include(x => x.Package).ToList();

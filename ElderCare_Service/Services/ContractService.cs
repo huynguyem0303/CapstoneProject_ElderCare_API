@@ -115,6 +115,15 @@ namespace ElderCare_Service.Services
 
         }
 
+        public async Task<List<Contract>> ExpriedContractToday()
+        {
+            return await _unitOfWork.ContractRepo.ExpriedContractToday();
+        }
 
+        public async Task<List<Contract>> ExpriedContractInNext5Day()
+        {
+            return await _unitOfWork.ContractRepo.ExpriedContractInNext5Day();
+        }
     }
 }
+

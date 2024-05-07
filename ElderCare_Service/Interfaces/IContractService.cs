@@ -19,7 +19,8 @@ namespace ElderCare_Service.Interfaces
         Task ExpriedContract();
 
         Task<bool> ContractExists(int id);
-       
+        Task<List<Contract>> ExpriedContractToday();
+        Task<List<Contract>> ExpriedContractInNext5Day();
         Task<(Contract, List<Timetable>)> AddContract2(AddContractWithTrackingsDto dto);
     }
 }

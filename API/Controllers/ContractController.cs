@@ -50,7 +50,7 @@ namespace API.Controllers
         }
         [HttpGet("getPendingContractByCarerId")]
         [EnableQuery]
-        public async Task<IActionResult> GetPendingContractByCarerId( int carerid)
+        public async Task<IActionResult> GetPendingContractByCarerId(int carerid)
         {
             //var model = await _unitOfWork.ElderRepo.FindAsync(x => x.ElderlyId == elderId);
             var contract = await _contractService.FindAsync(e => e.CarerId == carerid && e.Status == (int)ContractStatus.Pending, e => e.ContractServices);
@@ -62,10 +62,10 @@ namespace API.Controllers
         }
         [HttpGet("getPendingContractByCusId")]
         [EnableQuery]
-        public async Task<IActionResult> GetPendingContractByCusId( int cusid)
+        public async Task<IActionResult> GetPendingContractByCusId(int cusid)
         {
             //var model = await _unitOfWork.ElderRepo.FindAsync(x => x.ElderlyId == elderId);
-            var contract = await _contractService.FindAsync(e => e.CustomerId == cusid && e.Status == (int)ContractStatus.Pending,e=>e.ContractServices);
+            var contract = await _contractService.FindAsync(e => e.CustomerId == cusid && e.Status == (int)ContractStatus.Pending, e => e.ContractServices);
             if (!contract.IsNullOrEmpty())
             {
                 return Ok(contract);
@@ -138,7 +138,7 @@ namespace API.Controllers
         {
             if (!await _contractService.ContractExists(id))
             {
-                return BadRequest(error:"K co contract can tra luong cho carer!!");
+                return BadRequest(error: "K co contract can tra luong cho carer!!");
             }
 
             var contract = await _contractService.ApproveContract(id, (int)status);
@@ -153,13 +153,35 @@ namespace API.Controllers
         [EnableQuery]
         public async Task<IActionResult> ExpiredContract()
         {
-          await _contractService.ExpriedContract();
+            await _contractService.ExpriedContract();
             return Ok(new ApiResponse
             {
                 Success = true,
                 Message = "Checking xong"
 
             }); ;
+        }
+        [HttpGet("ExpiredContractToday")]
+        [EnableQuery]
+        public async Task<IActionResult> ExpiredContractToday()
+        {
+            var list = await _contractService.ExpriedContractToday();
+            if (list.IsNullOrEmpty())
+            {
+                return NotFound();
+            }
+            return Ok(list);
+        }
+        [HttpGet("ExpiredContractInNext5Day")]
+        [EnableQuery]
+        public async Task<IActionResult> ExpiredContractInNext5Day()
+        {
+            var list = await _contractService.ExpriedContractInNext5Day();
+            if (list.IsNullOrEmpty())
+            {
+                return NotFound();
+            }
+            return Ok(list);
         }
     }
 }
