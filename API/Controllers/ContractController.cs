@@ -14,6 +14,7 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ContractController : Controller
     {
         private readonly IContractService _contractService;
@@ -23,24 +24,34 @@ namespace API.Controllers
             _contractService = contractService;
         }
 
+        [HttpGet("{id}")]
+        [EnableQuery]
+        public async Task<SingleResult> GetContract(int id)
+        {
+            var contract = await _contractService.FindAsync(e => e.ContractId == id, e => e.ContractServices, e => e.ContractVersions);
+
+            return SingleResult.Create(contract.AsQueryable());
+        }
+
         [HttpGet("getContractByCarerId")]
         [EnableQuery]
-        public async Task<IActionResult> GetContractByCarerId(int carerid)
+        public async Task<IActionResult> GetContractByCarerId(int carerId)
         {
             //var model = await _unitOfWork.ElderRepo.FindAsync(x => x.ElderlyId == elderId);
-            var contract = await _contractService.FindAsync(e => e.CarerId == carerid, e => e.ContractServices);
+            var contract = await _contractService.FindAsync(e => e.CarerId == carerId, e => e.ContractServices, e => e.ContractVersions);
             if (!contract.IsNullOrEmpty())
             {
                 return Ok(contract);
             }
             return NotFound();
         }
+
         [HttpGet("getContractByCusId")]
         [EnableQuery]
         public async Task<IActionResult> GetContractByCusId(int cusid)
         {
             //var model = await _unitOfWork.ElderRepo.FindAsync(x => x.ElderlyId == elderId);
-            var contract = await _contractService.FindAsync(e => e.CustomerId == cusid, e => e.ContractServices);
+            var contract = await _contractService.FindAsync(e => e.CustomerId == cusid, e => e.ContractServices, e => e.ContractVersions);
             if (!contract.IsNullOrEmpty())
             {
                 return Ok(contract);
@@ -52,7 +63,7 @@ namespace API.Controllers
         public async Task<IActionResult> GetPendingContractByCarerId( int carerid)
         {
             //var model = await _unitOfWork.ElderRepo.FindAsync(x => x.ElderlyId == elderId);
-            var contract = await _contractService.FindAsync(e => e.CarerId == carerid && e.Status == (int)ContractStatus.Pending, e => e.ContractServices);
+            var contract = await _contractService.FindAsync(e => e.CarerId == carerid && e.Status == (int)ContractStatus.Pending, e => e.ContractServices, e => e.ContractVersions);
             if (!contract.IsNullOrEmpty())
             {
                 return Ok(contract);
@@ -64,7 +75,7 @@ namespace API.Controllers
         public async Task<IActionResult> GetPendingContractByCusId( int cusid)
         {
             //var model = await _unitOfWork.ElderRepo.FindAsync(x => x.ElderlyId == elderId);
-            var contract = await _contractService.FindAsync(e => e.CustomerId == cusid && e.Status == (int)ContractStatus.Pending,e=>e.ContractServices);
+            var contract = await _contractService.FindAsync(e => e.CustomerId == cusid && e.Status == (int)ContractStatus.Pending,e => e.ContractServices, e => e.ContractVersions);
             if (!contract.IsNullOrEmpty())
             {
                 return Ok(contract);
