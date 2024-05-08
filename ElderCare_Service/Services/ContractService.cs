@@ -54,12 +54,13 @@ namespace ElderCare_Service.Services
                 await _unitOfWork.ContractRepo.AddAsync(entity);
                 await _unitOfWork.SaveChangeAsync();
                 return entity;
-            }catch(Exception ex) { throw new Exception(ex.Message); }
+            }
+            catch (Exception ex) { throw new Exception(ex.Message); }
         }
 
         public async Task<List<Contract>> GetByCarerId(int id)
         {
-           return _unitOfWork.ContractRepo.GetByCarer(id).Result.ToList();
+            return _unitOfWork.ContractRepo.GetByCarer(id).Result.ToList();
         }
         public async Task<IEnumerable<Contract>> FindAsync(Expression<Func<Contract, bool>> expression, params Expression<Func<Contract, object>>[] includes)
         {
@@ -80,7 +81,7 @@ namespace ElderCare_Service.Services
         {
             return await _unitOfWork.ContractRepo.GetByIdAsync(id) != null;
         }
-      
+
 
         public async Task<(Contract, List<Timetable>)> AddContract2(AddContractWithTrackingsDto dto)
         {
@@ -104,5 +105,25 @@ namespace ElderCare_Service.Services
             await _unitOfWork.SaveChangeAsync();
             return (contract, trackingTimeables);
         }
+
+        public async Task ExpriedContract()
+        {
+            await _unitOfWork.ContractRepo.ExpriedContract();
+
+            await _unitOfWork.SaveChangeAsync();
+
+
+        }
+
+        public async Task<List<Contract>> ExpriedContractToday()
+        {
+            return await _unitOfWork.ContractRepo.ExpriedContractToday();
+        }
+
+        public async Task<List<Contract>> ExpriedContractInNext5Day()
+        {
+            return await _unitOfWork.ContractRepo.ExpriedContractInNext5Day();
+        }
     }
 }
+

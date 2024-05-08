@@ -356,6 +356,18 @@ namespace API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpPut("CarerSalary")]
+        [EnableQuery]
+        public async Task<IActionResult> CarerSalary()
+        {
+          
+            var list =await _transactionService.TransactionContract();
+            if (list.IsNullOrEmpty())
+            {
+                return NotFound();
+            }
+            return Ok(list);
+        }
     }
 
 }

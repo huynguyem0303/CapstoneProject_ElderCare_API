@@ -1,11 +1,13 @@
 ﻿using AutoMapper;
 using CorePush.Apple;
+using DocumentFormat.OpenXml.Office.CustomUI;
 using ElderCare_Domain.Enums;
 using ElderCare_Domain.Models;
 using ElderCare_Repository.DTO;
 using ElderCare_Service.Interfaces;
 using ElderCare_Service.Utils;
 using Microsoft.AspNetCore.Http;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -245,6 +247,47 @@ namespace ElderCare_Service.Services
         public IEnumerable<Transaction> GetAll()
         {
             return _unitOfWork.TransactionRepo.GetAll();
+        }
+        public async Task<List<Transaction>> TransactionContract()
+        {
+            var id1 = 0;
+            List<Transaction> transactionlist = new List<Transaction>();
+            var costlist = await _unitOfWork.ContractRepo.TransactionContractPrice();
+            for (int i = 0; i < costlist.Count; i++)
+            {
+                var transaction = new Transaction();
+                var id = _unitOfWork.TransactionRepo.GetAll().OrderByDescending(i => i.TransactionId).FirstOrDefault().TransactionId;
+                if (transactionlist.IsNullOrEmpty())
+                {
+                    transaction.TransactionId = id + 1;
+                    id1=transaction.TransactionId;
+                }
+                else
+                {
+                    transaction.TransactionId = id1 + 1;
+                    id1 = transaction.TransactionId;
+                }
+                transaction.ContractId = costlist[i].contractId;
+                transaction.FigureMoney = costlist[i].price * 80 / 100;
+                transaction.Type = 3;
+                transaction.Description = "Tra luong cho carer";
+                transaction.Datetime = DateTime.Now;
+                transaction.Status = "APPROVE";
+                transaction.CarercusId = 0;
+
+
+                transactionlist.Add(transaction);
+
+            }
+            foreach(var item in transactionlist)
+            {
+                await _unitOfWork.TransactionRepo.AddAsync(item);
+                await _unitOfWork.SaveChangeAsync();
+            }
+            await _unitOfWork.ContractRepo.TransactionContract();
+            await _unitOfWork.SaveChangeAsync();
+            return transactionlist;
+        
         }
     }
 }

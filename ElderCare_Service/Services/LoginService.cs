@@ -34,7 +34,7 @@ namespace ElderCare_Service.Services
             var account = await _unitOfWork.AccountRepository.LoginCustomerAsync(email, password);
             if(account == null)
             {
-                throw new UnauthorizedAccessException("incorrect email or password");
+                throw new UnauthorizedAccessException("Sai email hoac password");
             }else if (!DeviceToken.IsNullOrEmpty())
             {
                 //var response = await checkAccountFCMToken((int)account.AccountId, DeviceToken);
@@ -58,7 +58,7 @@ namespace ElderCare_Service.Services
             var account = await _unitOfWork.AccountRepository.LoginCarerAsync(email, password);
             if (account == null)
             {
-                throw new UnauthorizedAccessException("incorrect email or password");
+                throw new UnauthorizedAccessException("Sai email hoac password");
             }
             else if (!DeviceToken.IsNullOrEmpty())
             {
@@ -90,7 +90,7 @@ namespace ElderCare_Service.Services
             var account = await _unitOfWork.AccountRepository.LoginStaffAsync(email, password);
             if (account == null)
             {
-                throw new UnauthorizedAccessException("incorrect email or password");
+                throw new UnauthorizedAccessException("Sai email hoac password");
             }
             else if (!DeviceToken.IsNullOrEmpty())
             {

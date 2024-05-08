@@ -1,4 +1,5 @@
-﻿using ElderCare_Domain.Enums;
+using API.DTO;
+using ElderCare_Domain.Enums;
 using ElderCare_Domain.Models;
 using ElderCare_Repository.DTO;
 using ElderCare_Service.Interfaces;
@@ -60,7 +61,7 @@ namespace API.Controllers
         }
         [HttpGet("getPendingContractByCarerId")]
         [EnableQuery]
-        public async Task<IActionResult> GetPendingContractByCarerId( int carerid)
+        public async Task<IActionResult> GetPendingContractByCarerId(int carerid)
         {
             //var model = await _unitOfWork.ElderRepo.FindAsync(x => x.ElderlyId == elderId);
             var contract = await _contractService.FindAsync(e => e.CarerId == carerid && e.Status == (int)ContractStatus.Pending, e => e.ContractServices, e => e.ContractVersions);
@@ -72,7 +73,7 @@ namespace API.Controllers
         }
         [HttpGet("getPendingContractByCusId")]
         [EnableQuery]
-        public async Task<IActionResult> GetPendingContractByCusId( int cusid)
+        public async Task<IActionResult> GetPendingContractByCusId(int cusid)
         {
             //var model = await _unitOfWork.ElderRepo.FindAsync(x => x.ElderlyId == elderId);
             var contract = await _contractService.FindAsync(e => e.CustomerId == cusid && e.Status == (int)ContractStatus.Pending,e => e.ContractServices, e => e.ContractVersions);
@@ -139,7 +140,8 @@ namespace API.Controllers
         ///         1 - Signed (send noti to customer and then create new transaction);
         ///         2 - Rejected(can be done by carer or customer when they dont want to make transaction)
         ///         3 - Active 
-        ///         4 - Expired </param>
+        ///         4 - Waiting for transaction
+        ///         5 - Expired </param>
         /// <returns></returns>
         [HttpPut("{id}/Contract")]
         [EnableQuery]
@@ -147,7 +149,7 @@ namespace API.Controllers
         {
             if (!await _contractService.ContractExists(id))
             {
-                return NotFound();
+                return BadRequest(error: "K co contract can tra luong cho carer!!");
             }
 
             var contract = await _contractService.ApproveContract(id, (int)status);
@@ -157,6 +159,40 @@ namespace API.Controllers
                 return Ok(contract);
             }
             return NoContent();
+        }
+        [HttpPut("ExpiredContract")]
+        [EnableQuery]
+        public async Task<IActionResult> ExpiredContract()
+        {
+            await _contractService.ExpriedContract();
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Message = "Checking xong"
+
+            }); ;
+        }
+        [HttpGet("ExpiredContractToday")]
+        [EnableQuery]
+        public async Task<IActionResult> ExpiredContractToday()
+        {
+            var list = await _contractService.ExpriedContractToday();
+            if (list.IsNullOrEmpty())
+            {
+                return NotFound();
+            }
+            return Ok(list);
+        }
+        [HttpGet("ExpiredContractInNext5Day")]
+        [EnableQuery]
+        public async Task<IActionResult> ExpiredContractInNext5Day()
+        {
+            var list = await _contractService.ExpriedContractInNext5Day();
+            if (list.IsNullOrEmpty())
+            {
+                return NotFound();
+            }
+            return Ok(list);
         }
     }
 }
