@@ -104,7 +104,7 @@ namespace API.Controllers
         // DELETE: api/Packages/5
         [HttpDelete("{id}")]
         [EnableQuery]
-      
+        [Authorize(Roles = "Staff, Admin")]
         public async Task<IActionResult> DeletePackage(int id)
         {
             if (!await _packageService.PackageExists(id))
