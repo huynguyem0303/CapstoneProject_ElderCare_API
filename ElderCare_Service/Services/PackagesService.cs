@@ -2,6 +2,7 @@
 using ElderCare_Domain.Models;
 using ElderCare_Repository.DTO;
 using ElderCare_Service.Interfaces;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -86,7 +87,7 @@ namespace ElderCare_Service.Services
         }
         public async Task<bool> ContractPackageExists(int id)
         {
-            return await _unitOfWork.ContractRepo.GetByPackageIdAsync(id) != null;
+            return (await _unitOfWork.ContractRepo.GetByPackageIdAsync(id)).IsNullOrEmpty();
         }
 
         public async Task<List<PackageServiceDto>> AddPackageServiceAsync(int packageId, string[] serviceName)
