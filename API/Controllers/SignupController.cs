@@ -36,7 +36,7 @@ namespace API.Controllers
             {
                 carer = await _signupService.SignUpCarer(carerDto);
             }
-            catch (DbUpdateException e)
+            catch (Exception e)
             {
                 return BadRequest(error: e.Message);
             }
@@ -51,7 +51,7 @@ namespace API.Controllers
             {
                 account = await _signupService.SignUpCustomer(customerDto);
             }
-            catch (DbUpdateException e)
+            catch (Exception e)
             {
                 return BadRequest(error: e.Message);
             }
