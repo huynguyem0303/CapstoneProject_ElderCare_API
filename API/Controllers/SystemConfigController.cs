@@ -13,6 +13,7 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin")]
     public class SystemConfigsController : ODataController
     {
         private readonly ISystemConfigService _systemConfigService;
@@ -25,7 +26,6 @@ namespace API.Controllers
         // GET: api/SystemConfigs
         [HttpGet]
         [EnableQuery]
-        [Authorize(Roles = "Staff, Admin")]
         public IActionResult GetSystemConfigs()
         {
             var list = _systemConfigService.GetAll();
@@ -36,7 +36,6 @@ namespace API.Controllers
         // GET: api/SystemConfigs/5
         [HttpGet("{id}")]
         [EnableQuery]
-        [Authorize(Roles = "Staff, Admin")]
         public async Task<SingleResult<SystemConfig>> GetSystemConfig(int id)
         {
             var systemConfig = await _systemConfigService.FindAsync(x => x.SystemConfigId == id);
@@ -47,7 +46,6 @@ namespace API.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         [EnableQuery]
-        [Authorize(Roles = "Staff, Admin")]
         public async Task<IActionResult> PutSystemConfig(int id, SystemConfig systemConfig)
         {
             if (id != systemConfig.SystemConfigId)
@@ -78,7 +76,6 @@ namespace API.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         [EnableQuery]
-        [Authorize(Roles = "Staff, Admin")]
         public async Task<ActionResult<SystemConfig>> PostSystemConfig(AddSystemConfigDto model)
         {
             SystemConfig systemConfig;
@@ -100,7 +97,6 @@ namespace API.Controllers
         // DELETE: api/SystemConfigs/5
         [HttpDelete("{id}")]
         [EnableQuery]
-        [Authorize(Roles = "Staff, Admin")]
         public async Task<IActionResult> DeleteSystemConfig(int id)
         {
             if (!await _systemConfigService.SystemConfigExists(id))
