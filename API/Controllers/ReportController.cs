@@ -47,7 +47,7 @@ namespace API.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         [EnableQuery]
-        [Authorize]
+        [Authorize(Roles = "Customer")]
         public async Task<IActionResult> PutReport(int id, UpdateReportDto report)
         {
             if (id != report.ReportId)
@@ -78,7 +78,7 @@ namespace API.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         [EnableQuery]
-        [Authorize]
+        [Authorize(Roles = "Customer")]
         public async Task<ActionResult<Report>> PostReport(AddReportDto model)
         {
             Report report;
