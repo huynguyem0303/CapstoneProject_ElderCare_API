@@ -17,27 +17,17 @@ namespace API.Controllers
     [ApiController]
     public class ElderController  : ODataController
     {
-        //private readonly IUnitOfWork _unitOfWork;
-        //private readonly IMapper _mapper;
         private readonly IElderService _elderService;
 
         public ElderController(IElderService elderService)
         {
             _elderService = elderService;
         }
-
-        //public ElderController(IUnitOfWork unitOfWork, IMapper mapper)
-        //{
-        //    _unitOfWork = unitOfWork;
-        //    _mapper = mapper;
-        //}
-        // GET: api/Accounts
         [HttpGet]
         [EnableQuery]
         [Authorize]
         public IActionResult GetElders()
         {
-            //var list = _unitOfWork.ElderRepo.GetAll();
             var list = _elderService.GetAll();
 
             return Ok(list);
@@ -48,7 +38,6 @@ namespace API.Controllers
         [Authorize]
         public async Task<IActionResult> GetEldersByCusId(int id)
         {
-            //var list = _unitOfWork.ElderRepo.GetAll();
             var list = await _elderService.FindAsync(e=>e.CustomerId==id);
             if (list.IsNullOrEmpty())
             {
@@ -64,7 +53,6 @@ namespace API.Controllers
         [Authorize]
         public async Task<SingleResult> GetElder([FromRoute]int id)
         {
-            //var model = await _unitOfWork.ElderRepo.FindAsync(x => x.ElderlyId == elderId);
             var elder = await _elderService.FindAsync(e => e.ElderlyId == id); ;
             return SingleResult.Create(elder.AsQueryable());
         }
@@ -112,7 +100,7 @@ namespace API.Controllers
         /// <returns></returns>
         [HttpPut("{id}")]
         [EnableQuery]
-        [Authorize]
+        [Authorize(Roles = "Customer")]
         public async Task<IActionResult> PutElderDetail(int id, UpdateElderDto model)
         {
             if (id != model.ElderlyId)
@@ -148,7 +136,7 @@ namespace API.Controllers
         /// <returns></returns>
         [HttpPut("{elderId}/Hobby/{id}")]
         [EnableQuery]
-        [Authorize]
+        [Authorize(Roles = "Customer")]
         public async Task<IActionResult> PutHobby(int elderId, int id, HobbyDto model)
         {
             if (elderId != model.ElderlyId || id != model.HobbyId)
@@ -191,7 +179,7 @@ namespace API.Controllers
         /// <returns></returns>
         [HttpPut("{elderId}/HealthDetail/{id}")]
         [EnableQuery]
-        [Authorize]
+        [Authorize(Roles = "Customer")]
         public async Task<IActionResult> PutHealthDetail(int elderId, int id, UpdateHealthDetailDto model)
         {
             if (elderId != model.ElderlyId || id != model.HealthDetailId)
@@ -233,7 +221,7 @@ namespace API.Controllers
         /// <returns></returns>
         [HttpPut("{elderId}/HealthDetail/{healthDetailId}/PsychomotorHealth")]
         [EnableQuery]
-        [Authorize]
+        [Authorize(Roles = "Customer")]
         public async Task<IActionResult> PutPsychomotorHealth(int elderId, int healthDetailId, PsychomotorHealthDto model)
         {
             if (healthDetailId != model.HealthDetailId)
@@ -271,7 +259,7 @@ namespace API.Controllers
         /// <returns></returns>
         [HttpPost("{elderId}/HealthDetail/{healthDetailId}/PsychomotorHealth")]
         [EnableQuery]
-        [Authorize]
+        [Authorize(Roles = "Customer")]
         public async Task<IActionResult> PostPsychomotorHealth(int elderId , int healthDetailId, PsychomotorHealthDto model)
         {
             if (healthDetailId != model.HealthDetailId)
@@ -306,7 +294,7 @@ namespace API.Controllers
         /// <returns></returns>
         [HttpPost("{elderId}/HealthDetail")]
         [EnableQuery]
-        [Authorize]
+        [Authorize(Roles = "Customer")]
         public async Task<IActionResult> PostElderHealthDetail(int elderlyId, AddHealthDetailDto model)
         {
             if (elderlyId != model.ElderlyId)
@@ -341,7 +329,7 @@ namespace API.Controllers
         /// <returns></returns>
         [HttpPost("{elderId}/Hobby")]
         [EnableQuery]
-        [Authorize]
+        [Authorize(Roles = "Customer")]
         public async Task<IActionResult> PostElderHobby(int elderId, AddElderHobbyDto model)
         {
             if (elderId != model.ElderlyId)
@@ -372,17 +360,12 @@ namespace API.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         [EnableQuery]
+        [Authorize(Roles = "Customer")]
         public async Task<ActionResult<Account>> PostElder(AddElderDto model)
         {
-            //var model = _mapper.Map<Elderly>(model);
-            //var elderId = _unitOfWork.ElderRepo.GetAll().OrderByDescending(i => i.ElderlyId).FirstOrDefault().ElderlyId;
-            //model.ElderlyId = elderId+1;
-            //await _unitOfWork.ElderRepo.AddAsync(model);
-            //Elderly elder;
             ElderViewDto elder;
             try
             {
-                //await _unitOfWork.SaveChangeAsync();
                 elder = await _elderService.AddELderlyAsyncWithReturnDto(model);
             }
             catch (DbUpdateException e)
@@ -396,21 +379,9 @@ namespace API.Controllers
         // DELETE: api/Accounts/5
         [HttpDelete("{id}")]
         [EnableQuery]
-        [Authorize]
+        [Authorize(Roles = "Customer")]
         public async Task<IActionResult> DeleteElder(int id)
         {
-            //if ((_unitOfWork.ElderRepo.GetAll()).IsNullOrEmpty())
-            //{
-            //    return NotFound();
-            //}
-            //var model = await _unitOfWork.ElderRepo.GetByIdAsync(elderId);
-            //if (model == null)
-            //{
-            //    return NotFound();
-            //}
-
-            //_unitOfWork.ElderRepo.Delete(model);
-            //await _unitOfWork.SaveChangeAsync();
             if(!await _elderService.ElderExists(id))
             {
                 return NotFound();
@@ -428,7 +399,7 @@ namespace API.Controllers
         /// <returns></returns>
         [HttpDelete("{elderId}/Hobby/{id}")]
         [EnableQuery]
-        [Authorize]
+        [Authorize(Roles = "Customer")]
         public async Task<IActionResult> DeleteHobby(int elderId, int id)
         {
             if (!(await _elderService.HobbyExists(id) || await _elderService.ElderExists(elderId)))
@@ -453,7 +424,7 @@ namespace API.Controllers
         /// <returns></returns>
         [HttpDelete("{elderId}/HealthDetail/{healthDetailId}/PsychomotorHealth/{psychomotorHealthId}")]
         [EnableQuery]
-        [Authorize]
+        [Authorize(Roles = "Customer")]
         public async Task<IActionResult> RemovePsychomotorHealth(int elderId, int healthDetailId, int psychomotorHealthId)
         {
             if (!await _elderService.ElderlyPsychomotorHealtExists(healthDetailId, psychomotorHealthId))
@@ -475,10 +446,6 @@ namespace API.Controllers
 
             return NoContent();
         }
-        //private async Task<bool> ElderExists(int elderId)
-        //{
-        //    return await _unitOfWork.ElderRepo.GetByIdAsync(elderId) != null;
-        //}
     }
 }
 
