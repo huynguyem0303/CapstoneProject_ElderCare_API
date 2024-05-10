@@ -114,7 +114,7 @@ namespace API.Controllers
 
         [HttpGet("{id}/Carers")]
         [EnableQuery]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> GetCarerByServiceId(int id)
         {
             var list = _serviceService.GetCarerByServiceId(id);
@@ -123,7 +123,7 @@ namespace API.Controllers
 
         [HttpPost("{serviceId}/TrackingOption")]
         [EnableQuery]
-        [Authorize]
+        [Authorize(Roles = "Staff, Admin")]
         public async Task<IActionResult> AddTrackingOption(int serviceId, AddTrackingOptionDto model)
         {
             TrackingOption trackingOption; 
@@ -153,7 +153,7 @@ namespace API.Controllers
 
         [HttpPut("{serviceId}/TrackingOption/{trackingOptionId}")]
         [EnableQuery]
-        [Authorize]
+        [Authorize(Roles = "Staff, Admin")]
         public async Task<IActionResult> UpdateTrackingOption(int serviceId, int trackingOptionId, UpdateTrackingOptionDto model)
         {
             if (serviceId != model.ServiceId || trackingOptionId != model.TrackingOptionId)
@@ -181,7 +181,7 @@ namespace API.Controllers
         }
         [HttpDelete("{serviceId}/TrackingOption/{trackingOptionId}")]
         [EnableQuery]
-        [Authorize]
+        [Authorize(Roles = "Staff, Admin")]
         public async Task<IActionResult> DeleteTrackingOption(int serviceId, int trackingOptionId)
         {
             if (!await _serviceService.ServiceExists(serviceId) || !await _serviceService.TrackingOptionExists(trackingOptionId))
