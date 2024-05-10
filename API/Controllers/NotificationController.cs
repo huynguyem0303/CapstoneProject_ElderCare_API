@@ -13,7 +13,6 @@ namespace API.Controllers
     [ApiController]
     public class NotificationController : ODataController
     {
-        //private readonly IUnitOfWork _unitOfWork;
         private readonly INotificationService _notificationService;
 
         public NotificationController(INotificationService notificationService)
@@ -21,10 +20,6 @@ namespace API.Controllers
             _notificationService = notificationService;
         }
 
-        //public NotificationController(IUnitOfWork unitOfWork)
-        //{
-        //    _unitOfWork = unitOfWork;
-        //}
         /// <summary>
         /// send noti using fcm services
         /// </summary>
@@ -33,9 +28,9 @@ namespace API.Controllers
         [Route("send")]
         [EnableQuery]
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> SendNotification(NotificationModel notificationModel)
         {
-            //var result = await _unitOfWork.NotificationService.SendNotification(notificationModel);
             var result = await _notificationService.SendNotification(notificationModel);
             return Ok(result);
         }
@@ -48,13 +43,13 @@ namespace API.Controllers
         [Route("sendToAccount")]
         [EnableQuery]
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> SendNotificationToAccount(AccountExpoNotiDto accountNotiDto)
         {
-            //var result = await _unitOfWork.NotificationService.SendNotificationToAccount(accountNotiDto);
-            //var result = await _notificationService.SendNotificationToAccount(accountNotiDto);
             var result = await _notificationService.SendExpoNotificationToAccount(accountNotiDto);
             return Ok(result);
         }
+
         /// <summary>
         /// send noti using expo service
         /// </summary>
@@ -63,6 +58,7 @@ namespace API.Controllers
         [Route("ExpoNoti")]
         [EnableQuery]
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> SendExpoNotification(PushTicketRequestDto[] request)
         {
             try
@@ -85,6 +81,7 @@ namespace API.Controllers
         [Route("ExpoNotiReceipt")]
         [EnableQuery]
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> GetExpoNotificationReceipt(List<string> ids)
         {
             var result = await _notificationService.GetExpoNotificationReceipt(new ExpoCommunityNotificationServer.Models.PushReceiptRequest() { PushTicketIds = ids});

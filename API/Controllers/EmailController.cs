@@ -7,22 +7,15 @@ using Microsoft.AspNetCore.Mvc;
 using MimeKit;
 using MimeKit.Text;
 using ElderCare_Service.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Staff, Admin")]
     public class EmailController : Controller
     {
-        //private readonly IUnitOfWork _unitOfWork;
-      
-
-        //public EmailController(IUnitOfWork unitOfWork, IMapper mapper)
-        //{
-        //    _unitOfWork = unitOfWork;
-          
-        //}
-
         private readonly IEmailService _emailService;
 
         public EmailController(IEmailService emailService)

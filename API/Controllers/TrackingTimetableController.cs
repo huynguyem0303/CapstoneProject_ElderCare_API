@@ -26,7 +26,7 @@ namespace API.Controllers
 
         [HttpPost]
         [EnableQuery]
-        [Authorize]
+        [Authorize(Roles = "Staff")]
         public async Task<IActionResult> CreateTrackingTimetable(AddTimetableDto model)
         {
             Timetable timetable;
@@ -60,7 +60,7 @@ namespace API.Controllers
 
         [HttpPut("{id}")]
         [EnableQuery]
-        [Authorize]
+        [Authorize(Roles = "Staff")]
         public async Task<IActionResult> PutTrackingTimetable(int id, UpdateTimetableDto model)
         {
             if (id != model.TimetableId)
@@ -89,7 +89,7 @@ namespace API.Controllers
 
         [HttpDelete("{id}")]
         [EnableQuery]
-        //[Authorize]
+        [Authorize(Roles = "Staff")]
         public async Task<IActionResult> RemoveTrackingTimetable(int id)
         {
             if (!await _timetableService.TimetableExist(id))
@@ -109,7 +109,7 @@ namespace API.Controllers
         /// <returns></returns>
         [HttpPatch("{id}/Trackings/{trackingId}/CarerReport")]
         [EnableQuery]
-        //[Authorize("Carer")]
+        [Authorize(Roles = "Carer")]
         public async Task<IActionResult> UpdateTrackingByCarer(int id, string trackingId, CarerUpdateTrackingDto model)
         {
             if (!await _timetableService.TimetableExist(id) || !await _timetableService.TrackingExisted(trackingId))
@@ -148,7 +148,7 @@ namespace API.Controllers
         /// <returns></returns>
         [HttpPatch("{id}/Trackings/{trackingId}/CustomerApprove")]
         [EnableQuery]
-        //[Authorize("Customer")]
+        [Authorize(Roles = "Customer")]
         public async Task<IActionResult> ApproveTrackingByCustomer(int id, string trackingId, CustomerApproveTrackingDto model)
         {
             if (!await _timetableService.TimetableExist(id) || !await _timetableService.TrackingExisted(trackingId))
@@ -181,7 +181,7 @@ namespace API.Controllers
         /// <returns></returns>
         [HttpPost("{id}/Trackings")]
         [EnableQuery]
-        [Authorize]
+        [Authorize(Roles = "Staff")]
         public async Task<IActionResult> AddTrackingToTimetable(int id, AddTrackingDto model)
         {
             if (!await _timetableService.TimetableExist(id))
@@ -217,7 +217,7 @@ namespace API.Controllers
         /// <returns></returns>
         [HttpGet("{id}/Trackings/{trackingId}")]
         [EnableQuery]
-        [Authorize]
+        [Authorize(Roles = "Staff")]
         public async Task<SingleResult> GetTracking(int id, string trackingId)
         {
             var tracking = await _timetableService.FindTrackingAsync(e => e.TimetableId == id && e.TrackingId == Guid.Parse(trackingId));
@@ -232,7 +232,7 @@ namespace API.Controllers
         /// <returns></returns>
         [HttpDelete("{id}/Trackings/{trackingId}")]
         [EnableQuery]
-        [Authorize]
+        [Authorize(Roles = "Staff")]
         public async Task<IActionResult> DeleteTracking(int id, string trackingId)
         {
             if (!await _timetableService.TimetableExist(id) || !await _timetableService.TrackingExisted(trackingId))
