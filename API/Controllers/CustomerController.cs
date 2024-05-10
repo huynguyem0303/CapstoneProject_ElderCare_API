@@ -47,7 +47,7 @@ namespace API.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         [EnableQuery]
-        [Authorize]
+        [Authorize(Roles = "Customer, Staff")]
         public async Task<IActionResult> PutCustomer(int id, UpdateCustomerDto customer)
         {
             if (id != customer.CustomerId)
@@ -82,7 +82,7 @@ namespace API.Controllers
         // GET: api/Customers
         [HttpGet("{customerId}/Carers")]
         [EnableQuery]
-        [Authorize]
+        [Authorize(Roles = "Customer, Staff")]
         public IActionResult GetCarersByCustomerId(int customerId)
         {
             var list = _customerService.GetCarersByCustomerId(customerId);
@@ -97,7 +97,7 @@ namespace API.Controllers
         /// <returns></returns>
         [HttpGet("{customerId}/Notifications")]
         [EnableQuery]
-        [Authorize]
+        [Authorize(Roles = "Customer")]
         public IActionResult GetNotificationsByCustomerId(int customerId)
         {
             var list = _customerService.GetNotificationsByCustomerId(customerId);
