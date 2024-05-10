@@ -25,6 +25,7 @@ namespace API.Controllers
         // GET: api/Certifications
         [HttpGet]
         [EnableQuery]
+        [Authorize]
         public IActionResult GetCertifications()
         {
             var list = _certificationService.GetAll();
@@ -35,6 +36,7 @@ namespace API.Controllers
         // GET: api/Certifications/5
         [HttpGet("{id}")]
         [EnableQuery]
+        [Authorize]
         public async Task<SingleResult<Certification>> GetCertification(int id)
         {
             var certification = await _certificationService.FindAsync(x => x.CertId == id);

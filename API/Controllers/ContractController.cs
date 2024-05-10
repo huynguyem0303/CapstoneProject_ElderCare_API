@@ -15,7 +15,6 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class ContractController : Controller
     {
         private readonly IContractService _contractService;
@@ -27,6 +26,7 @@ namespace API.Controllers
 
         [HttpGet("{id}")]
         [EnableQuery]
+        [Authorize(Roles = "Customer, Carer, Staff")]
         public async Task<SingleResult> GetContract(int id)
         {
             var contract = await _contractService.FindAsync(e => e.ContractId == id, e => e.ContractServices, e => e.ContractVersions);
@@ -34,11 +34,16 @@ namespace API.Controllers
             return SingleResult.Create(contract.AsQueryable());
         }
 
+        /// <summary>
+        /// Get contracts based on carerId
+        /// </summary>
+        /// <param name="carerId"></param>
+        /// <returns></returns>
         [HttpGet("getContractByCarerId")]
         [EnableQuery]
+        [Authorize(Roles = "Customer, Carer, Staff")]
         public async Task<IActionResult> GetContractByCarerId(int carerId)
         {
-            //var model = await _unitOfWork.ElderRepo.FindAsync(x => x.ElderlyId == elderId);
             var contract = await _contractService.FindAsync(e => e.CarerId == carerId, e => e.ContractServices, e => e.ContractVersions);
             if (!contract.IsNullOrEmpty())
             {
@@ -47,11 +52,16 @@ namespace API.Controllers
             return NotFound();
         }
 
+        /// <summary>
+        /// Get contracts based on customerId
+        /// </summary>
+        /// <param name="cusid">customerId</param>
+        /// <returns></returns>
         [HttpGet("getContractByCusId")]
         [EnableQuery]
+        [Authorize(Roles = "Customer, Carer, Staff")]
         public async Task<IActionResult> GetContractByCusId(int cusid)
         {
-            //var model = await _unitOfWork.ElderRepo.FindAsync(x => x.ElderlyId == elderId);
             var contract = await _contractService.FindAsync(e => e.CustomerId == cusid, e => e.ContractServices, e => e.ContractVersions);
             if (!contract.IsNullOrEmpty())
             {
@@ -59,11 +69,17 @@ namespace API.Controllers
             }
             return NotFound();
         }
+
+        /// <summary>
+        /// Get pending contracts based on carerId
+        /// </summary>
+        /// <param name="carerid">carerId</param>
+        /// <returns></returns>
         [HttpGet("getPendingContractByCarerId")]
         [EnableQuery]
+        [Authorize(Roles = "Customer, Carer, Staff")]
         public async Task<IActionResult> GetPendingContractByCarerId(int carerid)
         {
-            //var model = await _unitOfWork.ElderRepo.FindAsync(x => x.ElderlyId == elderId);
             var contract = await _contractService.FindAsync(e => e.CarerId == carerid && e.Status == (int)ContractStatus.Pending, e => e.ContractServices, e => e.ContractVersions);
             if (!contract.IsNullOrEmpty())
             {
@@ -71,11 +87,17 @@ namespace API.Controllers
             }
             return NotFound();
         }
+
+        /// <summary>
+        /// Get pending contracts based on customer Id
+        /// </summary>
+        /// <param name="cusid">customerId</param>
+        /// <returns></returns>
         [HttpGet("getPendingContractByCusId")]
         [EnableQuery]
+        [Authorize(Roles = "Customer, Carer, Staff")]
         public async Task<IActionResult> GetPendingContractByCusId(int cusid)
         {
-            //var model = await _unitOfWork.ElderRepo.FindAsync(x => x.ElderlyId == elderId);
             var contract = await _contractService.FindAsync(e => e.CustomerId == cusid && e.Status == (int)ContractStatus.Pending,e => e.ContractServices, e => e.ContractVersions);
             if (!contract.IsNullOrEmpty())
             {
@@ -84,14 +106,19 @@ namespace API.Controllers
             return NotFound();
         }
 
+        /// <summary>
+        /// Create contract
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
         [HttpPost]
         [EnableQuery]
+        [Authorize(Roles = "Customer, Carer, Staff")]
         public async Task<ActionResult<Contract>> PostContract(AddContractDto dto)
         {
             Contract contract;
             try
             {
-                //await _unitOfWork.SaveChangeAsync();
                 contract = await _contractService.AddContract(dto);
             }
             catch (DbUpdateException e)
@@ -105,15 +132,20 @@ namespace API.Controllers
             return NotFound();
         }
 
+        /// <summary>
+        /// Create contract with tracking timetables
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
         [HttpPost("CreateWithTimetable")]
         [EnableQuery]
+        [Authorize(Roles = "Customer, Carer, Staff")]
         public async Task<ActionResult<Contract>> PostContract2(AddContractWithTrackingsDto dto)
         {
             Contract contract;
             var trackingTimeables = new List<Timetable>();
             try
             {
-                //await _unitOfWork.SaveChangeAsync();
                 (contract, trackingTimeables) = await _contractService.AddContract2(dto);
             }
             catch (DbUpdateException e)
@@ -145,11 +177,12 @@ namespace API.Controllers
         /// <returns></returns>
         [HttpPut("{id}/Contract")]
         [EnableQuery]
+        [Authorize(Roles = "Staff")]
         public async Task<IActionResult> ApproveContract(int id, ContractStatus status)
         {
             if (!await _contractService.ContractExists(id))
             {
-                return BadRequest(error: "K co contract can tra luong cho carer!!");
+                return BadRequest(error: "Khong co contract can tra luong cho carer!!");
             }
 
             var contract = await _contractService.ApproveContract(id, (int)status);
@@ -160,8 +193,14 @@ namespace API.Controllers
             }
             return NoContent();
         }
+
+        /// <summary>
+        /// Check and update expired contracts status
+        /// </summary>
+        /// <returns></returns>
         [HttpPut("ExpiredContract")]
         [EnableQuery]
+        [Authorize]
         public async Task<IActionResult> ExpiredContract()
         {
             await _contractService.ExpriedContract();
@@ -172,8 +211,14 @@ namespace API.Controllers
 
             }); ;
         }
+
+        /// <summary>
+        /// Get all expired contract of today
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("ExpiredContractToday")]
         [EnableQuery]
+        [Authorize]
         public async Task<IActionResult> ExpiredContractToday()
         {
             var list = await _contractService.ExpriedContractToday();
@@ -183,8 +228,14 @@ namespace API.Controllers
             }
             return Ok(list);
         }
+
+        /// <summary>
+        /// Get all expired contract in the next 5 days
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("ExpiredContractInNext5Day")]
         [EnableQuery]
+        [Authorize]
         public async Task<IActionResult> ExpiredContractInNext5Day()
         {
             var list = await _contractService.ExpriedContractInNext5Day();

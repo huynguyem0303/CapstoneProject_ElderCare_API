@@ -20,8 +20,6 @@ namespace API.Controllers
     [ApiController]
     public class CarerController : Controller
     {
-        //private readonly IUnitOfWork _unitOfWork;
-        //private readonly IMapper _mapper;
         private readonly ICarerService _carerService;
 
         public CarerController(ICarerService carerService)
@@ -29,26 +27,25 @@ namespace API.Controllers
             _carerService = carerService;
         }
 
-        //public CarerController(IUnitOfWork unitOfWork, IMapper mapper)
-        //{
-        //    _unitOfWork = unitOfWork;
-        //    _mapper = mapper;
-        //}
-
         [HttpGet]
         [EnableQuery]
         [Authorize(Roles = "Staff, Admin")]
         public IActionResult GetCarers()
         {
-            //var list = _unitOfWork.AccountRepository.GetAll();
             var list = _carerService.GetAll();
             return Ok(list);
         }
+
+        /// <summary>
+        /// This method search carer
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
         [HttpPost("search")]
-        [Authorize]
+        [EnableQuery]
+        [Authorize(Roles = "Customer")]
         public async Task<IActionResult> GetCarer(SearchCarerDto dto)
         {
-            //var carer = await _unitOfWork.CarerRepository.SearchCarer(dto);
             var carer = await _carerService.SearchCarer(dto);
             if (!carer.IsNullOrEmpty())
             {
@@ -62,19 +59,24 @@ namespace API.Controllers
         [Authorize]
         public async Task<SingleResult<Carer>> GetCarerById(int id)
         {
-            //var carer = await _unitOfWork.AccountRepository.FindAsync(x => x.AccountId == id);
             var carer = await _carerService.FindAsync(x => x.CarerId == id);
             return SingleResult.Create(carer.AsQueryable());
         }
+
+        /// <summary>
+        /// This method return category based on its service's name 
+        /// </summary>
+        /// <param name="name">service's name</param>
+        /// <returns></returns>
         [HttpGet("categoryname")]
         [EnableQuery]
         [Authorize]
         public async Task<IActionResult> GetCategoryByServiceName(string name)
         {
-            //var carer = await _unitOfWork.AccountRepository.FindAsync(x => x.AccountId == id);
             var carer = await _carerService.FindCateAsync(x => x.ServiceName.Contains(name));
             return Ok(carer);
         }
+
         /// <summary>
         /// This method get all services of a carer
         /// </summary>
@@ -108,6 +110,7 @@ namespace API.Controllers
 
         [HttpPut("{id}")]
         [EnableQuery]
+        [Authorize(Roles = "Carer, Staff")]
         public async Task<IActionResult> PutCarer(int id, Carer carer)
         {
             if (id != carer.CarerId)
@@ -115,11 +118,8 @@ namespace API.Controllers
                 return BadRequest();
             }
 
-            //_unitOfWork.CarerRepository.Update(carer);
-
             try
             {
-                //await _unitOfWork.SaveChangeAsync();
                 await _carerService.UpdateCarer(carer);
             }
             catch (DbUpdateConcurrencyException)
@@ -148,7 +148,7 @@ namespace API.Controllers
         /// <returns></returns>
         [HttpPut("{id}/Account")]
         [EnableQuery]
-        [Authorize]
+        [Authorize(Roles = "Staff")]
         public async Task<IActionResult> ApproveCarer(int id, CarerStatus status)
         {
             if(!await _carerService.CarerExists(id))
@@ -173,7 +173,7 @@ namespace API.Controllers
         /// <returns></returns>
         [HttpPost("{carerId}/Services")]
         [EnableQuery]
-        [Authorize]
+        [Authorize(Roles = "Carer, Staff")]
         public async Task<ActionResult<Package>> PostCarerService(int carerId, string[] serviceName)
         {
             if (!await _carerService.CarerExists(carerId))
@@ -205,7 +205,7 @@ namespace API.Controllers
         /// <returns></returns>
         [HttpDelete("{carerId}/Services/{serviceId}")]
         [EnableQuery]
-        [Authorize]
+        [Authorize(Roles = "Carer, Staff")]
         public async Task<IActionResult> RemoveService(int carerId, int serviceId)
         {
             if (!await _carerService.CarerExists(carerId))
@@ -278,7 +278,7 @@ namespace API.Controllers
         /// <returns></returns>
         [HttpPost("{carerId}/Services/{serviceId}/Feedbacks")]
         [EnableQuery]
-        [Authorize]
+        [Authorize(Roles = "Customer")]
         public async Task<IActionResult> PostServiceFeedbacks(int carerId, int serviceId, AddFeedbackDto model)
         {
             if(carerId != model.CarerId || serviceId != model.ServiceId)
@@ -311,7 +311,7 @@ namespace API.Controllers
          /// <returns></returns>
         [HttpPut("{carerId}/Services/{serviceId}/Feedbacks/{feedbackId}")]
         [EnableQuery]
-
+        [Authorize(Roles = "Customer")]
         public async Task<IActionResult> PutServiceFeedbackDetail(int carerId, int serviceId, int feedbackId, UpdateFeedbackDto model)
         {
             if (carerId != model.CarerId || serviceId != model.ServiceId || feedbackId != model.FeedbackId)
@@ -342,6 +342,7 @@ namespace API.Controllers
         /// <returns></returns>
         [HttpDelete("{carerId}/Services/{serviceId}/Feedbacks/{feedbackId}")]
         [EnableQuery]
+        [Authorize(Roles = "Customer, Staff")]
         public async Task<IActionResult> DeleteServiceFeedback(int carerId, int serviceId, int feedbackId)
         {
             if(! await _carerService.FeedbackExist(carerId, serviceId, feedbackId))
@@ -366,7 +367,7 @@ namespace API.Controllers
         /// <returns></returns>
         [HttpGet("{carerId}/Notifications")]
         [EnableQuery]
-        [Authorize]
+        [Authorize(Roles = "Carer")]
         public IActionResult GetNotificationsByCarerId(int carerId)
         {
             var list = _carerService.GetNotificationsByCarerId(carerId);
@@ -374,44 +375,19 @@ namespace API.Controllers
             return Ok(list);
         }
 
+        /// <summary>
+        /// This method return all tracking timetables based on carerId 
+        /// </summary>
+        /// <param name="carerId"></param>
+        /// <returns></returns>
         [HttpGet("{carerId}/TrackingTimetables")]
         [EnableQuery]
-        [Authorize]
+        [Authorize(Roles = "Carer, Staff")]
         public async Task<IActionResult> GetTrackingTimetablesByCarerId(int carerId)
         {
             var list = await _carerService.GetTrackingTimetablesByCarerId(carerId);
 
             return Ok(list);
         }
-        //[HttpGet("getTransactionHistory")]
-        //[EnableQuery]
-        //[Authorize(Roles = "Carer")]
-        //public async Task<IActionResult> GetCarerTransactionHistory(int carerId)
-        //{
-        //    try
-        //    {
-        //        //var transactionList = await _unitOfWork.CarerRepository.GetCarerTransactionHistoryAsync(carerId);
-        //        //var carerTransactions = _mapper.Map<List<CarerTransactionDto>>(transactionList);
-        //        //foreach (var transaction in carerTransactions)
-        //        //{
-        //        //    var carerCus = await _unitOfWork.CarerRepository.GetCarerCustomerFromIdAsync(transactionList[carerTransactions.IndexOf(transaction)].CarercusId);
-        //        //    if(carerCus != null)
-        //        //    {
-        //        //        (transaction.CarerId, transaction.CustomerId) = (carerCus.CarerId, carerCus.CustomerId);
-        //        //    }
-        //        //}
-        //        var carerTransactions = await _carerService.GetCarerTransactionHistoryAsync(carerId);
-        //        return Ok(carerTransactions);
-        //    }
-        //    catch(Exception ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
-        //}
-
-        //private async Task<bool> CarerExists(int id)
-        //{
-        //    return await _unitOfWork.CarerRepository.GetByIdAsync(id) != null;
-        //}
     }
 }
