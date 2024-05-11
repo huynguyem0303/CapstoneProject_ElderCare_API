@@ -87,7 +87,7 @@ namespace ElderCare_Service.Services
         }
         public async Task<bool> ContractPackageExists(int id)
         {
-            return (await _unitOfWork.ContractRepo.GetByPackageIdAsync(id)).IsNullOrEmpty();
+            return !(await _unitOfWork.ContractRepo.GetByPackageIdAsync(id)).IsNullOrEmpty();
         }
 
         public async Task<List<PackageServiceDto>> AddPackageServiceAsync(int packageId, string[] serviceName)
