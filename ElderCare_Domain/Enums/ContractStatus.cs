@@ -15,7 +15,7 @@ namespace ElderCare_Domain.Enums
         WaitingTransaction= 4,
         Expired = 5,
         CusComplained=6,
-        Others=7
+        Terminated=7
     }
 }
 

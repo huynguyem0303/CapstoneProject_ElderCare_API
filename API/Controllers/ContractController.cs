@@ -175,7 +175,7 @@ namespace API.Controllers
         ///         4 - Waiting for transaction
         ///         5 - Expired 
         ///         6 - CusComplained
-        ///         7 - Others</param>
+        ///         7 - Terminated</param>
         /// <returns></returns>
         [HttpPut("{id}/Contract")]
         [EnableQuery]
