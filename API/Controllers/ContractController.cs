@@ -173,7 +173,9 @@ namespace API.Controllers
         ///         2 - Rejected(can be done by carer or customer when they dont want to make transaction)
         ///         3 - Active 
         ///         4 - Waiting for transaction
-        ///         5 - Expired </param>
+        ///         5 - Expired 
+        ///         6 - CusComplained
+        ///         7 - Others</param>
         /// <returns></returns>
         [HttpPut("{id}/Contract")]
         [EnableQuery]
