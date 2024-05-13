@@ -289,15 +289,15 @@ namespace API.Controllers
         /// <summary>
         /// This method add elder health detail
         /// </summary>
-        /// <param name="elderlyId"></param>
+        /// <param name="elderId"></param>
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost("{elderId}/HealthDetail")]
         [EnableQuery]
         [Authorize(Roles = "Customer")]
-        public async Task<IActionResult> PostElderHealthDetail(int elderlyId, AddHealthDetailDto model)
+        public async Task<IActionResult> PostElderHealthDetail(int elderId, AddHealthDetailDto model)
         {
-            if (elderlyId != model.ElderlyId)
+            if (elderId != model.ElderlyId)
             {
                 return BadRequest();
             }
@@ -308,7 +308,7 @@ namespace API.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!await _elderService.ElderExists(elderlyId))
+                if (!await _elderService.ElderExists(elderId))
                 {
                     return NotFound();
                 }
@@ -318,7 +318,7 @@ namespace API.Controllers
                 }
             }
 
-            return CreatedAtAction("GetElder", new { elderlyId }, healthDetail);
+            return CreatedAtAction("GetElder", new { elderId }, healthDetail);
         }
 
         /// <summary>
