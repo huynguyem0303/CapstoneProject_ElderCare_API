@@ -116,6 +116,11 @@ namespace API.Controllers
             {
                 return BadRequest(error: "Package is still in contract!!!");
             }
+            var checkservice=_packageService.PackageServiceExisted(id);
+            if (checkservice.Result == true)
+            {
+                return BadRequest(error: "Service is still in Package!!!");
+            }
             await _packageService.DeletePackage(id);
             
             return NoContent();

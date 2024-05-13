@@ -25,13 +25,13 @@ namespace ElderCare_Repository.Repos
             for (var i = 0; i < serviceName.Length; i++)
             {
                 var service = await _context.Services.FirstOrDefaultAsync(e => e.Name == serviceName[i]);
-                if(service == null)
+                if (service == null)
                 {
                     errors.Add($"serviceName[{i}]:'{serviceName[i]}' is incorrect");
                 }
                 else
                 {
-                    if(_context.PackageServices.Where(e => e.PackageId == packageId && e.ServiceId == service.ServiceId).Any())
+                    if (_context.PackageServices.Where(e => e.PackageId == packageId && e.ServiceId == service.ServiceId).Any())
                     {
                         errors.Add($"serviceName[{i}]:'{serviceName[i]}' existed in the package");
                     }
@@ -51,17 +51,29 @@ namespace ElderCare_Repository.Repos
                 throw new DbUpdateException(message: String.Join(",\n", errors));
             }
             list = list.DistinctBy(e => e.ServiceId).ToList();
-            if(list.Count > 0)
+            if (list.Count > 0)
             {
                 await _context.PackageServices.AddRangeAsync(list);
             }
             return list;
         }
 
+        public async Task<bool> PackageServiceExisted(int packageId)
+        {
+            var check = await _context.PackageServices.Where(x => x.PackageId == packageId).FirstOrDefaultAsync();
+            if (check != null)
+            {
+                return true;
+            }
+
+            return false;
+
+        }
+
         public async Task RemovePackageService(int packageId, int serviceId)
         {
             var packageService = await _context.PackageServices.FirstOrDefaultAsync(e => e.ServiceId == serviceId && e.PackageId == packageId);
-            if(packageService != null)
+            if (packageService != null)
             {
                 _context.PackageServices.Remove(packageService);
             }

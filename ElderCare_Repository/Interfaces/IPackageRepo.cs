@@ -12,5 +12,6 @@ namespace ElderCare_Repository.Interfaces
     {
         public Task<List<PackageService>> AddPackageService(int packageId, string[] serviceName);
         Task RemovePackageService(int packageId, int serviceId);
+        Task<bool> PackageServiceExisted(int packageId);
     }
 }

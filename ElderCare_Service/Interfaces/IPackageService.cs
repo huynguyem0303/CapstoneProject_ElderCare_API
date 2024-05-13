@@ -19,6 +19,7 @@ namespace ElderCare_Service.Interfaces
         Task DeletePackage(int id);
         Task<bool> PackageExists(int id);
         Task<bool> ContractPackageExists(int id);
+        Task<bool> PackageServiceExisted(int packageId);
         Task<List<PackageServiceDto>> AddPackageServiceAsync(int packageId, string[] serviceName);
         Task RemoveServiceFromPackage(int packageId,int serviceId);
     }

@@ -107,5 +107,10 @@ namespace ElderCare_Service.Services
             await _unitOfWork.PackageRepo.RemovePackageService(packageId,serviceId); 
             await _unitOfWork.SaveChangeAsync();
         }
+
+        public async Task<bool> PackageServiceExisted(int packageId)
+        {
+            return await _unitOfWork.PackageRepo.PackageServiceExisted(packageId);
+        }
     }
 }
