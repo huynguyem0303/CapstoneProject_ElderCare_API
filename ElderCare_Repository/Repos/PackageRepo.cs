@@ -58,6 +58,23 @@ namespace ElderCare_Repository.Repos
             return list;
         }
 
+        public async Task<List<Package>> GetByCarerId(int id)
+        {
+            var carerServices = await _context.CarerServices.Where(e => e.CarerId == id).Select(e => e.ServiceId).ToListAsync();
+            var packages = _context.Packages.Include(e => e.PackageServices);
+            var result = new List<Package>();
+            foreach (var package in packages)
+            {
+                var packageServices = from packageService in package.PackageServices
+                                      select packageService.ServiceId;
+                if (!packageServices.Except(carerServices).Any())
+                {
+                    result.Add(package);
+                }
+            }
+            return result;
+        }
+
         public async Task<bool> PackageServiceExisted(int packageId)
         {
             var check = await _context.PackageServices.Where(x => x.PackageId == packageId).FirstOrDefaultAsync();

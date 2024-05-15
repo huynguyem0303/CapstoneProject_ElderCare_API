@@ -43,7 +43,7 @@ namespace API.Controllers
         /// <returns></returns>
         [HttpPost("search")]
         [EnableQuery]
-        [Authorize(Roles = "Customer")]
+        [Authorize]
         public async Task<IActionResult> GetCarer(SearchCarerDto dto)
         {
             var carer = await _carerService.SearchCarer(dto);
@@ -93,6 +93,24 @@ namespace API.Controllers
             }
             var services = await _carerService.GetServicesByCarerId(id);
             return Ok(services);
+        }
+        
+        /// <summary>
+        /// This method get all service packages match with carer's services
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("{id}/Packages")]
+        [EnableQuery]
+        [Authorize]
+        public async Task<IActionResult> GetPackagesByCarerId(int id)
+        {
+            if (!await _carerService.CarerExists(id))
+            {
+                return NotFound();
+            }
+            var packages = await _carerService.GetPackagesByCarerId(id);
+            return Ok(packages);
         }
 
         [HttpGet("pending")]

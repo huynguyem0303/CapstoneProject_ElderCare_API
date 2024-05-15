@@ -241,5 +241,20 @@ namespace ElderCare_Service.Services
         {
             return await _unitOfWork.TimetableRepo.FindAsync(e => e.CarerId == carerId, e => e.Trackings);
         }
+
+        public async Task<IEnumerable<PackageDto>> GetPackagesByCarerId(int id)
+        {
+            var packages = await _unitOfWork.PackageRepo.GetByCarerId(id);
+            var services = _unitOfWork.ServiceRepo.GetAll();
+            var result = _mapper.Map<List<PackageDto>>(packages);
+            foreach (var item in result)
+            {
+                var packageServices = (from packageService in item.PackageServices
+                                       join service in services on packageService.ServiceId equals service.ServiceId
+                                       select service).ToList();
+                item.PackageServices = _mapper.Map<List<ServiceDto>>(packageServices);
+            }
+            return result;
+        }
     }
 }
