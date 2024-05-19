@@ -47,6 +47,7 @@ namespace ElderCare_Service
             services.AddScoped<ISystemConfigRepo, SystemConfigRepo>();
             services.AddScoped<ISystemConfigService, SystemConfigService>();
             services.AddScoped<IFeedbackRepo, FeedbackRepo>();
+            services.AddScoped<IFeedbackService, FeedbackService>();
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddHttpContextAccessor();
             services.AddAutoMapper(typeof(MapperConfigurationProfile).Assembly);
