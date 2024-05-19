@@ -94,7 +94,10 @@ namespace API.Controllers
                 {
                     return BadRequest(error: "Duplicate Name!!");
                 }
-                package = await _packageService.AddPackageAsync(model);
+                else
+                {
+                    package = await _packageService.AddPackageAsync(model);
+                }
             }
             catch (DbUpdateException e)
             {

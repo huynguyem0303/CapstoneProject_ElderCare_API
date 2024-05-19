@@ -90,7 +90,11 @@ namespace API.Controllers
                 {
                     return BadRequest(error: "Duplicate Name!!");
                 }
-                service = await _serviceService.AddServiceAsync(model);
+                else
+                {
+                    service = await _serviceService.AddServiceAsync(model);
+                }
+               
             }
             catch (DbUpdateException e)
             {
