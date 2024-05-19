@@ -166,7 +166,7 @@ namespace API.Controllers
         /// <returns></returns>
         [HttpPut("{id}/Account")]
         [EnableQuery]
-        [Authorize(Roles = "Staff")]
+        //[Authorize(Roles = "Staff")]
         public async Task<IActionResult> ApproveCarer(int id, CarerStatus status)
         {
             if(!await _carerService.CarerExists(id))

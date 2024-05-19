@@ -66,7 +66,10 @@ namespace ElderCare_Repository.Mappers
             CreateMap<Carer, Account>()
                 .ForMember(d => d.Username, s => s.MapFrom(e => e.Name))
                 .ForMember(d => d.PhoneNumber, s => s.MapFrom(e => e.Phone))
-                .ForMember(d => d.CarerId, s => s.MapFrom(e => e.CarerId));
+                .ForMember(d => d.CarerId, s => s.MapFrom(e => e.CarerId))
+                .ForMember(d => d.Address, s => s.MapFrom(e => e.Address))
+                .ForMember(d => d.Email, s => s.MapFrom(e => e.Email))
+                .ReverseMap();
             //customer sign in
             CreateMap<CustomerSignUpDto, Customer>()
                 .ForMember(d => d.CustomerName, s => s.MapFrom(e => e.Name))
@@ -165,12 +168,6 @@ namespace ElderCare_Repository.Mappers
                 .ForMember(d => d.Address, s => s.MapFrom(e => e.Address))
                 .ForMember(d => d.Email, s => s.MapFrom(e => e.Email))
                 .ReverseMap();
-            CreateMap<Account, Carer>()
-                .ForMember(d => d.Phone, s => s.MapFrom(e => e.PhoneNumber))
-                .ForMember(d => d.Address, s => s.MapFrom(e => e.Address))
-                .ForMember(d => d.Email, s => s.MapFrom(e => e.Email))
-                .ReverseMap();
-
             //timetable
             CreateMap<AddTimetableDto, Timetable>();
             CreateMap<AddTimetableDto.AddTimetableTrackingDto, Tracking>();
