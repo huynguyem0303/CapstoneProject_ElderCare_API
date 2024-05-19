@@ -35,7 +35,7 @@ namespace API.Controllers
 
         [HttpGet]
         [EnableQuery]
-        [Authorize(Roles = "Staff")]
+        [Authorize(Roles = "Staff, Admin")]
         public IActionResult GetAllTransactions()
         {
             var list = _transactionService.GetAll();
@@ -106,7 +106,7 @@ namespace API.Controllers
 
         [HttpGet("getTransactionHistoryByCarerId")]
         [EnableQuery]
-        [Authorize(Roles = "Carer, Staff")]
+        [Authorize(Roles = "Carer, Staff, Admin")]
 
         public async Task<IActionResult> GetTransactionHistoryByCarerId(int carerId)
         {
@@ -127,7 +127,7 @@ namespace API.Controllers
 
         [HttpGet("getTransactionHistoryByCustomerId")]
         [EnableQuery]
-        [Authorize(Roles = "Customer, Staff")]
+        [Authorize(Roles = "Customer, Staff, Admin")]
         public async Task<IActionResult> GetTransactionHistoryByCusId(int customerId)
         {
             try
@@ -147,7 +147,7 @@ namespace API.Controllers
 
         [HttpGet("getApproveCarerCusByCustomerId")]
         [EnableQuery]
-        [Authorize(Roles = "Customer, Staff")]
+        [Authorize(Roles = "Customer, Staff, Admin")]
         public async Task<IActionResult> GetApproveCarerCusByCustomerId(int customerId)
         {
             try
@@ -167,7 +167,7 @@ namespace API.Controllers
 
         [HttpGet("getApproveCarerCusByCarerId")]
         [EnableQuery]
-        [Authorize(Roles = "Carer, Staff")]
+        [Authorize(Roles = "Carer, Staff, Admin")]
         public async Task<IActionResult> GetApproveCarerCusByCarerId(int carerId)
         {
             try
@@ -187,7 +187,7 @@ namespace API.Controllers
 
         [HttpPut("CarerSalary")]
         [EnableQuery]
-        [Authorize(Roles = "Carer, Staff")]
+        [Authorize(Roles = "Carer, Staff, Admin")]
         public async Task<IActionResult> CarerSalary()
         {
           
