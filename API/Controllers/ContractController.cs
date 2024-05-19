@@ -24,6 +24,16 @@ namespace API.Controllers
             _contractService = contractService;
         }
 
+        // GET: api/Certifications
+        [HttpGet]
+        [EnableQuery]
+        [Authorize]
+        public IActionResult GetContracts()
+        {
+            var list = _contractService.FindAsync(e => true, e => e.ContractServices, e => e.ContractVersions);
+
+            return Ok(list);
+        }
         [HttpGet("{id}")]
         [EnableQuery]
         [Authorize(Roles = "Customer, Carer, Staff")]
