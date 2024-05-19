@@ -23,5 +23,6 @@ namespace ElderCare_Service.Interfaces
         Task UpdateTrackingOption(UpdateTrackingOptionDto model);
         Task DeleteTrackingOption(int id);
         Task<bool> TrackingOptionExists(int id);
+        Task<bool> ServiceNameExists(string name);
     }
 }

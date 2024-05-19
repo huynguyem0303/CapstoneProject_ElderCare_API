@@ -58,6 +58,13 @@ namespace ElderCare_Repository.Repos
             return list;
         }
 
+        public async Task<Package> GetPackageByName(string name)
+        {
+
+            return await _context.Packages.Where(x => x.Name.Equals(name)).FirstOrDefaultAsync();
+
+        }
+
         public async Task<List<Package>> GetByCarerId(int id)
         {
             var carerServices = await _context.CarerServices.Where(e => e.CarerId == id).Select(e => e.ServiceId).ToListAsync();

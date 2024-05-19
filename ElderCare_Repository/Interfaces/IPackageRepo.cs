@@ -14,5 +14,7 @@ namespace ElderCare_Repository.Interfaces
         Task RemovePackageService(int packageId, int serviceId);
         Task<bool> PackageServiceExisted(int packageId);
         Task<List<Package>> GetByCarerId(int id);
+        Task<Package> GetPackageByName(string name);
     }
+   
 }

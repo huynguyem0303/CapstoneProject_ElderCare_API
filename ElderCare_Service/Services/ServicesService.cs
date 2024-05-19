@@ -106,5 +106,15 @@ namespace ElderCare_Service.Services
         {
             return await _unitOfWork.TrackingOptionRepo.GetByIdAsync(id) != null;
         }
+
+        public async Task<bool> ServiceNameExists(string name)
+        {
+            var check = await _unitOfWork.ServiceRepo.GetServiceByName(name);
+            if (check != null)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }

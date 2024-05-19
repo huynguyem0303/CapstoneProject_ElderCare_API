@@ -25,6 +25,7 @@ namespace ElderCare_Service.Services
 
         public async Task<Package> AddPackageAsync(AddPackageDto model)
         {
+
             var package = _mapper.Map<Package>(model);
             package.PackageId = _unitOfWork.PackageRepo.GetAll().OrderBy(e => e.PackageId).Last().PackageId + 1;
             await _unitOfWork.PackageRepo.AddAsync(package);
@@ -111,6 +112,16 @@ namespace ElderCare_Service.Services
         public async Task<bool> PackageServiceExisted(int packageId)
         {
             return await _unitOfWork.PackageRepo.PackageServiceExisted(packageId);
+        }
+
+        public async Task<bool> PackageNameExists(string name)
+        {
+           var check= await _unitOfWork.PackageRepo.GetPackageByName(name);
+            if (check != null)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

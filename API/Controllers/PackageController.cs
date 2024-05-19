@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.OData.Routing.Controllers;
 using ElderCare_Repository.DTO;
 using System.Data;
 using ElderCare_Service.Interfaces;
+using ElderCare_Service.Services;
 
 namespace API.Controllers
 {
@@ -88,6 +89,11 @@ namespace API.Controllers
             Package package;
             try
             {
+                var check = await _packageService.PackageNameExists(model.Name);
+                if (check == true)
+                {
+                    return BadRequest(error: "Duplicate Name!!");
+                }
                 package = await _packageService.AddPackageAsync(model);
             }
             catch (DbUpdateException e)

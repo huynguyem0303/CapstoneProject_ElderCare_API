@@ -12,5 +12,6 @@ namespace ElderCare_Repository.Interfaces
     public interface IServiceRepo : IGenericRepo<Service>
     {
         Task<List<Service>> GetAllByCarerId(int id);
+        Task<Service> GetServiceByName(string name);
     }
 }

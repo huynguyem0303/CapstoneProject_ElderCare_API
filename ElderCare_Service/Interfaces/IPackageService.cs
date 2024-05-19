@@ -18,6 +18,7 @@ namespace ElderCare_Service.Interfaces
         Task UpdatePackage(UpdatePackageDto model);
         Task DeletePackage(int id);
         Task<bool> PackageExists(int id);
+        Task<bool> PackageNameExists(string name);
         Task<bool> ContractPackageExists(int id);
         Task<bool> PackageServiceExisted(int packageId);
         Task<List<PackageServiceDto>> AddPackageServiceAsync(int packageId, string[] serviceName);

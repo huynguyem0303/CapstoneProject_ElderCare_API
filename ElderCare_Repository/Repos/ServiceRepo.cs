@@ -19,5 +19,10 @@ namespace ElderCare_Repository.Repos
                          select service;
             return await result.ToListAsync();
         }
+
+        public async Task<Service> GetServiceByName(string name)
+        {
+            return await _context.Services.Where(x=>x.Name.Equals(name)).FirstOrDefaultAsync();
+        }
     }
 }
