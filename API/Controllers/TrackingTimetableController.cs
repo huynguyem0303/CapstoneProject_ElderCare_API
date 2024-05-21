@@ -217,7 +217,7 @@ namespace API.Controllers
         /// <returns></returns>
         [HttpGet("{id}/Trackings/{trackingId}")]
         [EnableQuery]
-        [Authorize(Roles = "Staff")]
+        [Authorize]
         public async Task<SingleResult> GetTracking(int id, string trackingId)
         {
             var tracking = await _timetableService.FindTrackingAsync(e => e.TimetableId == id && e.TrackingId == Guid.Parse(trackingId));
