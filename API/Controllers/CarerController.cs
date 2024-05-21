@@ -166,7 +166,7 @@ namespace API.Controllers
         /// <returns></returns>
         [HttpPut("{id}/Account")]
         [EnableQuery]
-        //[Authorize(Roles = "Staff")]
+        [Authorize(Roles = "Staff, Admin")]
         public async Task<IActionResult> ApproveCarer(int id, CarerStatus status)
         {
             if(!await _carerService.CarerExists(id))
@@ -400,7 +400,7 @@ namespace API.Controllers
         /// <returns></returns>
         [HttpGet("{carerId}/TrackingTimetables")]
         [EnableQuery]
-        [Authorize(Roles = "Carer, Staff")]
+        [Authorize]
         public async Task<IActionResult> GetTrackingTimetablesByCarerId(int carerId)
         {
             var list = await _carerService.GetTrackingTimetablesByCarerId(carerId);
