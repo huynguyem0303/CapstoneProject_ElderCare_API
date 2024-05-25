@@ -73,10 +73,11 @@ namespace ElderCare_Service.Services
         {
             var package = (await _unitOfWork.PackageRepo.FindAsync(e => e.PackageId == id, e => e.PackageServices)).FirstOrDefault();
             var result = _mapper.Map<PackageDto>(package);
-            if(package != null)
+            var services = _unitOfWork.ServiceRepo.GetAll();
+            if (package != null)
             {
                 var packageServices = (from packageService in package.PackageServices
-                                       join service in _unitOfWork.ServiceRepo.GetAll() on packageService.ServiceId equals service.ServiceId
+                                       join service in services on packageService.ServiceId equals service.ServiceId
                                        select service).ToList();
                 result.PackageServices = _mapper.Map<List<ServiceDto>>(packageServices);
             }
