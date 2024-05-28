@@ -128,7 +128,7 @@ namespace API.Controllers
         [Authorize(Roles = "Staff, Admin")]
         public async Task<IActionResult> DeleteAccount(int id)
         {
-            if (await _accountService.AccountExists(id))
+            if (!await _accountService.AccountExists(id))
             {
                 return NotFound();
             }
