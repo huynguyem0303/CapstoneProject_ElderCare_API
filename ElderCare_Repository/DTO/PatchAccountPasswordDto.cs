@@ -7,13 +7,11 @@ using System.Threading.Tasks;
 
 namespace ElderCare_Repository.DTO
 {
-    public class SignInDto
+    public class PatchAccountPasswordDto
     {
-        [DataType(DataType.PhoneNumber)]
-        public string PhoneNumber { get; set; }
-        [DataType(DataType.EmailAddress)]
-        public string Email { get; set; }
+        public int AccountId { get; set; }
         [DataType(DataType.Password)]
+        [StringLength(maximumLength: 50, MinimumLength = 8, ErrorMessage = "Password cannot be longer than 40 characters and less than 8 characters")]
         public string Password { get; set; }
         [DataType(DataType.Password)]
         [Compare(nameof(Password), ErrorMessage = "please make sure your password match.")]

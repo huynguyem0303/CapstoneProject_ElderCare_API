@@ -70,15 +70,41 @@ namespace API.Controllers
                     throw;
                 }
             }
-
             return NoContent();
         }
 
+        [HttpPatch("{id}/ChangePassword")]
+        [EnableQuery]
+        [Authorize]
+        public async Task<IActionResult> PatchAccountPassword(int id, PatchAccountPasswordDto model)
+        {
+            if (id != model.AccountId)
+            {
+                return BadRequest();
+            }
+            try
+            {
+                await _accountService.ChangeAccountPassword(model);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!await _accountService.AccountExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return NoContent();
+        }
         // POST: api/Accounts
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
+        [HttpPost("StaffAccount")]
         [EnableQuery]
-        public async Task<ActionResult<Account>> PostAccount(SignInDto model)
+        [Authorize(Roles = "Admin, Staff")]
+        public async Task<ActionResult<Account>> PostAccount(StaffAccountCreateDto model)
         {
             Account account;
             try
