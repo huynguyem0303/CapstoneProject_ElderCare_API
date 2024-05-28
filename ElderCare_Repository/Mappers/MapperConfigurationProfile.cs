@@ -17,7 +17,7 @@ namespace ElderCare_Repository.Mappers
         public MapperConfigurationProfile()
         {
             CreateMap(typeof(Pagination<>), typeof(Pagination<>));
-            CreateMap<SignInDto, Account>();
+            CreateMap<StaffAccountCreateDto, Account>();
             CreateMap<AddElderDto, Elderly>();
             CreateMap<UpdateElderDto, Elderly>();
             CreateMap<LivingConditionDto, LivingCondition>().ReverseMap();

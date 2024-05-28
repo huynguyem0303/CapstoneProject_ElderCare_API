@@ -3,6 +3,7 @@ using ElderCare_Domain.Enums;
 using ElderCare_Domain.Models;
 using ElderCare_Repository.DTO;
 using ElderCare_Service.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using System.Security.Claims;
 
@@ -20,11 +21,12 @@ namespace ElderCare_Service.Services
             _mapper = mapper;
         }
 
-        public async Task<Account> AddAccountAsync(SignInDto model)
+        public async Task<Account> AddAccountAsync(StaffAccountCreateDto model)
         {
             var account = _mapper.Map<Account>(model);
             account.Status = (int)AccountStatus.Active;
-            account.RoleId = (int)AccountRole.None; 
+            account.CreatedDate = DateTime.Now; 
+            account.Password = Guid.NewGuid().ToString("N").Substring(0, 10);
             await _unitOfWork.AccountRepository.AddAsync(account);
             await _unitOfWork.SaveChangeAsync();
             return account;
@@ -68,6 +70,17 @@ namespace ElderCare_Service.Services
         public int? GetMemberIdFromToken(ClaimsPrincipal userClaims)
         {
             return _unitOfWork.AccountRepository.GetMemberIdFromToken(userClaims);
+        }
+
+        public async Task ChangeAccountPassword(PatchAccountPasswordDto model)
+        {
+            var account = await _unitOfWork.AccountRepository.GetByIdAsync(model.AccountId);
+            if (account == null) {
+                throw new DbUpdateConcurrencyException();
+            }
+            account.Password = model.Password;
+            _unitOfWork.AccountRepository.Update(account);
+            await _unitOfWork.SaveChangeAsync();
         }
     }
 }

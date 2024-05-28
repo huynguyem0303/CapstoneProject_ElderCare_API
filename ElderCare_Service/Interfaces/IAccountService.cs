@@ -15,10 +15,11 @@ namespace ElderCare_Service.Interfaces
         IEnumerable<Account> GetAll();
         Task<Account?> GetByIdAsync(int? id);
         Task<IEnumerable<Account>> FindAsync(Expression<Func<Account, bool>> expression, params Expression<Func<Account, object>>[] includes);
-        Task<Account> AddAccountAsync(SignInDto model);
+        Task<Account> AddAccountAsync(StaffAccountCreateDto model);
         Task UpdateAccount(Account account);
         Task DeleteAccount(int id);
         Task<bool> AccountExists(int id);
         int? GetMemberIdFromToken(ClaimsPrincipal userClaims);
+        Task ChangeAccountPassword(PatchAccountPasswordDto model);
     }
 }
