@@ -17,7 +17,7 @@ namespace ElderCare_Repository.Mappers
         public MapperConfigurationProfile()
         {
             CreateMap(typeof(Pagination<>), typeof(Pagination<>));
-            CreateMap<SignInDto, Account>();
+            CreateMap<StaffAccountCreateDto, Account>();
             CreateMap<AddElderDto, Elderly>();
             CreateMap<UpdateElderDto, Elderly>();
             CreateMap<LivingConditionDto, LivingCondition>().ReverseMap();
@@ -53,7 +53,7 @@ namespace ElderCare_Repository.Mappers
                 .ForMember(d => d.Bankinfo, s => s.MapFrom(e => e.BankInfo))
                 .ForMember(d => d.Gender, s => s.MapFrom(e => e.Gender))
                 .ForMember(d => d.Image, s => s.MapFrom(e => e.Image));
-            CreateMap<CarerSignUpDto.BankInfomation, Bankinformation>();
+            CreateMap<CarerSignUpDto.CarerBankInfomationDto, Bankinformation>();
             CreateMap<CarerSignUpDto, Account>()
                 .ForMember(d => d.Email, s => s.MapFrom(e => e.Email))
                 .ForMember(d => d.Username, s => s.MapFrom(e => e.Name))
@@ -77,7 +77,7 @@ namespace ElderCare_Repository.Mappers
                 .ForMember(d => d.Phone, s => s.MapFrom(e => e.PhoneNumber))
                 .ForMember(d => d.Bankinfo, s => s.MapFrom(e => e.BankInfo))
                 .ForMember(d => d.Address, s => s.MapFrom(e => e.Address));
-            CreateMap<CustomerSignUpDto.CustomerBankInfomation, Bankinformation>();
+            CreateMap<CustomerSignUpDto.CustomerBankInfomationDto, Bankinformation>();
             CreateMap<CustomerSignUpDto, Account>()
                 .ForMember(d => d.Email, s => s.MapFrom(e => e.Email))
                 .ForMember(d => d.Username, s => s.MapFrom(e => e.Name))

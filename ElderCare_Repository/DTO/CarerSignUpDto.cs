@@ -34,7 +34,7 @@ namespace ElderCare_Repository.DTO
 
         //[JsonProperty("address")]
         public string? Address { get; set; }
-        public class BankInfomation
+        public class CarerBankInfomationDto
         {
             //[JsonProperty("account_number")]
             [DataType(DataType.CreditCard)]
@@ -51,7 +51,7 @@ namespace ElderCare_Repository.DTO
         }
         
         //[JsonProperty("bank_info")]
-        public BankInfomation BankInfo { get; set; }
+        public CarerBankInfomationDto BankInfo { get; set; }
 
         public class CarerCertification
         {

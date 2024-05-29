@@ -26,11 +26,12 @@ namespace ElderCare_Repository.DTO
 
         [DataType(DataType.Password)]
         [JsonProperty("password")]
+        [StringLength(maximumLength: 50, MinimumLength = 8, ErrorMessage = "Password cannot be longer than 40 characters and less than 8 characters")]
         public string Password { get; set; }
 
 
 
-        public class CustomerBankInfomation
+        public class CustomerBankInfomationDto
         {
             //[JsonProperty("account_number")]
             [DataType(DataType.CreditCard)]
@@ -47,6 +48,6 @@ namespace ElderCare_Repository.DTO
         }
 
         //[JsonProperty("bank_info")]
-        public CustomerBankInfomation BankInfo { get; set; }
+        public CustomerBankInfomationDto BankInfo { get; set; }
     }
 }
