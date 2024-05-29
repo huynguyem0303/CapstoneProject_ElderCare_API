@@ -39,9 +39,8 @@ namespace ElderCare_Service.Services
                 {
                     _unitOfWork.ContractRepo.AddContractServiceAsync(dto.service, entity.ContractId);
                     entity.Packageprice = _unitOfWork.ContractRepo.GetPackagePrice().Result;
-                    entity.Package = _unitOfWork.PackageRepo.GetByIdAsync(0).Result;
-                    entity.PackageId = _unitOfWork.PackageRepo.GetByIdAsync(0).Result.PackageId;
                     entity.ContractType = (int)ContractType.ServiceContract;
+                  ;
                 }
                 else if (dto.service.IsNullOrEmpty())
                 {
